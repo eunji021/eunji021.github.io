@@ -2,22 +2,62 @@
 layout: default
 ---
 
-<a href="javascript:history.back()" class="back-link" aria-label="Go back">
-  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-    <polyline points="15 18 9 12 15 6"></polyline>
-  </svg>
-</a>
-<h1 class="post-title">{{ page.title }}</h1>
-{% include date_and_social_share.html %}
+{% include header.html %}
 
-{%- if site.theme_config.show_toc and page.toc -%}
-  {% include toc.html %}
-{%- endif -%}
+{% assign page_category = site.data.category_list[page.category] %}
 
-<div class="post-content{% if page.dropcap %} has-dropcap{% endif %}">
-  {{ content }}
-</div>
 
-{%- if site.theme_config.show_post_nav -%}
-  {% include post_nav.html %}
-{%- endif -%}
+<div class="container-full">
+    <div class="container grid-xl">
+      <div class="mt-12 show-md"></div>
+      <div class="mt-8"></div>
+      <div class="columns negative-m-xl">
+        <div class="column col-12">
+          <ul class="breadcrumb">
+            <li class="breadcrumb-item">
+              <a href="{{ site.url }}{{ site.baseurl }}">Help Center Home</a>
+            </li>
+            <li class="breadcrumb-item">
+              <a href="../{{ page.category }}">{{ page_category.name }}</a>
+            </li>
+            <li class="breadcrumb-item">
+              <a href="#">{{ page.title }}</a>
+            </li>
+          </ul>
+          <h2 class="text-light text-bold">{{ page.title }}</h2>
+          <p class="text-light mb-0">{{ page.short-description }}</p>
+        </div>
+        <div class="column col-12">
+          <div class="card">
+            <div class="card-body">
+                {% if site.use_authors == true %}
+                {% assign post_author = site.data.authors[page.author] %}
+                <div class="flex-vertical-center mb-4">
+                  <figure class="avatar d-inline-block" style="align-items: center;">
+                    <img  src="../assets/{{ post_author.image }}" alt="...">
+                  </figure>
+                  <div class="ml-2">
+                    <p class="text-dark text-small mb-0">Written by <span class="text-primary">{{ post_author.name }}</span></p>
+                    <p class="text-dark text-small text-italic mb-0">{% include reading-time.html %}</p>
+                  </div>
+                </div>
+                {% else %}
+                <div class="ml-2">
+                    <p class="m-0 text-small">Last updated:</p>
+                    <p class="text-dark text-small text-italic mb-0">{{ page.last_modified_at | date: '%B %d, %Y'  }} - {% include reading-time.html %}</p>
+                  </div>
+                {% endif %}
+
+              {{ content }}
+
+              
+            
+
+
+            </div>
+          </div>
+        </div>
+        {% include more-help.html %}
+      </div>
+    </div>
+  </div>
