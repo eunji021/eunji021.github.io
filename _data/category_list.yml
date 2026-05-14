@@ -1,12 +1,11 @@
 #This file defines all the categories you are using
 
-
-using-subcategories:
-  name: Using Subcategories
-  description: Learn to use subcategories!
-projects:
-  name: Projects
-  description: My recent projects and work
-customizing-odin:
-  name: Customizing Odin
-  description: Welcome to Odin, time to get started
+tech-fundamentals:
+  name: Tech Fundamentals
+  description: Python 기초, C언어, C# 문법 정리 및 핵심 코드
+embedded-hardware-projects:
+  name: Embedded & Hardware Projects
+  description: ESP32 화재 대피 시스템 등 하드웨어 연동 프로젝트
+system-software-projects:
+  name: System & Software Projects
+  description: C# 마트 관리 시스템 등 개인/팀 프로젝트

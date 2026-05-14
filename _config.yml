@@ -18,8 +18,8 @@
 # You can create any custom variable you would like, and they will be accessible
 # in the templates via {{ site.myvariable }}.
 
-title: My Portfolio
-description: A showcase of my recent projects and work.
+title: 권은지 포트폴리오
+description: 반도체 장비 소프트웨어 전공자 권은지입니다. C/C++, C#, Python을 활용한 시스템 제어 및 소프트웨어 개발 역량을 갖추고 있습니다.
 baseurl: "" # the subpath of your site, e.g. /support
 url: https://eunji021.github.io # the base hostname AND PROTOCOL for your site, e.g. http://example.com
 permalink: /:categories/:title
@@ -28,44 +28,44 @@ content_type: Portfolio #Define whether this is a knowledge base, help center, o
 use_authors: true #Set this to false to disable showing post authors
 
 brand_logo: logo.png
-brand_name: Portfolio
+brand_name: 권은지 포트폴리오
 header: My Projects
-subheader: A collection of my work
+subheader: 반도체 장비 소프트웨어 전공자 권은지입니다. C/C++, C#, Python을 활용한 시스템 제어 및 소프트웨어 개발 역량을 갖추고 있습니다.
 
 meta_image: odin-meta.png
 
 # Social Links
-twitter_username: TheTeaGuns
+twitter_username: 
 facebook_page:
-github_username: TeaGuns
-email: m@credd.in
+github_username: eunji021
+email: gwun012@naver.com
 linkedin_page:
 instagram_username: 
 
 
 # Navivation
 nav_item_one: Github
-nav_item_one_link: https://github.com/TeaGuns/odin
+nav_item_one_link: https://github.com/eunji021
 
-nav_item_two: Twitter
-nav_item_two_link: https://twitter.com/TheTeaGuns
+nav_item_two: Email
+nav_item_two_link: mailto:gwun012@naver.com
 
 nav_item_three: #
 nav_item_three_link: #
 
-nav_button: Return to Odin Home
-nav_button_link: https://teaguns.github.io/odin/
+nav_button: Return to Home
+nav_button_link: https://eunji021.github.io/
 
 # More Help
-help_one_title: Odin Bugs
-help_one_content: If you find any bugs or problems with this theme, please open an issue over on Github.
+help_one_title: GitHub
+help_one_content: 제 깃허브를 방문해서 더 많은 프로젝트를 확인해 보세요.
 help_one_button: Github
-help_one_link: https://github.com/TeaGuns/odin/issues
+help_one_link: https://github.com/eunji021
 
-help_two_title: Twitter
-help_two_content: Feel free to tweet at me if you have suggestions for Odin. Or if you just want to say hi.
-help_two_button: Twitter
-help_two_link: https://twitter.com/theteaguns
+help_two_title: Email
+help_two_content: 프로젝트 및 채용 관련 문의는 이메일로 연락 부탁드립니다.
+help_two_button: Email
+help_two_link: mailto:gwun012@naver.com
 
 # Build settings
 theme: minima
