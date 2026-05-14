@@ -1,0 +1,140 @@
+// Premium Portfolio Overrides
+@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
+
+body {
+  background-color: #0b1120; // Deep slate dark
+  color: #f8fafc;
+  font-family: 'Pretendard', 'Inter', sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+// Typography Overrides
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Pretendard', 'Inter', sans-serif;
+  color: #ffffff;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+// Premium Hero Section
+.hero-section {
+  padding: 100px 0 80px;
+  background: radial-gradient(circle at top right, rgba(99, 102, 241, 0.15), transparent 400px),
+              linear-gradient(180deg, #0b1120 0%, #0f172a 100%);
+  position: relative;
+  overflow: hidden;
+
+  .hero-title {
+    font-size: 3.5rem;
+    font-weight: 800;
+    line-height: 1.2;
+    margin-bottom: 24px;
+    background: linear-gradient(135deg, #ffffff 0%, #a5b4fc 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: fadeUp 0.8s ease-out;
+  }
+
+  .hero-subtitle {
+    font-size: 1.25rem;
+    color: #94a3b8;
+    line-height: 1.6;
+    max-width: 600px;
+    margin: 0 auto;
+    font-weight: 400;
+    animation: fadeUp 1s ease-out;
+  }
+}
+
+// Glassmorphism Cards
+.card {
+  background: rgba(30, 41, 59, 0.6) !important;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border-radius: 16px !important;
+  padding: 32px 24px !important;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06) !important;
+  height: 100%;
+
+  &:hover {
+    transform: translateY(-8px) !important;
+    border: 1px solid rgba(99, 102, 241, 0.5) !important;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2), 0 10px 10px -5px rgba(0, 0, 0, 0.04), 0 0 20px rgba(99, 102, 241, 0.2) !important;
+    background: rgba(30, 41, 59, 0.8) !important;
+  }
+
+  .card-title {
+    font-size: 1.5rem;
+    color: #ffffff;
+    margin-bottom: 12px;
+  }
+
+  .card-desc {
+    color: #cbd5e1;
+    font-size: 1rem;
+    line-height: 1.5;
+    margin-bottom: 24px;
+  }
+}
+
+// Tags / Badges
+.tech-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+  margin-top: auto;
+}
+
+.badge-pill {
+  background: rgba(99, 102, 241, 0.2);
+  color: #a5b4fc;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  border: 1px solid rgba(99, 102, 241, 0.3);
+}
+
+// Navigation
+.navbar {
+  padding: 20px 0;
+  background: transparent;
+  
+  .logo-text {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: #ffffff;
+    text-decoration: none;
+    letter-spacing: -0.02em;
+    span {
+      color: #818cf8;
+    }
+  }
+
+  .nav-links {
+    color: #cbd5e1 !important;
+    font-weight: 500;
+    transition: color 0.2s;
+    &:hover {
+      color: #ffffff !important;
+    }
+  }
+}
+
+// Animations
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// Hide defaults
+.header-bg { display: none; }
