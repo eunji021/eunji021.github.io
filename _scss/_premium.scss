@@ -247,37 +247,74 @@ h1, h2, h3, h4, h5, h6 {
 
 // Dashboard Panel
 .dashboard-panel {
-  background: rgba(30, 41, 59, 0.5) !important;
-  border: 1px solid rgba(255, 255, 255, 0.08) !important;
-  border-radius: 16px !important;
-  padding: 32px 28px !important;
+  background: rgba(30, 41, 59, 0.2) !important;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.05) !important;
+  border-radius: 20px !important;
+  padding: 32px !important;
   height: 100%;
-  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.2) !important;
+}
+
+.dashboard-title {
+  display: flex;
+  align-items: center;
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 1.5rem;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 // Dashboard Inner List Items
 .list-item {
-  display: block;
-  padding: 18px 24px !important;
-  background: rgba(15, 23, 42, 0.6) !important;
+  display: flex !important;
+  align-items: center;
+  justify-content: space-between;
+  padding: 24px !important;
+  background: rgba(15, 23, 42, 0.4) !important;
   border: 1px solid rgba(255, 255, 255, 0.03) !important;
-  border-radius: 8px !important;
-  margin-bottom: 12px !important;
-  transition: all 0.2s ease !important;
+  border-radius: 12px !important;
+  margin-bottom: 16px !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
   text-decoration: none !important;
 
   &:hover {
     background: rgba(30, 41, 59, 0.8) !important;
-    border-color: rgba(99, 102, 241, 0.5) !important;
-    transform: translateY(-8px) !important;
-    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2), 0 10px 10px -5px rgba(0, 0, 0, 0.04), 0 0 20px rgba(99, 102, 241, 0.2) !important;
+    border-color: rgba(129, 140, 248, 0.5) !important;
+    transform: translateY(-6px) !important;
+    box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.3), 0 0 15px rgba(129, 140, 248, 0.15) !important;
+    
+    .list-arrow {
+      color: #818cf8 !important;
+      transform: translateX(4px);
+    }
+  }
+
+  .list-content {
+    flex: 1;
   }
 
   .list-title {
-    color: #e2e8f0 !important;
-    font-size: 1.1rem;
-    font-weight: 500;
+    color: #f8fafc !important;
+    font-size: 1.15rem;
+    font-weight: 600;
+    margin: 0 0 8px 0;
+  }
+
+  .list-desc {
+    color: #94a3b8 !important;
+    font-size: 0.95rem;
     margin: 0;
+    line-height: 1.5;
+  }
+
+  .list-arrow {
+    color: #475569;
+    font-size: 1.5rem;
+    transition: all 0.3s ease;
+    margin-left: 16px;
   }
 }
 
