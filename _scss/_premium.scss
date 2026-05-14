@@ -244,3 +244,40 @@ h1, h2, h3, h4, h5, h6 {
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
+
+// Dashboard Panel
+.dashboard-panel {
+  background: rgba(30, 41, 59, 0.5) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  border-radius: 16px !important;
+  padding: 32px 28px !important;
+  height: 100%;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.2) !important;
+}
+
+// Dashboard Inner List Items
+.list-item {
+  display: block;
+  padding: 18px 24px !important;
+  background: rgba(15, 23, 42, 0.6) !important;
+  border: 1px solid rgba(255, 255, 255, 0.03) !important;
+  border-radius: 8px !important;
+  margin-bottom: 12px !important;
+  transition: all 0.2s ease !important;
+  text-decoration: none !important;
+
+  &:hover {
+    background: rgba(30, 41, 59, 0.9) !important;
+    border-color: #818cf8 !important;
+    transform: translateX(6px) !important;
+    box-shadow: -4px 4px 10px rgba(0,0,0,0.2) !important;
+  }
+
+  .list-title {
+    color: #e2e8f0 !important;
+    font-size: 1.1rem;
+    font-weight: 500;
+    margin: 0;
+  }
+}
+
