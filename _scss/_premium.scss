@@ -318,3 +318,34 @@ h1, h2, h3, h4, h5, h6 {
   }
 }
 
+
+// Ambient Glow Effect for WOW Factor
+.dashboard-glow {
+  position: absolute;
+  top: -5%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90%;
+  max-width: 1200px;
+  height: 800px;
+  background: radial-gradient(circle, rgba(99, 102, 241, 0.12) 0%, rgba(129, 140, 248, 0.05) 30%, rgba(11, 17, 32, 0) 70%);
+  pointer-events: none;
+  z-index: 0;
+  animation: pulseGlow 8s infinite alternate;
+}
+
+@keyframes pulseGlow {
+  0% { opacity: 0.6; transform: translateX(-50%) scale(0.95); }
+  100% { opacity: 1; transform: translateX(-50%) scale(1.05); }
+}
+
+// Fix Text Visibility
+.list-item .list-desc {
+  color: #cbd5e1 !important;
+}
+
+.dashboard-panel {
+  display: flex;
+  flex-direction: column;
+}
+

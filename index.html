@@ -5,15 +5,18 @@ title: Home
 {% assign page_category = site.data.category_list[page.category] %}
 
 {% include header-home.html %}
-<div class="container-full" style="background-color: #0b1120; padding-bottom: 120px;">
-  <div class="container grid-xl">
+<div class="container-full" style="background-color: #0b1120; padding-bottom: 120px; position: relative;">
+  <!-- Glow Background Effect -->
+  <div class="dashboard-glow"></div>
+
+  <div class="container grid-xl" style="max-width: 1400px; position: relative; z-index: 2;">
     
     <!-- Dashboard Split Section -->
-    <div class="columns" style="margin-top: 40px;">
+    <div class="columns" style="margin-top: 40px; display: flex; align-items: stretch;">
       
       <!-- Left Column: Projects -->
-      <div class="column col-6 col-md-12" style="padding-right: 15px; margin-bottom: 40px;">
-        <div class="dashboard-panel">
+      <div class="column col-6 col-md-12" style="padding: 0 15px; margin-bottom: 40px; display: flex;">
+        <div class="dashboard-panel" style="width: 100%;">
           <h3 class="dashboard-title">
             <i class="uil uil-apps" style="color: #818cf8; margin-right: 12px; font-size: 1.8rem;"></i> Projects
           </h3>
@@ -45,8 +48,8 @@ title: Home
       </div>
 
       <!-- Right Column: Learnings -->
-      <div class="column col-6 col-md-12" style="padding-left: 15px;">
-        <div class="dashboard-panel">
+      <div class="column col-6 col-md-12" style="padding: 0 15px; margin-bottom: 40px; display: flex;">
+        <div class="dashboard-panel" style="width: 100%;">
           <h3 class="dashboard-title">
             <i class="uil uil-book-open" style="color: #818cf8; margin-right: 12px; font-size: 1.8rem;"></i> Tech Fundamentals
           </h3>
