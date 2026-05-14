@@ -267,10 +267,10 @@ h1, h2, h3, h4, h5, h6 {
   text-decoration: none !important;
 
   &:hover {
-    background: rgba(30, 41, 59, 0.9) !important;
-    border-color: #818cf8 !important;
-    transform: translateX(6px) !important;
-    box-shadow: -4px 4px 10px rgba(0,0,0,0.2) !important;
+    background: rgba(30, 41, 59, 0.8) !important;
+    border-color: rgba(99, 102, 241, 0.5) !important;
+    transform: translateY(-8px) !important;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2), 0 10px 10px -5px rgba(0, 0, 0, 0.04), 0 0 20px rgba(99, 102, 241, 0.2) !important;
   }
 
   .list-title {
