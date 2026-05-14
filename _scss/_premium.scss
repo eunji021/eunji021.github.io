@@ -138,3 +138,51 @@ h1, h2, h3, h4, h5, h6 {
 
 // Hide defaults
 .header-bg { display: none; }
+
+// Moonwalk Style Project Cards
+.moonwalk-card {
+  background: #16161a !important;
+  border: 1px solid #2d2d30 !important;
+  border-radius: 8px !important;
+  padding: 24px !important;
+  box-shadow: none !important;
+  text-align: left !important;
+  transition: border-color 0.2s ease !important;
+  height: 100%;
+
+  &:hover {
+    border-color: #60a5fa !important;
+    transform: none !important;
+    background: #1c1c21 !important;
+    box-shadow: none !important;
+  }
+
+  .moonwalk-title {
+    color: #60a5fa !important;
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .moonwalk-desc {
+    color: #9ca3af !important;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  .moonwalk-badge {
+    background: #0f766e !important;
+    color: #ccfbf1 !important;
+    font-size: 0.7rem !important;
+    font-weight: 800 !important;
+    padding: 2px 6px !important;
+    border-radius: 3px !important;
+    letter-spacing: 0.05em !important;
+    display: inline-block;
+  }
+}
+
