@@ -209,3 +209,38 @@ h1, h2, h3, h4, h5, h6 {
   border: 1px solid #313244 !important;
 }
 
+
+// Dashboard List Card Styles
+.list-card {
+  display: block;
+  padding: 18px 24px !important;
+  background: rgba(30, 41, 59, 0.4) !important;
+  border: 1px solid rgba(255, 255, 255, 0.05) !important;
+  border-radius: 8px !important;
+  margin-bottom: 12px !important;
+  transition: all 0.2s ease !important;
+  text-decoration: none !important;
+
+  &:hover {
+    background: rgba(30, 41, 59, 0.9) !important;
+    border-color: #818cf8 !important;
+    transform: translateX(4px) !important;
+  }
+
+  .list-title {
+    color: #e2e8f0 !important;
+    font-size: 1.1rem;
+    font-weight: 500;
+    margin: 0;
+  }
+}
+
+.dashboard-title {
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 1.4rem;
+  margin-bottom: 24px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
