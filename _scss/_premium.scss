@@ -349,3 +349,205 @@ h1, h2, h3, h4, h5, h6 {
   flex-direction: column;
 }
 
+// System Dashboard Styles
+.system-dashboard {
+  font-family: 'Consolas', 'Courier New', monospace;
+  color: #e2e8f0;
+  border: 1px dashed rgba(255, 255, 255, 0.4);
+  border-radius: 12px;
+  background: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(8px);
+  margin-top: 40px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+
+  .dash-topbar {
+    display: flex;
+    justify-content: space-between;
+    padding: 16px 24px;
+    border-bottom: 1px dashed rgba(255, 255, 255, 0.4);
+    
+    .dash-logo { font-weight: bold; }
+    .dash-links a {
+      color: #cbd5e1;
+      text-decoration: none;
+      margin: 0 8px;
+      &:hover { color: #a5b4fc; text-decoration: underline; }
+    }
+  }
+
+  .dash-hero {
+    padding: 32px 24px;
+    border-bottom: 1px dashed rgba(255, 255, 255, 0.4);
+    
+    .hero-title {
+      font-size: 1.5rem;
+      margin: 0 0 8px 0;
+      font-family: 'Consolas', 'Courier New', monospace;
+      color: #e2e8f0;
+      -webkit-text-fill-color: initial;
+      background: none;
+    }
+    
+    .hero-subtitle {
+      font-size: 1rem;
+      color: #94a3b8;
+      margin: 0;
+    }
+  }
+
+  .dash-split {
+    display: flex;
+    min-height: 400px;
+  }
+
+  .dash-menu {
+    flex: 1;
+    max-width: 400px;
+    border-right: 1px dashed rgba(255, 255, 255, 0.4);
+    padding: 24px;
+    
+    .dash-col-header {
+      margin-bottom: 32px;
+      color: #64748b;
+    }
+
+    .menu-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .menu-item {
+      padding: 12px 0;
+      cursor: pointer;
+      position: relative;
+      transition: color 0.2s;
+      
+      .menu-icon { margin-right: 8px; }
+      
+      .hover-indicator {
+        opacity: 0;
+        margin-left: 12px;
+        color: #a5b4fc;
+        transition: opacity 0.2s, transform 0.2s;
+        transform: translateX(-10px);
+        font-size: 0.9rem;
+      }
+
+      &.hovered {
+        color: #a5b4fc;
+        .hover-indicator {
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
+    }
+
+    .menu-divider {
+      color: rgba(255, 255, 255, 0.2);
+      padding: 12px 0;
+    }
+  }
+
+  .dash-content {
+    flex: 2;
+    padding: 24px;
+    position: relative;
+    overflow: hidden;
+
+    .dash-col-header {
+      margin-bottom: 32px;
+      color: #64748b;
+    }
+
+    .content-view {
+      position: absolute;
+      top: 80px;
+      left: 24px;
+      right: 24px;
+      bottom: 24px;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateX(-30px);
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      
+      &.active {
+        opacity: 1;
+        visibility: visible;
+        transform: translateX(0);
+      }
+    }
+
+    #view-default {
+      background-image: 
+        linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+      background-size: 20px 20px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 8px;
+      transform: none;
+    }
+
+    .tech-item {
+      margin-bottom: 24px;
+      h4 { 
+        margin: 0 0 8px 0; 
+        font-size: 1.1rem; 
+        color: #e2e8f0;
+        font-family: 'Consolas', 'Courier New', monospace;
+      }
+      p { 
+        margin: 0; 
+        color: #94a3b8; 
+      }
+    }
+
+    .project-cards-container {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+
+    .dash-card {
+      display: block;
+      padding: 16px;
+      border: 1px dashed rgba(255, 255, 255, 0.3);
+      border-radius: 8px;
+      text-decoration: none;
+      transition: border-color 0.2s, transform 0.2s;
+      
+      &:hover {
+        border-color: #a5b4fc;
+        transform: translateX(4px);
+      }
+
+      .list-title {
+        color: #e2e8f0;
+        margin: 0 0 8px 0;
+        font-size: 1.05rem;
+        font-family: 'Consolas', 'Courier New', monospace;
+      }
+      
+      .list-desc {
+        color: #94a3b8;
+        font-size: 0.9rem;
+        margin-bottom: 12px;
+      }
+
+      .tech-badges {
+        display: flex;
+        gap: 8px;
+      }
+
+      .badge-pill {
+        background: transparent !important;
+        border: none !important;
+        color: #818cf8 !important;
+        padding: 0 !important;
+        font-family: 'Consolas', 'Courier New', monospace;
+      }
+    }
+  }
+}
+
