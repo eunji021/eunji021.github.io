@@ -87,7 +87,7 @@ title: Home
               <i class="uil uil-book-open" style="color: #818cf8; margin-right: 12px; font-size: 1.8rem;"></i> Tech Fundamentals
             </h3>
             
-            <a href="{{ site.baseurl }}/tech-fundamentals" class="list-item">
+            <a href="{{ site.baseurl }}/ej" class="list-item" style="cursor: pointer;">
               <div class="list-content">
                 <h4 class="list-title">Python 기초 및 알고리즘</h4>
                 <p class="list-desc">데이터 구조 이해 및 로직 최적화 기반 다지기</p>
@@ -175,6 +175,7 @@ title: Home
 
 <script>
 document.addEventListener("DOMContentLoaded", function() {
+  const splitGrid = document.querySelector('.dash-split-grid');
   const menuAbout = document.getElementById('menu-about');
   const menuTech = document.getElementById('menu-tech');
   const menuProjects = document.getElementById('menu-projects');
@@ -209,12 +210,6 @@ document.addEventListener("DOMContentLoaded", function() {
       viewTech.classList.add('active');
       menuTech.classList.add('hovered');
     });
-    
-    menuTech.addEventListener('mouseleave', () => {
-      resetViews();
-      viewAbout.classList.add('active');
-      menuAbout.classList.add('hovered');
-    });
   }
   
   if(menuProjects) {
@@ -223,8 +218,10 @@ document.addEventListener("DOMContentLoaded", function() {
       viewProjects.classList.add('active');
       menuProjects.classList.add('hovered');
     });
-    
-    menuProjects.addEventListener('mouseleave', () => {
+  }
+
+  if(splitGrid) {
+    splitGrid.addEventListener('mouseleave', () => {
       resetViews();
       viewAbout.classList.add('active');
       menuAbout.classList.add('hovered');
