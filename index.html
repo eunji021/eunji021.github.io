@@ -18,21 +18,21 @@ title: Home
     </div>
     
     <!-- Split Layout Structure -->
-    <div class="columns" style="display: flex; align-items: stretch; gap: 32px;">
+    <div class="dash-split-grid" style="display: grid; grid-template-columns: 35% 1fr; gap: 32px; align-items: stretch; min-height: 500px;">
       
       <!-- Left Panel: MENU -->
-      <div class="column col-4 col-md-12">
-        <div class="modern-panel dash-menu" style="height: 100%;">
-          <ul class="menu-list" style="list-style: none; padding: 0; margin: 0;">
-            <li class="menu-item" id="menu-tech">
+      <div class="dash-left-panel" style="display: flex; flex-direction: column;">
+        <div class="modern-panel dash-menu" style="height: 100%; display: flex; flex-direction: column; justify-content: center;">
+          <ul class="menu-list" style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 24px;">
+            <li class="menu-item" id="menu-tech" style="padding: 32px 24px; font-size: 1.3rem; border-radius: 16px;">
               <div style="display: flex; align-items: center;">
-                <span class="menu-icon"><i class="uil uil-book-open"></i></span> Tech Fundamentals
+                <span class="menu-icon" style="font-size: 1.5rem;"><i class="uil uil-book-open"></i></span> Tech Fundamentals
               </div>
               <i class="uil uil-arrow-right list-arrow"></i>
             </li>
-            <li class="menu-item" id="menu-projects">
+            <li class="menu-item" id="menu-projects" style="padding: 32px 24px; font-size: 1.3rem; border-radius: 16px;">
               <div style="display: flex; align-items: center;">
-                <span class="menu-icon"><i class="uil uil-apps"></i></span> Projects
+                <span class="menu-icon" style="font-size: 1.5rem;"><i class="uil uil-apps"></i></span> Projects
               </div>
               <i class="uil uil-arrow-right list-arrow"></i>
             </li>
@@ -41,8 +41,8 @@ title: Home
       </div>
       
       <!-- Right Panel: CONTENT AREA -->
-      <div class="column col-8 col-md-12">
-        <div class="modern-panel dash-content" id="dash-content-area" style="position: relative; overflow: hidden; height: 100%; min-height: 480px;">
+      <div class="dash-right-panel" style="display: flex; flex-direction: column;">
+        <div class="modern-panel dash-content" id="dash-content-area" style="position: relative; overflow: hidden; height: 100%; min-height: 500px;">
           
           <!-- Default State -->
           <div class="content-view active" id="view-default" style="display: flex; align-items: center; justify-content: center; height: 100%;">
