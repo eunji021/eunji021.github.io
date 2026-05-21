@@ -16,17 +16,17 @@ title: Home
       
       <!-- Dashboard Top Bar -->
       <div class="dash-topbar">
-        <div class="dash-logo">| Kwon Eun Ji (로고)</div>
+        <div class="dash-logo">Kwon Eun Ji</div>
         <div class="dash-links">
-          <a href="https://github.com/eunji021">Github</a>
-          <a href="mailto:{{ site.email }}">Email</a> |
+          <a href="https://github.com/eunji021"><i class="uil uil-github"></i> Github</a>
+          <a href="mailto:{{ site.email }}"><i class="uil uil-envelope"></i> Email</a>
         </div>
       </div>
       
       <!-- Dashboard Hero -->
       <div class="dash-hero">
-        <h1 class="hero-title">| 소프트웨어 엔지니어 <span style="color: #a5b4fc;">권은지</span></h1>
-        <p class="hero-subtitle">| &gt; System &amp; Embedded Developer</p>
+        <h1 class="hero-title">소프트웨어 엔지니어 <span style="color: #a5b4fc;">권은지</span></h1>
+        <p class="hero-subtitle">&gt; System &amp; Embedded Developer</p>
       </div>
       
       <!-- Dashboard Split Section -->
@@ -34,22 +34,18 @@ title: Home
         
         <!-- Left Column: MENU -->
         <div class="dash-menu">
-          <div class="dash-col-header">| [ MENU ]</div>
           <ul class="menu-list">
             <li class="menu-item" id="menu-tech">
-              | <span class="menu-icon">■</span> Tech Fundamentals <span class="hover-indicator">&lt;-- (HOVER)</span>
+              <span class="menu-icon"><i class="uil uil-book-open"></i></span> Tech Fundamentals
             </li>
-            <li class="menu-divider">| ---------------------------------------------</li>
             <li class="menu-item" id="menu-projects">
-              | <span class="menu-icon">■</span> Projects <span class="hover-indicator">&lt;-- (HOVER)</span>
+              <span class="menu-icon"><i class="uil uil-apps"></i></span> Projects
             </li>
           </ul>
         </div>
         
         <!-- Right Column: CONTENT AREA -->
         <div class="dash-content" id="dash-content-area">
-          
-          <div class="dash-col-header" id="content-header">| [ CONTENT AREA ]</div>
           
           <!-- Default State (Grid background) -->
           <div class="content-view active" id="view-default">
@@ -59,16 +55,16 @@ title: Home
           <!-- Tech Fundamentals View -->
           <div class="content-view" id="view-tech">
             <div class="tech-item">
-              <h4>| &gt; Python 기초 및 알고리즘</h4>
-              <p>| &nbsp;&nbsp;- 데이터 구조 이해 및 로직 최적화 기반 다지기</p>
+              <h4>Python 기초 및 알고리즘</h4>
+              <p>데이터 구조 이해 및 로직 최적화 기반 다지기</p>
             </div>
             <div class="tech-item">
-              <h4>| &gt; C/C++ 메모리 제어</h4>
-              <p>| &nbsp;&nbsp;- 안정적인 펌웨어 개발을 위한 포인터/메모리 관리</p>
+              <h4>C/C++ 메모리 제어</h4>
+              <p>안정적인 펌웨어 개발을 위한 포인터/메모리 관리</p>
             </div>
             <div class="tech-item">
-              <h4>| &gt; C# 객체지향 프로그래밍</h4>
-              <p>| &nbsp;&nbsp;- 유지보수가 용이한 시스템 소프트웨어 설계</p>
+              <h4>C# 객체지향 프로그래밍</h4>
+              <p>유지보수가 용이한 시스템 소프트웨어 설계</p>
             </div>
           </div>
           
@@ -78,22 +74,22 @@ title: Home
               
               <a href="{{ site.baseurl }}/embedded-hardware-projects" class="list-item dash-card">
                 <div class="list-content">
-                  <h4 class="list-title">| 스마트 화재 대피 유도 시스템</h4>
-                  <p class="list-desc">| - 실시간 센서 데이터 기반 하드웨어 제어</p>
+                  <h4 class="list-title">스마트 화재 대피 유도 시스템</h4>
+                  <p class="list-desc">실시간 센서 데이터 기반 하드웨어 제어</p>
                   <div class="tech-badges">
-                    <span class="badge-pill">[ESP32]</span>
-                    <span class="badge-pill">[C/C++]</span>
+                    <span class="badge-pill">ESP32</span>
+                    <span class="badge-pill">C/C++</span>
                   </div>
                 </div>
               </a>
               
               <a href="{{ site.baseurl }}/system-software-projects" class="list-item dash-card">
                 <div class="list-content">
-                  <h4 class="list-title">| C# 기반 마트 관리 시스템</h4>
-                  <p class="list-desc">| - OOP 기반의 안정적인 UI/UX 구축 및 연동</p>
+                  <h4 class="list-title">C# 기반 마트 관리 시스템</h4>
+                  <p class="list-desc">OOP 기반의 안정적인 UI/UX 구축 및 연동</p>
                   <div class="tech-badges">
-                    <span class="badge-pill">[C#]</span>
-                    <span class="badge-pill">[WinForms]</span>
+                    <span class="badge-pill">C#</span>
+                    <span class="badge-pill">WinForms</span>
                   </div>
                 </div>
               </a>
@@ -118,8 +114,6 @@ document.addEventListener("DOMContentLoaded", function() {
   const viewTech = document.getElementById('view-tech');
   const viewProjects = document.getElementById('view-projects');
   
-  const contentHeader = document.getElementById('content-header');
-  
   function resetViews() {
     viewDefault.classList.remove('active');
     viewTech.classList.remove('active');
@@ -133,26 +127,22 @@ document.addEventListener("DOMContentLoaded", function() {
     resetViews();
     viewTech.classList.add('active');
     menuTech.classList.add('hovered');
-    contentHeader.innerText = "| [ TECH DETAILS ]";
   });
   
   menuTech.addEventListener('mouseleave', () => {
     resetViews();
     viewDefault.classList.add('active');
-    contentHeader.innerText = "| [ CONTENT AREA ]";
   });
   
   menuProjects.addEventListener('mouseenter', () => {
     resetViews();
     viewProjects.classList.add('active');
     menuProjects.classList.add('hovered');
-    contentHeader.innerText = "| [ PROJECT CARDS ]";
   });
   
   menuProjects.addEventListener('mouseleave', () => {
     resetViews();
     viewDefault.classList.add('active');
-    contentHeader.innerText = "| [ CONTENT AREA ]";
   });
 });
 </script>
