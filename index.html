@@ -42,15 +42,24 @@ title: Home
       
       <!-- Right Panel: CONTENT AREA -->
       <div class="dash-right-panel" style="display: flex; flex-direction: column;">
-        <div class="modern-panel dash-content" id="dash-content-area" style="position: relative; overflow: hidden; height: 100%; min-height: 500px;">
+        <div class="modern-panel dash-content" id="dash-content-area" style="position: relative; overflow: hidden; height: 100%; min-height: 500px; padding: 24px;">
           
-          <!-- Default State -->
-          <div class="content-view active" id="view-default" style="display: flex; align-items: center; justify-content: center; height: 100%;">
-             <!-- Empty, Grid line background via CSS -->
+          <!-- Default State (Terminal Boot Log) -->
+          <div class="content-view active" id="view-default" style="display: flex; align-items: stretch; justify-content: stretch; height: 100%; padding: 0; top: 24px; left: 24px; right: 24px; bottom: 24px;">
+            <div class="terminal-container" style="background: rgba(10, 15, 25, 0.95); border-radius: 12px; width: 100%; height: 100%; padding: 24px; box-shadow: inset 0 0 20px rgba(0,0,0,0.5), 0 0 15px rgba(0,0,0,0.3); font-family: 'Consolas', 'Courier New', monospace; position: relative; overflow: hidden; display: flex; flex-direction: column;">
+              <div class="terminal-header" style="display: flex; gap: 8px; margin-bottom: 24px;">
+                <div style="width: 12px; height: 12px; border-radius: 50%; background: #ff5f56;"></div>
+                <div style="width: 12px; height: 12px; border-radius: 50%; background: #ffbd2e;"></div>
+                <div style="width: 12px; height: 12px; border-radius: 50%; background: #27c93f;"></div>
+              </div>
+              <div id="terminal-text" style="color: #4ade80; font-size: 1.1rem; line-height: 1.8; text-shadow: 0 0 5px rgba(74, 222, 128, 0.4); flex-grow: 1;">
+                <!-- Typed text will go here -->
+              </div>
+            </div>
           </div>
           
           <!-- Tech Fundamentals View -->
-          <div class="content-view" id="view-tech" style="overflow-y: auto; max-height: 100%; padding-right: 12px;">
+          <div class="content-view" id="view-tech" style="overflow-y: auto; max-height: 100%; padding-right: 12px; top: 24px; left: 24px; right: 12px; bottom: 24px;">
             <h3 class="dashboard-title" style="margin-top: 0;">
               <i class="uil uil-book-open" style="color: #818cf8; margin-right: 12px; font-size: 1.8rem;"></i> Tech Fundamentals
             </h3>
@@ -81,7 +90,7 @@ title: Home
           </div>
           
           <!-- Projects View -->
-          <div class="content-view" id="view-projects" style="overflow-y: auto; max-height: 100%; padding-right: 12px;">
+          <div class="content-view" id="view-projects" style="overflow-y: auto; max-height: 100%; padding-right: 12px; top: 24px; left: 24px; right: 12px; bottom: 24px;">
             <h3 class="dashboard-title" style="margin-top: 0;">
               <i class="uil uil-apps" style="color: #818cf8; margin-right: 12px; font-size: 1.8rem;"></i> Projects
             </h3>
@@ -119,6 +128,22 @@ title: Home
   </div>
 </div>
 
+<style>
+@keyframes terminalBlink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+.cursor-blink {
+  display: inline-block;
+  width: 10px;
+  height: 1.2rem;
+  background: #4ade80;
+  margin-left: 6px;
+  vertical-align: middle;
+  animation: terminalBlink 1s step-end infinite;
+}
+</style>
+
 <script>
 document.addEventListener("DOMContentLoaded", function() {
   const menuTech = document.getElementById('menu-tech');
@@ -137,6 +162,68 @@ document.addEventListener("DOMContentLoaded", function() {
     if(menuProjects) menuProjects.classList.remove('hovered');
   }
 
+  // Terminal Typing Logic
+  const bootLogs = [
+    "> Initializing boot sequence...",
+    "> Loading kernel modules [OK]",
+    "> Checking hardware interfaces [OK]",
+    "> Mounting local file systems [OK]",
+    "> Starting embedded services [OK]",
+    "> System Ready.",
+    "> Awaiting User Input_"
+  ];
+  const terminalText = document.getElementById('terminal-text');
+  let lineIndex = 0;
+  let charIndex = 0;
+  let typingTimeout;
+
+  function typeLog() {
+    if(!terminalText) return;
+    
+    if (lineIndex < bootLogs.length) {
+      if (charIndex === 0) {
+        const newLine = document.createElement('div');
+        terminalText.appendChild(newLine);
+        
+        // Ensure cursor is always at the end
+        const cursor = terminalText.querySelector('.cursor-blink');
+        if (cursor) cursor.remove();
+        
+        const newCursor = document.createElement('span');
+        newCursor.className = 'cursor-blink';
+        terminalText.appendChild(newCursor);
+      }
+      
+      const lines = terminalText.querySelectorAll('div');
+      const currentDiv = lines[lines.length - 1];
+      const currentLine = bootLogs[lineIndex];
+      
+      if (charIndex < currentLine.length) {
+        currentDiv.textContent += currentLine.charAt(charIndex);
+        charIndex++;
+        typingTimeout = setTimeout(typeLog, Math.random() * 30 + 15);
+      } else {
+        charIndex = 0;
+        lineIndex++;
+        typingTimeout = setTimeout(typeLog, 300);
+      }
+    }
+  }
+
+  // Restart typing animation when view-default becomes active
+  function restartTyping() {
+    clearTimeout(typingTimeout);
+    if(terminalText) {
+      terminalText.innerHTML = ''; // Clear contents
+      lineIndex = 0;
+      charIndex = 0;
+      setTimeout(typeLog, 300);
+    }
+  }
+
+  // Start initially
+  setTimeout(restartTyping, 500);
+
   if(menuTech) {
     menuTech.addEventListener('mouseenter', () => {
       resetViews();
@@ -147,6 +234,7 @@ document.addEventListener("DOMContentLoaded", function() {
     menuTech.addEventListener('mouseleave', () => {
       resetViews();
       viewDefault.classList.add('active');
+      restartTyping();
     });
   }
   
@@ -160,6 +248,7 @@ document.addEventListener("DOMContentLoaded", function() {
     menuProjects.addEventListener('mouseleave', () => {
       resetViews();
       viewDefault.classList.add('active');
+      restartTyping();
     });
   }
 });
