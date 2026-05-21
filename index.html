@@ -17,72 +17,100 @@ title: Home
       <p class="hero-subtitle" style="font-size: 1.1rem; color: #64748b; font-weight: 600;">프로젝트</p>
     </div>
     
-    <!-- Two-Column Layout -->
-    <div class="columns" style="display: flex; align-items: stretch; gap: 32px; justify-content: center;">
+    <!-- Split Layout Structure -->
+    <div class="columns" style="display: flex; align-items: stretch; gap: 32px;">
       
-      <!-- Left Column: Projects -->
-      <div class="column col-6 col-md-12" style="display: flex;">
-        <div class="dashboard-panel" style="width: 100%;">
-          <h3 class="dashboard-title">
-            <i class="uil uil-apps" style="color: #818cf8; margin-right: 12px; font-size: 1.8rem;"></i> Projects
-          </h3>
-          
-          <a href="{{ site.baseurl }}/embedded-hardware-projects" class="list-item">
-            <div class="list-content">
-              <h4 class="list-title">스마트 화재 대피 유도 시스템</h4>
-              <p class="list-desc">실시간 센서 데이터 기반 하드웨어 제어 및 최적 경로 탐색</p>
-              <div class="tech-badges" style="justify-content: flex-start; margin-top: 12px;">
-                <span class="badge-pill">ESP32</span>
-                <span class="badge-pill">C/C++</span>
+      <!-- Left Panel: MENU -->
+      <div class="column col-4 col-md-12">
+        <div class="modern-panel dash-menu" style="height: 100%;">
+          <ul class="menu-list" style="list-style: none; padding: 0; margin: 0;">
+            <li class="menu-item" id="menu-tech">
+              <div style="display: flex; align-items: center;">
+                <span class="menu-icon"><i class="uil uil-book-open"></i></span> Tech Fundamentals
               </div>
-            </div>
-            <i class="uil uil-arrow-right list-arrow"></i>
-          </a>
-          
-          <a href="{{ site.baseurl }}/system-software-projects" class="list-item">
-            <div class="list-content">
-              <h4 class="list-title">C# 기반 마트 관리 시스템</h4>
-              <p class="list-desc">객체 지향 설계(OOP) 기반의 안정적인 UI/UX 구축 및 연동</p>
-              <div class="tech-badges" style="justify-content: flex-start; margin-top: 12px;">
-                <span class="badge-pill">C#</span>
-                <span class="badge-pill">WinForms</span>
+              <i class="uil uil-arrow-right list-arrow"></i>
+            </li>
+            <li class="menu-item" id="menu-projects">
+              <div style="display: flex; align-items: center;">
+                <span class="menu-icon"><i class="uil uil-apps"></i></span> Projects
               </div>
-            </div>
-            <i class="uil uil-arrow-right list-arrow"></i>
-          </a>
+              <i class="uil uil-arrow-right list-arrow"></i>
+            </li>
+          </ul>
         </div>
       </div>
       
-      <!-- Right Column: Tech Fundamentals -->
-      <div class="column col-6 col-md-12" style="display: flex;">
-        <div class="dashboard-panel" style="width: 100%;">
-          <h3 class="dashboard-title">
-            <i class="uil uil-book-open" style="color: #818cf8; margin-right: 12px; font-size: 1.8rem;"></i> Tech Fundamentals
-          </h3>
+      <!-- Right Panel: CONTENT AREA -->
+      <div class="column col-8 col-md-12">
+        <div class="modern-panel dash-content" id="dash-content-area" style="position: relative; overflow: hidden; height: 100%; min-height: 480px;">
           
-          <a href="{{ site.baseurl }}/tech-fundamentals" class="list-item">
-            <div class="list-content">
-              <h4 class="list-title">Python 기초 및 알고리즘</h4>
-              <p class="list-desc">데이터 구조 이해 및 로직 최적화 기반 다지기</p>
-            </div>
-            <i class="uil uil-arrow-right list-arrow"></i>
-          </a>
+          <!-- Default State -->
+          <div class="content-view active" id="view-default" style="display: flex; align-items: center; justify-content: center; height: 100%;">
+             <!-- Empty, Grid line background via CSS -->
+          </div>
           
-          <a href="{{ site.baseurl }}/tech-fundamentals" class="list-item">
-            <div class="list-content">
-              <h4 class="list-title">C/C++ 메모리 제어</h4>
-              <p class="list-desc">안정적인 펌웨어 개발을 위한 포인터와 메모리 관리</p>
-            </div>
-            <i class="uil uil-arrow-right list-arrow"></i>
-          </a>
+          <!-- Tech Fundamentals View -->
+          <div class="content-view" id="view-tech" style="overflow-y: auto; max-height: 100%; padding-right: 12px;">
+            <h3 class="dashboard-title" style="margin-top: 0;">
+              <i class="uil uil-book-open" style="color: #818cf8; margin-right: 12px; font-size: 1.8rem;"></i> Tech Fundamentals
+            </h3>
+            
+            <a href="{{ site.baseurl }}/tech-fundamentals" class="list-item">
+              <div class="list-content">
+                <h4 class="list-title">Python 기초 및 알고리즘</h4>
+                <p class="list-desc">데이터 구조 이해 및 로직 최적화 기반 다지기</p>
+              </div>
+              <i class="uil uil-arrow-right list-arrow"></i>
+            </a>
+            
+            <a href="{{ site.baseurl }}/tech-fundamentals" class="list-item">
+              <div class="list-content">
+                <h4 class="list-title">C/C++ 메모리 제어</h4>
+                <p class="list-desc">안정적인 펌웨어 개발을 위한 포인터와 메모리 관리</p>
+              </div>
+              <i class="uil uil-arrow-right list-arrow"></i>
+            </a>
 
-          <a href="{{ site.baseurl }}/tech-fundamentals" class="list-item">
-            <div class="list-content">
-              <h4 class="list-title">C# 객체지향 프로그래밍</h4>
-              <p class="list-desc">유지보수가 용이한 시스템 소프트웨어 설계 패턴</p>
-            </div>
-            <i class="uil uil-arrow-right list-arrow"></i>
-          </a>
+            <a href="{{ site.baseurl }}/tech-fundamentals" class="list-item">
+              <div class="list-content">
+                <h4 class="list-title">C# 객체지향 프로그래밍</h4>
+                <p class="list-desc">유지보수가 용이한 시스템 소프트웨어 설계 패턴</p>
+              </div>
+              <i class="uil uil-arrow-right list-arrow"></i>
+            </a>
+          </div>
+          
+          <!-- Projects View -->
+          <div class="content-view" id="view-projects" style="overflow-y: auto; max-height: 100%; padding-right: 12px;">
+            <h3 class="dashboard-title" style="margin-top: 0;">
+              <i class="uil uil-apps" style="color: #818cf8; margin-right: 12px; font-size: 1.8rem;"></i> Projects
+            </h3>
+            
+            <a href="{{ site.baseurl }}/embedded-hardware-projects" class="list-item">
+              <div class="list-content">
+                <h4 class="list-title">스마트 화재 대피 유도 시스템</h4>
+                <p class="list-desc">실시간 센서 데이터 기반 하드웨어 제어 및 최적 경로 탐색</p>
+                <div class="tech-badges" style="justify-content: flex-start; margin-top: 12px;">
+                  <span class="badge-pill">ESP32</span>
+                  <span class="badge-pill">C/C++</span>
+                </div>
+              </div>
+              <i class="uil uil-arrow-right list-arrow"></i>
+            </a>
+            
+            <a href="{{ site.baseurl }}/system-software-projects" class="list-item">
+              <div class="list-content">
+                <h4 class="list-title">C# 기반 마트 관리 시스템</h4>
+                <p class="list-desc">객체 지향 설계(OOP) 기반의 안정적인 UI/UX 구축 및 연동</p>
+                <div class="tech-badges" style="justify-content: flex-start; margin-top: 12px;">
+                  <span class="badge-pill">C#</span>
+                  <span class="badge-pill">WinForms</span>
+                </div>
+              </div>
+              <i class="uil uil-arrow-right list-arrow"></i>
+            </a>
+          </div>
+          
         </div>
       </div>
       
@@ -90,3 +118,49 @@ title: Home
 
   </div>
 </div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  const menuTech = document.getElementById('menu-tech');
+  const menuProjects = document.getElementById('menu-projects');
+  
+  const viewDefault = document.getElementById('view-default');
+  const viewTech = document.getElementById('view-tech');
+  const viewProjects = document.getElementById('view-projects');
+  
+  function resetViews() {
+    if(viewDefault) viewDefault.classList.remove('active');
+    if(viewTech) viewTech.classList.remove('active');
+    if(viewProjects) viewProjects.classList.remove('active');
+    
+    if(menuTech) menuTech.classList.remove('hovered');
+    if(menuProjects) menuProjects.classList.remove('hovered');
+  }
+
+  if(menuTech) {
+    menuTech.addEventListener('mouseenter', () => {
+      resetViews();
+      viewTech.classList.add('active');
+      menuTech.classList.add('hovered');
+    });
+    
+    menuTech.addEventListener('mouseleave', () => {
+      resetViews();
+      viewDefault.classList.add('active');
+    });
+  }
+  
+  if(menuProjects) {
+    menuProjects.addEventListener('mouseenter', () => {
+      resetViews();
+      viewProjects.classList.add('active');
+      menuProjects.classList.add('hovered');
+    });
+    
+    menuProjects.addEventListener('mouseleave', () => {
+      resetViews();
+      viewDefault.classList.add('active');
+    });
+  }
+});
+</script>
