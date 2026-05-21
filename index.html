@@ -9,140 +9,84 @@ title: Home
   <!-- Glow Background Effect -->
   <div class="dashboard-glow"></div>
 
-  <div class="container" style="max-width: 1400px !important; width: 95% !important; position: relative; z-index: 2;">
+  <div class="container" style="max-width: 1200px !important; width: 95% !important; position: relative; z-index: 2;">
     
-    <!-- System Dashboard Wrapper -->
-    <div class="system-dashboard">
+    <!-- Hero Section -->
+    <div class="dash-hero" style="text-align: center; padding: 100px 0 60px;">
+      <h1 class="hero-title" style="font-size: 3.5rem; margin-bottom: 16px; font-weight: 800; color: #fff; letter-spacing: -0.02em;">소프트웨어 엔지니어 권은지</h1>
+      <p class="hero-subtitle" style="font-size: 1.1rem; color: #64748b; font-weight: 600;">프로젝트</p>
+    </div>
+    
+    <!-- Two-Column Layout -->
+    <div class="columns" style="display: flex; align-items: stretch; gap: 32px; justify-content: center;">
       
-      <!-- Dashboard Top Bar -->
-      <div class="dash-topbar">
-        <div class="dash-logo">Kwon Eun Ji</div>
-        <div class="dash-links">
-          <a href="https://github.com/eunji021"><i class="uil uil-github"></i> Github</a>
-          <a href="mailto:{{ site.email }}"><i class="uil uil-envelope"></i> Email</a>
+      <!-- Left Column: Projects -->
+      <div class="column col-6 col-md-12" style="display: flex;">
+        <div class="dashboard-panel" style="width: 100%;">
+          <h3 class="dashboard-title">
+            <i class="uil uil-apps" style="color: #818cf8; margin-right: 12px; font-size: 1.8rem;"></i> Projects
+          </h3>
+          
+          <a href="{{ site.baseurl }}/embedded-hardware-projects" class="list-item">
+            <div class="list-content">
+              <h4 class="list-title">스마트 화재 대피 유도 시스템</h4>
+              <p class="list-desc">실시간 센서 데이터 기반 하드웨어 제어 및 최적 경로 탐색</p>
+              <div class="tech-badges" style="justify-content: flex-start; margin-top: 12px;">
+                <span class="badge-pill">ESP32</span>
+                <span class="badge-pill">C/C++</span>
+              </div>
+            </div>
+            <i class="uil uil-arrow-right list-arrow"></i>
+          </a>
+          
+          <a href="{{ site.baseurl }}/system-software-projects" class="list-item">
+            <div class="list-content">
+              <h4 class="list-title">C# 기반 마트 관리 시스템</h4>
+              <p class="list-desc">객체 지향 설계(OOP) 기반의 안정적인 UI/UX 구축 및 연동</p>
+              <div class="tech-badges" style="justify-content: flex-start; margin-top: 12px;">
+                <span class="badge-pill">C#</span>
+                <span class="badge-pill">WinForms</span>
+              </div>
+            </div>
+            <i class="uil uil-arrow-right list-arrow"></i>
+          </a>
         </div>
       </div>
       
-      <!-- Dashboard Hero -->
-      <div class="dash-hero">
-        <h1 class="hero-title">소프트웨어 엔지니어 <span style="color: #a5b4fc;">권은지</span></h1>
-        <p class="hero-subtitle">&gt; System &amp; Embedded Developer</p>
+      <!-- Right Column: Tech Fundamentals -->
+      <div class="column col-6 col-md-12" style="display: flex;">
+        <div class="dashboard-panel" style="width: 100%;">
+          <h3 class="dashboard-title">
+            <i class="uil uil-book-open" style="color: #818cf8; margin-right: 12px; font-size: 1.8rem;"></i> Tech Fundamentals
+          </h3>
+          
+          <a href="{{ site.baseurl }}/tech-fundamentals" class="list-item">
+            <div class="list-content">
+              <h4 class="list-title">Python 기초 및 알고리즘</h4>
+              <p class="list-desc">데이터 구조 이해 및 로직 최적화 기반 다지기</p>
+            </div>
+            <i class="uil uil-arrow-right list-arrow"></i>
+          </a>
+          
+          <a href="{{ site.baseurl }}/tech-fundamentals" class="list-item">
+            <div class="list-content">
+              <h4 class="list-title">C/C++ 메모리 제어</h4>
+              <p class="list-desc">안정적인 펌웨어 개발을 위한 포인터와 메모리 관리</p>
+            </div>
+            <i class="uil uil-arrow-right list-arrow"></i>
+          </a>
+
+          <a href="{{ site.baseurl }}/tech-fundamentals" class="list-item">
+            <div class="list-content">
+              <h4 class="list-title">C# 객체지향 프로그래밍</h4>
+              <p class="list-desc">유지보수가 용이한 시스템 소프트웨어 설계 패턴</p>
+            </div>
+            <i class="uil uil-arrow-right list-arrow"></i>
+          </a>
+        </div>
       </div>
       
-      <!-- Dashboard Split Section -->
-      <div class="dash-split">
-        
-        <!-- Left Column: MENU -->
-        <div class="dash-menu">
-          <ul class="menu-list">
-            <li class="menu-item" id="menu-tech">
-              <span class="menu-icon"><i class="uil uil-book-open"></i></span> Tech Fundamentals
-            </li>
-            <li class="menu-item" id="menu-projects">
-              <span class="menu-icon"><i class="uil uil-apps"></i></span> Projects
-            </li>
-          </ul>
-        </div>
-        
-        <!-- Right Column: CONTENT AREA -->
-        <div class="dash-content" id="dash-content-area">
-          
-          <!-- Default State (Grid background) -->
-          <div class="content-view active" id="view-default">
-             <!-- Empty, uses CSS background grid lines -->
-          </div>
-          
-          <!-- Tech Fundamentals View -->
-          <div class="content-view" id="view-tech">
-            <div class="tech-item">
-              <h4>Python 기초 및 알고리즘</h4>
-              <p>데이터 구조 이해 및 로직 최적화 기반 다지기</p>
-            </div>
-            <div class="tech-item">
-              <h4>C/C++ 메모리 제어</h4>
-              <p>안정적인 펌웨어 개발을 위한 포인터/메모리 관리</p>
-            </div>
-            <div class="tech-item">
-              <h4>C# 객체지향 프로그래밍</h4>
-              <p>유지보수가 용이한 시스템 소프트웨어 설계</p>
-            </div>
-          </div>
-          
-          <!-- Projects View -->
-          <div class="content-view" id="view-projects">
-            <div class="project-cards-container">
-              
-              <a href="{{ site.baseurl }}/embedded-hardware-projects" class="list-item dash-card">
-                <div class="list-content">
-                  <h4 class="list-title">스마트 화재 대피 유도 시스템</h4>
-                  <p class="list-desc">실시간 센서 데이터 기반 하드웨어 제어</p>
-                  <div class="tech-badges">
-                    <span class="badge-pill">ESP32</span>
-                    <span class="badge-pill">C/C++</span>
-                  </div>
-                </div>
-              </a>
-              
-              <a href="{{ site.baseurl }}/system-software-projects" class="list-item dash-card">
-                <div class="list-content">
-                  <h4 class="list-title">C# 기반 마트 관리 시스템</h4>
-                  <p class="list-desc">OOP 기반의 안정적인 UI/UX 구축 및 연동</p>
-                  <div class="tech-badges">
-                    <span class="badge-pill">C#</span>
-                    <span class="badge-pill">WinForms</span>
-                  </div>
-                </div>
-              </a>
-              
-            </div>
-          </div>
-          
-        </div> <!-- End Right Column -->
-      </div> <!-- End Dash Split -->
-      
-    </div> <!-- End System Dashboard -->
+    </div>
 
   </div>
 </div>
-
-<script>
-document.addEventListener("DOMContentLoaded", function() {
-  const menuTech = document.getElementById('menu-tech');
-  const menuProjects = document.getElementById('menu-projects');
-  
-  const viewDefault = document.getElementById('view-default');
-  const viewTech = document.getElementById('view-tech');
-  const viewProjects = document.getElementById('view-projects');
-  
-  function resetViews() {
-    viewDefault.classList.remove('active');
-    viewTech.classList.remove('active');
-    viewProjects.classList.remove('active');
-    
-    menuTech.classList.remove('hovered');
-    menuProjects.classList.remove('hovered');
-  }
-
-  menuTech.addEventListener('mouseenter', () => {
-    resetViews();
-    viewTech.classList.add('active');
-    menuTech.classList.add('hovered');
-  });
-  
-  menuTech.addEventListener('mouseleave', () => {
-    resetViews();
-    viewDefault.classList.add('active');
-  });
-  
-  menuProjects.addEventListener('mouseenter', () => {
-    resetViews();
-    viewProjects.classList.add('active');
-    menuProjects.classList.add('hovered');
-  });
-  
-  menuProjects.addEventListener('mouseleave', () => {
-    resetViews();
-    viewDefault.classList.add('active');
-  });
-});
-</script>
