@@ -9,51 +9,54 @@ title: Home
   <!-- Glow Background Effect -->
   <div class="dashboard-glow"></div>
 
-  <div class="container" style="max-width: 1400px !important; width: 95% !important; position: relative; z-index: 2;">
+  <div class="container" style="max-width: 1200px !important; width: 95% !important; position: relative; z-index: 2;">
     
-    <!-- System Dashboard Wrapper -->
-    <div class="system-dashboard">
+    <!-- Hero Section -->
+    <div class="dash-hero" style="text-align: center; padding: 80px 0 60px;">
+      <h1 class="hero-title" style="font-size: 3.5rem; margin-bottom: 16px; font-weight: 800; color: #fff; letter-spacing: -0.02em;">소프트웨어 엔지니어 <span style="color: #a5b4fc;">권은지</span></h1>
+      <p class="hero-subtitle" style="font-size: 1.25rem; color: #64748b; font-weight: 500;">프로젝트 &amp; 기술 스택</p>
+    </div>
+    
+    <!-- Two-Panel Split Section -->
+    <div class="columns" style="display: flex; align-items: stretch; gap: 32px;">
       
-      <!-- Dashboard Top Bar -->
-      <div class="dash-topbar">
-        <div class="dash-logo">Kwon Eun Ji</div>
-        <div class="dash-links">
-          <a href="https://github.com/eunji021"><i class="uil uil-github"></i> Github</a>
-          <a href="mailto:{{ site.email }}"><i class="uil uil-envelope"></i> Email</a>
-        </div>
-      </div>
-      
-      <!-- Dashboard Hero -->
-      <div class="dash-hero">
-        <h1 class="hero-title">소프트웨어 엔지니어 <span style="color: #a5b4fc;">권은지</span></h1>
-        <p class="hero-subtitle">&gt; System &amp; Embedded Developer</p>
-      </div>
-      
-      <!-- Dashboard Split Section -->
-      <div class="dash-split">
-        
-        <!-- Left Column: MENU -->
-        <div class="dash-menu">
-          <ul class="menu-list">
+      <!-- Left Panel: MENU -->
+      <div class="column col-4 col-md-12">
+        <div class="modern-panel dash-menu">
+          <h3 style="color: #fff; font-size: 1.3rem; margin-top: 0; margin-bottom: 24px; display: flex; align-items: center; gap: 8px;">
+            <i class="uil uil-list-ui-alt" style="color: #818cf8;"></i> Menu
+          </h3>
+          <ul class="menu-list" style="list-style: none; padding: 0; margin: 0;">
             <li class="menu-item" id="menu-tech">
-              <span class="menu-icon"><i class="uil uil-book-open"></i></span> Tech Fundamentals
+              <div style="display: flex; align-items: center;">
+                <span class="menu-icon"><i class="uil uil-book-open"></i></span> Tech Fundamentals
+              </div>
+              <i class="uil uil-arrow-right list-arrow"></i>
             </li>
             <li class="menu-item" id="menu-projects">
-              <span class="menu-icon"><i class="uil uil-apps"></i></span> Projects
+              <div style="display: flex; align-items: center;">
+                <span class="menu-icon"><i class="uil uil-apps"></i></span> Projects
+              </div>
+              <i class="uil uil-arrow-right list-arrow"></i>
             </li>
           </ul>
         </div>
-        
-        <!-- Right Column: CONTENT AREA -->
-        <div class="dash-content" id="dash-content-area">
+      </div>
+      
+      <!-- Right Panel: CONTENT AREA -->
+      <div class="column col-8 col-md-12">
+        <div class="modern-panel dash-content" id="dash-content-area" style="position: relative; overflow: hidden; height: 100%; min-height: 450px;">
           
           <!-- Default State (Grid background) -->
-          <div class="content-view active" id="view-default">
-             <!-- Empty, uses CSS background grid lines -->
+          <div class="content-view active" id="view-default" style="display: flex; align-items: center; justify-content: center; height: 100%;">
+             <p style="color: #475569; font-size: 1.1rem;">좌측 메뉴에 마우스를 올려보세요.</p>
           </div>
           
           <!-- Tech Fundamentals View -->
           <div class="content-view" id="view-tech">
+            <h3 style="margin-top: 0; color: #fff; margin-bottom: 24px; font-weight: 700; display: flex; align-items: center; gap: 8px;">
+              <i class="uil uil-book-open" style="color: #818cf8;"></i> Tech Fundamentals
+            </h3>
             <div class="tech-item">
               <h4>Python 기초 및 알고리즘</h4>
               <p>데이터 구조 이해 및 로직 최적화 기반 다지기</p>
@@ -70,12 +73,15 @@ title: Home
           
           <!-- Projects View -->
           <div class="content-view" id="view-projects">
+            <h3 style="margin-top: 0; color: #fff; margin-bottom: 24px; font-weight: 700; display: flex; align-items: center; gap: 8px;">
+              <i class="uil uil-apps" style="color: #818cf8;"></i> Projects
+            </h3>
             <div class="project-cards-container">
               
               <a href="{{ site.baseurl }}/embedded-hardware-projects" class="list-item dash-card">
                 <div class="list-content">
                   <h4 class="list-title">스마트 화재 대피 유도 시스템</h4>
-                  <p class="list-desc">실시간 센서 데이터 기반 하드웨어 제어</p>
+                  <p class="list-desc">실시간 센서 데이터 기반 하드웨어 제어 및 최적 경로 탐색</p>
                   <div class="tech-badges">
                     <span class="badge-pill">ESP32</span>
                     <span class="badge-pill">C/C++</span>
@@ -86,7 +92,7 @@ title: Home
               <a href="{{ site.baseurl }}/system-software-projects" class="list-item dash-card">
                 <div class="list-content">
                   <h4 class="list-title">C# 기반 마트 관리 시스템</h4>
-                  <p class="list-desc">OOP 기반의 안정적인 UI/UX 구축 및 연동</p>
+                  <p class="list-desc">객체 지향 설계(OOP) 기반의 안정적인 UI/UX 구축 및 연동</p>
                   <div class="tech-badges">
                     <span class="badge-pill">C#</span>
                     <span class="badge-pill">WinForms</span>
@@ -97,10 +103,10 @@ title: Home
             </div>
           </div>
           
-        </div> <!-- End Right Column -->
-      </div> <!-- End Dash Split -->
+        </div>
+      </div>
       
-    </div> <!-- End System Dashboard -->
+    </div>
 
   </div>
 </div>
