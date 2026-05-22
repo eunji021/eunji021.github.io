@@ -199,58 +199,39 @@ title: Home
     cursor: pointer;
   }
   
-  /* Mega Menu Dropdown */
+  /* Mega Menu Dropdown (Unconstrained) */
   .mega-dropdown {
     position: absolute;
     top: 90px;
-    background: rgba(15, 23, 42, 0.9);
-    backdrop-filter: blur(16px);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 16px;
-    padding: 24px;
-    box-shadow: 0 20px 40px rgba(0,0,0,0.5);
     opacity: 0;
     transform: translateY(-20px) scale(0.98);
     visibility: hidden;
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.5s cubic-bezier(0.25, 1, 0.5, 1);
     z-index: 5;
     pointer-events: none;
-    transform-origin: top center;
+    transform-origin: top right;
   }
 
-  /* Specific width adjustments */
+  /* Specific Layouts */
   .mega-dropdown.vertical-mode {
-    width: 380px;
-    right: -20px;
-  }
-
-  /* Horizontal Layout Mega Dropdown */
-  .mega-dropdown.horizontal-mode {
-    width: 650px;
-    right: -200px; /* Center relative to parent */
-  }
-
-  .horizontal-cards-container {
+    width: max-content;
+    right: 0;
     display: flex;
+    flex-direction: column;
     gap: 16px;
-    overflow-x: auto;
-    padding-bottom: 12px;
-    scrollbar-width: thin;
-    scrollbar-color: rgba(129, 140, 248, 0.5) transparent;
   }
 
-  .horizontal-cards-container::-webkit-scrollbar {
-    height: 6px;
+  .mega-dropdown.horizontal-mode {
+    width: max-content;
+    right: 0; 
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
   }
-  .horizontal-cards-container::-webkit-scrollbar-thumb {
-    background: rgba(129, 140, 248, 0.5);
-    border-radius: 10px;
-  }
-
-  .horizontal-cards-container .list-item {
-    min-width: 280px;
+  
+  .mega-dropdown .list-item {
+    width: 320px;
     flex-shrink: 0;
-    margin-bottom: 0 !important;
   }
   
   /* Hover Interaction */
@@ -371,39 +352,27 @@ title: Home
             <div class="menu-link">projects</div>
             
             <div class="mega-dropdown horizontal-mode">
-              <h4 style="color: #cbd5e1; font-size: 1.1rem; margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">Projects Portfolio</h4>
+              <a href="{{ site.baseurl }}/embedded-hardware-projects" class="list-item" style="display: block; padding: 24px; background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(16px); border-radius: 16px; text-decoration: none; transition: all 0.3s; border: 1px solid rgba(255, 255, 255, 0.08); box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
+                <div class="list-content">
+                  <h4 class="list-title" style="color: #e2e8f0; margin: 0 0 10px 0; font-size: 1.15rem;">스마트 화재 대피 유도 시스템</h4>
+                  <p class="list-desc" style="color: #94a3b8; margin: 0 0 16px 0; font-size: 0.95rem; line-height: 1.5;">실시간 센서 데이터 기반 하드웨어 제어 및 최적 경로 탐색</p>
+                  <div class="tech-badges" style="display: flex; gap: 8px; flex-wrap: wrap;">
+                    <span style="background: rgba(99, 102, 241, 0.2); color: #a5b4fc; padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 600;">ESP32</span>
+                    <span style="background: rgba(99, 102, 241, 0.2); color: #a5b4fc; padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 600;">C/C++</span>
+                  </div>
+                </div>
+              </a>
               
-              <div class="horizontal-cards-container">
-                <a href="{{ site.baseurl }}/embedded-hardware-projects" class="list-item" style="display: block; padding: 20px; background: rgba(30, 41, 59, 0.4); border-radius: 12px; text-decoration: none; transition: all 0.3s; border: 1px solid transparent;">
-                  <div class="list-content">
-                    <h4 class="list-title" style="color: #e2e8f0; margin: 0 0 10px 0; font-size: 1.15rem;">스마트 화재 대피 유도 시스템</h4>
-                    <p class="list-desc" style="color: #94a3b8; margin: 0 0 16px 0; font-size: 0.95rem; line-height: 1.5;">실시간 센서 데이터 기반 하드웨어 제어 및 최적 경로 탐색</p>
-                    <div class="tech-badges" style="display: flex; gap: 8px; flex-wrap: wrap;">
-                      <span style="background: rgba(99, 102, 241, 0.2); color: #a5b4fc; padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 600;">ESP32</span>
-                      <span style="background: rgba(99, 102, 241, 0.2); color: #a5b4fc; padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 600;">C/C++</span>
-                    </div>
+              <a href="{{ site.baseurl }}/system-software-projects" class="list-item" style="display: block; padding: 24px; background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(16px); border-radius: 16px; text-decoration: none; transition: all 0.3s; border: 1px solid rgba(255, 255, 255, 0.08); box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
+                <div class="list-content">
+                  <h4 class="list-title" style="color: #e2e8f0; margin: 0 0 10px 0; font-size: 1.15rem;">C# 기반 마트 관리 시스템</h4>
+                  <p class="list-desc" style="color: #94a3b8; margin: 0 0 16px 0; font-size: 0.95rem; line-height: 1.5;">객체 지향 설계(OOP) 기반의 안정적인 UI/UX 구축 및 연동</p>
+                  <div class="tech-badges" style="display: flex; gap: 8px; flex-wrap: wrap;">
+                    <span style="background: rgba(99, 102, 241, 0.2); color: #a5b4fc; padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 600;">C#</span>
+                    <span style="background: rgba(99, 102, 241, 0.2); color: #a5b4fc; padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 600;">WinForms</span>
                   </div>
-                </a>
-                
-                <a href="{{ site.baseurl }}/system-software-projects" class="list-item" style="display: block; padding: 20px; background: rgba(30, 41, 59, 0.4); border-radius: 12px; text-decoration: none; transition: all 0.3s; border: 1px solid transparent;">
-                  <div class="list-content">
-                    <h4 class="list-title" style="color: #e2e8f0; margin: 0 0 10px 0; font-size: 1.15rem;">C# 기반 마트 관리 시스템</h4>
-                    <p class="list-desc" style="color: #94a3b8; margin: 0 0 16px 0; font-size: 0.95rem; line-height: 1.5;">객체 지향 설계(OOP) 기반의 안정적인 UI/UX 구축 및 연동</p>
-                    <div class="tech-badges" style="display: flex; gap: 8px; flex-wrap: wrap;">
-                      <span style="background: rgba(99, 102, 241, 0.2); color: #a5b4fc; padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 600;">C#</span>
-                      <span style="background: rgba(99, 102, 241, 0.2); color: #a5b4fc; padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 600;">WinForms</span>
-                    </div>
-                  </div>
-                </a>
-                
-                <!-- Placeholder for future horizontal scaling -->
-                <a href="#" class="list-item" style="display: flex; align-items: center; justify-content: center; padding: 20px; background: rgba(30, 41, 59, 0.2); border-radius: 12px; text-decoration: none; border: 1px dashed rgba(255,255,255,0.1); min-width: 200px;">
-                  <div style="color: #64748b; font-size: 0.95rem; text-align: center;">
-                    <i class="uil uil-plus-circle" style="font-size: 1.5rem; display: block; margin-bottom: 8px;"></i>
-                    More Projects<br>Coming Soon
-                  </div>
-                </a>
-              </div>
+                </div>
+              </a>
             </div>
           </div>
           
@@ -415,24 +384,22 @@ title: Home
             </div>
             <div class="menu-link">tech</div>
             
-            <div class="mega-dropdown vertical-mode" style="right: -80px;">
-              <h4 style="color: #cbd5e1; font-size: 1rem; margin-bottom: 16px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 8px;">Tech Fundamentals</h4>
-              
-              <a href="{{ site.baseurl }}/ej" class="list-item" style="display: block; padding: 16px; background: rgba(30, 41, 59, 0.4); border-radius: 12px; margin-bottom: 12px; text-decoration: none; transition: all 0.3s; border: 1px solid transparent;">
+            <div class="mega-dropdown vertical-mode">
+              <a href="{{ site.baseurl }}/ej" class="list-item" style="display: block; padding: 20px; background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(16px); border-radius: 16px; text-decoration: none; transition: all 0.3s; border: 1px solid rgba(255, 255, 255, 0.08); box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
                 <div class="list-content">
                   <h4 class="list-title" style="color: #e2e8f0; margin: 0 0 6px 0; font-size: 1.1rem;">Python 기초 및 알고리즘</h4>
                   <p class="list-desc" style="color: #94a3b8; margin: 0;">데이터 구조 이해 및 로직 최적화 기반 다지기</p>
                 </div>
               </a>
               
-              <a href="{{ site.baseurl }}/tech-fundamentals" class="list-item" style="display: block; padding: 16px; background: rgba(30, 41, 59, 0.4); border-radius: 12px; margin-bottom: 12px; text-decoration: none; transition: all 0.3s; border: 1px solid transparent;">
+              <a href="{{ site.baseurl }}/tech-fundamentals" class="list-item" style="display: block; padding: 20px; background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(16px); border-radius: 16px; text-decoration: none; transition: all 0.3s; border: 1px solid rgba(255, 255, 255, 0.08); box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
                 <div class="list-content">
                   <h4 class="list-title" style="color: #e2e8f0; margin: 0 0 6px 0; font-size: 1.1rem;">C/C++ 메모리 제어</h4>
                   <p class="list-desc" style="color: #94a3b8; margin: 0;">안정적인 펌웨어 개발을 위한 포인터와 메모리 관리</p>
                 </div>
               </a>
 
-              <a href="{{ site.baseurl }}/tech-fundamentals" class="list-item" style="display: block; padding: 16px; background: rgba(30, 41, 59, 0.4); border-radius: 12px; text-decoration: none; transition: all 0.3s; border: 1px solid transparent;">
+              <a href="{{ site.baseurl }}/tech-fundamentals" class="list-item" style="display: block; padding: 20px; background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(16px); border-radius: 16px; text-decoration: none; transition: all 0.3s; border: 1px solid rgba(255, 255, 255, 0.08); box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
                 <div class="list-content">
                   <h4 class="list-title" style="color: #e2e8f0; margin: 0 0 6px 0; font-size: 1.1rem;">C# 객체지향 프로그래밍</h4>
                   <p class="list-desc" style="color: #94a3b8; margin: 0;">유지보수가 용이한 시스템 소프트웨어 설계 패턴</p>
@@ -449,9 +416,10 @@ title: Home
             </div>
             <div class="menu-link">blog</div>
             
-            <div class="mega-dropdown vertical-mode" style="right: 0; width: 280px;">
-              <h4 style="color: #cbd5e1; font-size: 1rem; margin-bottom: 16px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 8px;">Blog</h4>
-              <p style="color: #94a3b8; font-size: 0.95rem; text-align: center; padding: 20px 0;">아직 작성된 글이 없습니다.</p>
+            <div class="mega-dropdown vertical-mode">
+              <div class="list-item" style="display: block; padding: 20px; background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(16px); border-radius: 16px; border: 1px solid rgba(255, 255, 255, 0.08); box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
+                <p style="color: #94a3b8; font-size: 0.95rem; text-align: center; margin: 0;">아직 작성된 글이 없습니다.</p>
+              </div>
             </div>
           </div>
           
