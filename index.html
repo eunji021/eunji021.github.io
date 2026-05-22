@@ -19,17 +19,22 @@ title: Home
   
   /* Left Main Area Styles */
   .left-intro-area {
-    padding-right: 20px;
+    padding: 40px;
+    background: rgba(10, 15, 30, 0.4);
+    backdrop-filter: blur(12px);
+    border-radius: 4px;
+    border: 1px solid rgba(99, 102, 241, 0.5);
+    box-shadow: 0 0 15px rgba(99, 102, 241, 0.15);
     animation: fadeSlideUp 0.8s cubic-bezier(0.25, 0.8, 0.25, 1) forwards;
   }
   
   .intro-label {
-    color: #818cf8;
+    color: #a855f7;
     font-weight: 700;
+    font-family: 'Courier New', Courier, monospace;
     font-size: 1.1rem;
-    margin-bottom: 12px;
+    margin-bottom: 16px;
     letter-spacing: 2px;
-    text-transform: uppercase;
     display: inline-block;
   }
   
@@ -235,6 +240,15 @@ title: Home
   .mega-dropdown .list-item {
     width: 320px;
     flex-shrink: 0;
+    display: block;
+    padding: 24px;
+    background: rgba(10, 15, 30, 0.6) !important;
+    backdrop-filter: blur(12px);
+    border-radius: 4px !important;
+    text-decoration: none;
+    transition: all 0.3s;
+    border: 1px solid #6366f1 !important;
+    box-shadow: 0 0 10px rgba(99, 102, 241, 0.2);
   }
   
   /* Hover Interaction */
@@ -246,10 +260,13 @@ title: Home
   .nav-item-container:hover .open-book {
     opacity: 1;
     transform: rotateY(0deg) scale(1.1);
+    color: #a855f7;
+    text-shadow: 0 0 15px rgba(168, 85, 247, 0.8);
   }
   
   .nav-item-container:hover .menu-link {
-    color: #818cf8;
+    color: #a855f7;
+    text-shadow: 0 0 15px rgba(168, 85, 247, 0.8);
   }
   
   .nav-item-container:hover .mega-dropdown {
@@ -266,10 +283,10 @@ title: Home
 
   /* Hover effects for mega dropdown items */
   .mega-dropdown .list-item:hover {
-    background: rgba(30, 41, 59, 0.8) !important;
-    border-color: rgba(129, 140, 248, 0.3) !important;
+    background: rgba(15, 23, 42, 0.8) !important;
+    border-color: #a855f7 !important;
     transform: translateY(-3px);
-    box-shadow: 0 6px 15px rgba(0,0,0,0.3);
+    box-shadow: 0 0 20px rgba(168, 85, 247, 0.8), inset 0 0 10px rgba(168, 85, 247, 0.3) !important;
   }
 
   @media (max-width: 768px) {
@@ -298,9 +315,9 @@ title: Home
   }
 </style>
 
-<div class="container-full" style="background-color: #0b1120; padding-bottom: 120px; position: relative; min-height: calc(100vh - 80px); display: flex; align-items: center;">
+<div class="container-full" style="background-color: #050b14; background-image: linear-gradient(rgba(99, 102, 241, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(99, 102, 241, 0.05) 1px, transparent 1px); background-size: 40px 40px; padding-bottom: 120px; position: relative; min-height: calc(100vh - 80px); display: flex; align-items: center;">
   <!-- Glow Background Effect -->
-  <div class="dashboard-glow"></div>
+  <div class="dashboard-glow" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; box-shadow: inset 0 0 150px rgba(99, 102, 241, 0.05); pointer-events: none;"></div>
 
   <div class="container" style="max-width: 1200px !important; width: 95% !important; position: relative; z-index: 2;">
     
@@ -308,12 +325,12 @@ title: Home
       
       <!-- 1. Left Main Area (About Me & Links) -->
       <div class="left-intro-area">
-        <span class="intro-label">About Me</span>
+        <span class="intro-label">&gt;_ SYSTEM.ABOUT_ME</span>
         
         <!-- Clickable Title for navigation -->
-        <a href="{{ site.baseurl }}/about" class="intro-title" id="name-link" title="클릭하여 상세 프로필 페이지로 이동" style="text-decoration: none;">
-          권은지
-          <span>System & Embedded</span>
+        <a href="{{ site.baseurl }}/about" class="intro-title" id="name-link" title="클릭하여 상세 프로필 페이지로 이동" style="text-decoration: none; font-family: 'Courier New', Courier, monospace; font-size: 3.2rem;">
+          root@KwonEunJi:~#
+          <span style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 1.6rem; color: #818cf8; letter-spacing: 0;">&gt; System &amp; Embedded_</span>
         </a>
         
         <!-- Summary View (Compact) -->
@@ -339,7 +356,7 @@ title: Home
             <div class="menu-link">projects</div>
             
             <div class="mega-dropdown horizontal-mode">
-              <a href="{{ site.baseurl }}/embedded-hardware-projects" class="list-item" style="display: block; padding: 24px; background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(16px); border-radius: 16px; text-decoration: none; transition: all 0.3s; border: 1px solid rgba(255, 255, 255, 0.08); box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
+              <a href="{{ site.baseurl }}/embedded-hardware-projects" class="list-item">
                 <div class="list-content">
                   <h4 class="list-title" style="color: #e2e8f0; margin: 0 0 10px 0; font-size: 1.15rem;">스마트 화재 대피 유도 시스템</h4>
                   <p class="list-desc" style="color: #94a3b8; margin: 0 0 16px 0; font-size: 0.95rem; line-height: 1.5;">실시간 센서 데이터 기반 하드웨어 제어 및 최적 경로 탐색</p>
@@ -350,7 +367,7 @@ title: Home
                 </div>
               </a>
               
-              <a href="{{ site.baseurl }}/system-software-projects" class="list-item" style="display: block; padding: 24px; background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(16px); border-radius: 16px; text-decoration: none; transition: all 0.3s; border: 1px solid rgba(255, 255, 255, 0.08); box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
+              <a href="{{ site.baseurl }}/system-software-projects" class="list-item">
                 <div class="list-content">
                   <h4 class="list-title" style="color: #e2e8f0; margin: 0 0 10px 0; font-size: 1.15rem;">C# 기반 마트 관리 시스템</h4>
                   <p class="list-desc" style="color: #94a3b8; margin: 0 0 16px 0; font-size: 0.95rem; line-height: 1.5;">객체 지향 설계(OOP) 기반의 안정적인 UI/UX 구축 및 연동</p>
@@ -372,21 +389,21 @@ title: Home
             <div class="menu-link">tech</div>
             
             <div class="mega-dropdown horizontal-mode">
-              <a href="{{ site.baseurl }}/ej" class="list-item" style="display: block; padding: 20px; background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(16px); border-radius: 16px; text-decoration: none; transition: all 0.3s; border: 1px solid rgba(255, 255, 255, 0.08); box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
+              <a href="{{ site.baseurl }}/ej" class="list-item">
                 <div class="list-content">
                   <h4 class="list-title" style="color: #e2e8f0; margin: 0 0 6px 0; font-size: 1.1rem;">Python 기초 및 알고리즘</h4>
                   <p class="list-desc" style="color: #94a3b8; margin: 0;">데이터 구조 이해 및 로직 최적화 기반 다지기</p>
                 </div>
               </a>
               
-              <a href="{{ site.baseurl }}/tech-fundamentals" class="list-item" style="display: block; padding: 20px; background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(16px); border-radius: 16px; text-decoration: none; transition: all 0.3s; border: 1px solid rgba(255, 255, 255, 0.08); box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
+              <a href="{{ site.baseurl }}/tech-fundamentals" class="list-item">
                 <div class="list-content">
                   <h4 class="list-title" style="color: #e2e8f0; margin: 0 0 6px 0; font-size: 1.1rem;">C/C++ 메모리 제어</h4>
                   <p class="list-desc" style="color: #94a3b8; margin: 0;">안정적인 펌웨어 개발을 위한 포인터와 메모리 관리</p>
                 </div>
               </a>
 
-              <a href="{{ site.baseurl }}/tech-fundamentals" class="list-item" style="display: block; padding: 20px; background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(16px); border-radius: 16px; text-decoration: none; transition: all 0.3s; border: 1px solid rgba(255, 255, 255, 0.08); box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
+              <a href="{{ site.baseurl }}/tech-fundamentals" class="list-item">
                 <div class="list-content">
                   <h4 class="list-title" style="color: #e2e8f0; margin: 0 0 6px 0; font-size: 1.1rem;">C# 객체지향 프로그래밍</h4>
                   <p class="list-desc" style="color: #94a3b8; margin: 0;">유지보수가 용이한 시스템 소프트웨어 설계 패턴</p>
@@ -404,7 +421,7 @@ title: Home
             <div class="menu-link">blog</div>
             
             <div class="mega-dropdown horizontal-mode">
-              <div class="list-item" style="display: block; padding: 20px; background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(16px); border-radius: 16px; border: 1px solid rgba(255, 255, 255, 0.08); box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
+              <div class="list-item">
                 <p style="color: #94a3b8; font-size: 0.95rem; text-align: center; margin: 0;">아직 작성된 글이 없습니다.</p>
               </div>
             </div>
