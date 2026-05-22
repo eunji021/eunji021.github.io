@@ -310,25 +310,16 @@ title: Home
       <div class="left-intro-area">
         <span class="intro-label">About Me</span>
         
-        <!-- Clickable Title for toggling context -->
-        <h1 class="intro-title" id="name-toggle" title="클릭하여 상세 소개 보기">
+        <!-- Clickable Title for navigation -->
+        <a href="{{ site.baseurl }}/about" class="intro-title" id="name-link" title="클릭하여 상세 프로필 페이지로 이동" style="text-decoration: none;">
           권은지
           <span>System & Embedded</span>
-        </h1>
+        </a>
         
         <!-- Summary View (Compact) -->
         <div id="summary-view" class="text-view active">
           <p class="intro-desc">
             <span class="highlight">하드웨어 제어</span>와 <span class="highlight">시스템 소프트웨어</span>의 경계를 허무는 엔지니어입니다. 신뢰성 높은 아키텍처와 최적화된 로직 구현에 집중합니다.
-          </p>
-        </div>
-
-        <!-- Detailed View (Expanded) -->
-        <div id="detailed-view" class="text-view">
-          <p class="intro-desc">
-            안정적인 하드웨어 제어와 직관적인 시스템 소프트웨어를 설계하는 엔지니어입니다.<br><br>
-            센서 데이터 기반의 임베디드(ESP32, C/C++) 제어부터, C# WinForms 기반의 사용자 친화적인 데스크톱 애플리케이션 구축까지 전체 스택의 효율성을 아우릅니다.<br><br>
-            "신뢰할 수 있는 시스템은 탄탄한 설계에서 나온다"는 철학 아래, 유지보수가 용이한 객체지향 설계(OOP)와 하드웨어 리소스를 고려한 메모리 최적화를 끊임없이 연구합니다.
           </p>
         </div>
 
@@ -429,26 +420,21 @@ title: Home
 
 <script>
   document.addEventListener("DOMContentLoaded", () => {
-    // Name Click Toggle Logic
-    const nameToggle = document.getElementById("name-toggle");
-    const summaryView = document.getElementById("summary-view");
-    const detailedView = document.getElementById("detailed-view");
-
-    if (nameToggle && summaryView && detailedView) {
-      nameToggle.addEventListener("click", () => {
-        if (summaryView.classList.contains("active")) {
-          // Switch to Detailed View
-          summaryView.classList.remove("active");
-          setTimeout(() => {
-            detailedView.classList.add("active");
-          }, 300); // Wait for transition out (if added) or just delay for visual effect
-        } else {
-          // Switch to Summary View
-          detailedView.classList.remove("active");
-          setTimeout(() => {
-            summaryView.classList.add("active");
-          }, 300);
-        }
+    // Page transition logic for name link
+    const nameLink = document.getElementById("name-link");
+    
+    if (nameLink) {
+      nameLink.addEventListener("click", (e) => {
+        e.preventDefault(); // Prevent immediate navigation
+        
+        // Add a fade-out effect to the body
+        document.body.style.transition = "opacity 0.4s ease";
+        document.body.style.opacity = "0";
+        
+        // Navigate after transition completes
+        setTimeout(() => {
+          window.location.href = nameLink.href;
+        }, 400);
       });
     }
   });
