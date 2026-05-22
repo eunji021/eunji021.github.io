@@ -223,9 +223,12 @@ title: Home
 
   .mega-dropdown.horizontal-mode {
     width: max-content;
-    right: 0; 
+    max-width: 55vw; /* Prevent overlap with the left area */
+    right: -20px; /* Slight offset to align beautifully under the icon */
     display: flex;
     flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-end;
     gap: 20px;
   }
   
@@ -329,14 +332,7 @@ title: Home
           </p>
         </div>
 
-        <div class="action-buttons">
-          <a href="https://github.com/eunji021" class="action-btn" target="_blank">
-            <i class="uil uil-github"></i> GitHub
-          </a>
-          <a href="mailto:{{ site.email }}" class="action-btn outline">
-            <i class="uil uil-envelope"></i> Email Me
-          </a>
-        </div>
+        <!-- Links consolidated to Header top nav -->
       </div>
       
       <!-- 2. Right Horizontal Navbar Area -->
@@ -384,7 +380,7 @@ title: Home
             </div>
             <div class="menu-link">tech</div>
             
-            <div class="mega-dropdown vertical-mode">
+            <div class="mega-dropdown horizontal-mode">
               <a href="{{ site.baseurl }}/ej" class="list-item" style="display: block; padding: 20px; background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(16px); border-radius: 16px; text-decoration: none; transition: all 0.3s; border: 1px solid rgba(255, 255, 255, 0.08); box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
                 <div class="list-content">
                   <h4 class="list-title" style="color: #e2e8f0; margin: 0 0 6px 0; font-size: 1.1rem;">Python 기초 및 알고리즘</h4>
@@ -416,7 +412,7 @@ title: Home
             </div>
             <div class="menu-link">blog</div>
             
-            <div class="mega-dropdown vertical-mode">
+            <div class="mega-dropdown horizontal-mode">
               <div class="list-item" style="display: block; padding: 20px; background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(16px); border-radius: 16px; border: 1px solid rgba(255, 255, 255, 0.08); box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
                 <p style="color: #94a3b8; font-size: 0.95rem; text-align: center; margin: 0;">아직 작성된 글이 없습니다.</p>
               </div>
