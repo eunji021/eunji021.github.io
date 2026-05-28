@@ -1,0 +1,441 @@
+﻿---
+layout: default
+title: Home
+---
+{% assign page_category = site.data.category_list[page.category] %}
+
+{% include header-home.html %}
+
+<style>
+  /* Layout Structure */
+  .abstract-layout {
+    display: grid;
+    grid-template-columns: 40% 60%;
+    gap: 40px;
+    align-items: start;
+    min-height: 70vh;
+    margin-top: 60px;
+  }
+  
+  /* Left Main Area Styles */
+  .left-intro-area {
+    padding-right: 20px;
+    animation: fadeSlideUp 0.8s cubic-bezier(0.25, 0.8, 0.25, 1) forwards;
+  }
+  
+  .intro-label {
+    color: #818cf8;
+    font-weight: 700;
+    font-size: 1.1rem;
+    margin-bottom: 12px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    display: inline-block;
+  }
+  
+  .intro-title {
+    font-size: 3.8rem;
+    font-weight: 900;
+    color: #ffffff;
+    margin-bottom: 24px;
+    line-height: 1.1;
+    letter-spacing: -0.03em;
+    cursor: pointer;
+    transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), text-shadow 0.3s;
+    display: inline-block;
+  }
+  
+  .intro-title:hover {
+    transform: translateY(-2px);
+    text-shadow: 0 4px 20px rgba(129, 140, 248, 0.4);
+  }
+  
+  .intro-title span {
+    color: #cbd5e1;
+    font-size: 2.3rem;
+    font-weight: 800;
+    display: block;
+    margin-top: 8px;
+    transition: color 0.3s;
+  }
+  
+  .intro-title:hover span {
+    color: #ffffff;
+  }
+  
+  /* Dynamic Text View Styles */
+  .text-view {
+    display: none;
+    opacity: 0;
+  }
+  
+  .text-view.active {
+    display: block;
+    animation: textFadeIn 0.6s cubic-bezier(0.25, 0.8, 0.25, 1) forwards;
+  }
+  
+  @keyframes textFadeIn {
+    from { opacity: 0; transform: translateY(15px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .intro-desc {
+    font-size: 1.15rem;
+    color: #94a3b8;
+    line-height: 1.8;
+    margin-bottom: 40px;
+    word-break: keep-all;
+  }
+  
+  .highlight {
+    color: #818cf8;
+    font-weight: 700;
+  }
+
+  .action-buttons {
+    display: flex;
+    gap: 16px;
+  }
+  
+  .action-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 14px 28px;
+    border-radius: 30px;
+    font-size: 1.05rem;
+    font-weight: 600;
+    text-decoration: none !important;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+    color: #ffffff !important;
+    border: none;
+    box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
+  }
+  
+  .action-btn:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 25px rgba(99, 102, 241, 0.6);
+  }
+  
+  .action-btn.outline {
+    background: transparent;
+    border: 2px solid rgba(129, 140, 248, 0.5);
+    color: #a5b4fc !important;
+    box-shadow: none;
+  }
+  
+  .action-btn.outline:hover {
+    border-color: #818cf8;
+    background: rgba(129, 140, 248, 0.1);
+    box-shadow: 0 4px 15px rgba(129, 140, 248, 0.2);
+    color: #ffffff !important;
+  }
+
+  /* Right Sidebar Menu Styles */
+  .right-nav-area {
+    display: flex;
+    justify-content: flex-end;
+    width: 100%;
+  }
+
+  .top-nav-bar {
+    display: flex;
+    gap: 40px;
+    padding-top: 20px;
+  }
+
+  .nav-item-container {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-bottom: 20px;
+  }
+  
+  /* Advanced 3D Book Icon Animation */
+  .book-icon-wrapper {
+    font-size: 2.2rem;
+    color: #cbd5e1;
+    cursor: pointer;
+    position: relative;
+    width: 44px;
+    height: 44px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10;
+    margin-bottom: 8px;
+    perspective: 1000px;
+  }
+  
+  .book-icon-wrapper .closed-book {
+    position: absolute;
+    transform-origin: center;
+    transition: opacity 0.4s ease, transform 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    opacity: 1;
+    transform: rotateY(0deg) scale(1);
+  }
+  
+  .book-icon-wrapper .open-book {
+    position: absolute;
+    transform-origin: center;
+    transition: opacity 0.4s ease, transform 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    opacity: 0;
+    transform: rotateY(-90deg) scale(0.6);
+    color: #818cf8;
+  }
+  
+  .menu-link {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #cbd5e1;
+    text-decoration: none !important;
+    text-transform: lowercase;
+    letter-spacing: 1px;
+    transition: color 0.3s;
+    position: relative;
+    z-index: 10;
+    cursor: pointer;
+  }
+  
+  /* Mega Menu Dropdown (Unconstrained) */
+  .mega-dropdown {
+    position: absolute;
+    top: 90px;
+    opacity: 0;
+    transform: translateY(-20px) scale(0.98);
+    visibility: hidden;
+    transition: all 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+    z-index: 5;
+    pointer-events: none;
+    transform-origin: top right;
+  }
+
+  /* Specific Layouts */
+  .mega-dropdown.vertical-mode {
+    width: max-content;
+    right: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .mega-dropdown.horizontal-mode {
+    width: max-content;
+    max-width: 55vw; /* Prevent overlap with the left area */
+    right: -20px; /* Slight offset to align beautifully under the icon */
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 20px;
+  }
+  
+  .mega-dropdown .list-item {
+    width: 320px;
+    flex-shrink: 0;
+  }
+  
+  /* Hover Interaction */
+  .nav-item-container:hover .closed-book {
+    opacity: 0;
+    transform: rotateY(180deg) scale(1.1);
+  }
+  
+  .nav-item-container:hover .open-book {
+    opacity: 1;
+    transform: rotateY(0deg) scale(1.1);
+  }
+  
+  .nav-item-container:hover .menu-link {
+    color: #818cf8;
+  }
+  
+  .nav-item-container:hover .mega-dropdown {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    visibility: visible;
+    pointer-events: auto;
+  }
+
+  @keyframes fadeSlideUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Hover effects for mega dropdown items */
+  .mega-dropdown .list-item:hover {
+    background: rgba(30, 41, 59, 0.8) !important;
+    border-color: rgba(129, 140, 248, 0.3) !important;
+    transform: translateY(-3px);
+    box-shadow: 0 6px 15px rgba(0,0,0,0.3);
+  }
+
+  @media (max-width: 768px) {
+    .abstract-layout {
+      grid-template-columns: 1fr;
+      text-align: center;
+    }
+    .right-nav-area {
+      justify-content: center;
+      margin-top: 40px;
+    }
+    .action-buttons {
+      justify-content: center;
+    }
+    .mega-dropdown {
+      right: 50%;
+      transform: translateX(50%) translateY(-20px) scale(0.95);
+    }
+    .mega-dropdown.horizontal-mode {
+      width: 90vw;
+      right: 50%;
+    }
+    .nav-item-container:hover .mega-dropdown {
+      transform: translateX(50%) translateY(0) scale(1);
+    }
+  }
+</style>
+
+<div class="container-full" style="background-color: #0b1120; padding-bottom: 120px; position: relative; min-height: calc(100vh - 80px); display: flex; align-items: center;">
+  <!-- Glow Background Effect -->
+  <div class="dashboard-glow"></div>
+
+  <div class="container" style="max-width: 1200px !important; width: 95% !important; position: relative; z-index: 2;">
+    
+    <div class="abstract-layout">
+      
+      <!-- 1. Left Main Area (About Me & Links) -->
+      <div class="left-intro-area">
+        <span class="intro-label">About Me</span>
+        
+        <!-- Clickable Title for navigation -->
+        <a href="{{ site.baseurl }}/about" class="intro-title" id="name-link" title="클릭하여 상세 프로필 페이지로 이동" style="text-decoration: none;">
+          권은지
+          <span>System & Embedded</span>
+        </a>
+        
+        <!-- Summary View (Compact) -->
+        <div id="summary-view" class="text-view active">
+          <p class="intro-desc">
+            <span class="highlight">하드웨어 제어</span>와 <span class="highlight">시스템 소프트웨어</span>의 경계를 허무는 엔지니어입니다. 신뢰성 높은 아키텍처와 최적화된 로직 구현에 집중합니다.
+          </p>
+        </div>
+
+        <!-- Links consolidated to Header top nav -->
+      </div>
+      
+      <!-- 2. Right Horizontal Navbar Area -->
+      <div class="right-nav-area">
+        <div class="top-nav-bar">
+          
+          <!-- Projects Menu (Horizontal Mega Dropdown) -->
+          <div class="nav-item-container">
+            <div class="book-icon-wrapper">
+              <i class="uil uil-book closed-book"></i>
+              <i class="uil uil-book-open open-book"></i>
+            </div>
+            <div class="menu-link">projects</div>
+            
+            <div class="mega-dropdown horizontal-mode">
+              <a href="{{ site.baseurl }}/embedded-hardware-projects" class="list-item" style="display: block; padding: 24px; background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(16px); border-radius: 16px; text-decoration: none; transition: all 0.3s; border: 1px solid rgba(255, 255, 255, 0.08); box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
+                <div class="list-content">
+                  <h4 class="list-title" style="color: #e2e8f0; margin: 0 0 10px 0; font-size: 1.15rem;">스마트 화재 대피 유도 시스템</h4>
+                  <p class="list-desc" style="color: #94a3b8; margin: 0 0 16px 0; font-size: 0.95rem; line-height: 1.5;">실시간 센서 데이터 기반 하드웨어 제어 및 최적 경로 탐색</p>
+                  <div class="tech-badges" style="display: flex; gap: 8px; flex-wrap: wrap;">
+                    <span style="background: rgba(99, 102, 241, 0.2); color: #a5b4fc; padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 600;">ESP32</span>
+                    <span style="background: rgba(99, 102, 241, 0.2); color: #a5b4fc; padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 600;">C/C++</span>
+                  </div>
+                </div>
+              </a>
+              
+              <a href="{{ site.baseurl }}/system-software-projects" class="list-item" style="display: block; padding: 24px; background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(16px); border-radius: 16px; text-decoration: none; transition: all 0.3s; border: 1px solid rgba(255, 255, 255, 0.08); box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
+                <div class="list-content">
+                  <h4 class="list-title" style="color: #e2e8f0; margin: 0 0 10px 0; font-size: 1.15rem;">C# 기반 마트 관리 시스템</h4>
+                  <p class="list-desc" style="color: #94a3b8; margin: 0 0 16px 0; font-size: 0.95rem; line-height: 1.5;">객체 지향 설계(OOP) 기반의 안정적인 UI/UX 구축 및 연동</p>
+                  <div class="tech-badges" style="display: flex; gap: 8px; flex-wrap: wrap;">
+                    <span style="background: rgba(99, 102, 241, 0.2); color: #a5b4fc; padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 600;">C#</span>
+                    <span style="background: rgba(99, 102, 241, 0.2); color: #a5b4fc; padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 600;">WinForms</span>
+                  </div>
+                </div>
+              </a>
+            </div>
+          </div>
+          
+          <!-- Tech Menu (Vertical Mega Dropdown) -->
+          <div class="nav-item-container">
+            <div class="book-icon-wrapper">
+              <i class="uil uil-book closed-book"></i>
+              <i class="uil uil-book-open open-book"></i>
+            </div>
+            <div class="menu-link">tech</div>
+            
+            <div class="mega-dropdown horizontal-mode">
+              <a href="{{ site.baseurl }}/ej" class="list-item" style="display: block; padding: 20px; background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(16px); border-radius: 16px; text-decoration: none; transition: all 0.3s; border: 1px solid rgba(255, 255, 255, 0.08); box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
+                <div class="list-content">
+                  <h4 class="list-title" style="color: #e2e8f0; margin: 0 0 6px 0; font-size: 1.1rem;">Python 기초 및 알고리즘</h4>
+                  <p class="list-desc" style="color: #94a3b8; margin: 0;">데이터 구조 이해 및 로직 최적화 기반 다지기</p>
+                </div>
+              </a>
+              
+              <a href="{{ site.baseurl }}/tech-fundamentals" class="list-item" style="display: block; padding: 20px; background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(16px); border-radius: 16px; text-decoration: none; transition: all 0.3s; border: 1px solid rgba(255, 255, 255, 0.08); box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
+                <div class="list-content">
+                  <h4 class="list-title" style="color: #e2e8f0; margin: 0 0 6px 0; font-size: 1.1rem;">C/C++ 메모리 제어</h4>
+                  <p class="list-desc" style="color: #94a3b8; margin: 0;">안정적인 펌웨어 개발을 위한 포인터와 메모리 관리</p>
+                </div>
+              </a>
+
+              <a href="{{ site.baseurl }}/tech-fundamentals" class="list-item" style="display: block; padding: 20px; background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(16px); border-radius: 16px; text-decoration: none; transition: all 0.3s; border: 1px solid rgba(255, 255, 255, 0.08); box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
+                <div class="list-content">
+                  <h4 class="list-title" style="color: #e2e8f0; margin: 0 0 6px 0; font-size: 1.1rem;">C# 객체지향 프로그래밍</h4>
+                  <p class="list-desc" style="color: #94a3b8; margin: 0;">유지보수가 용이한 시스템 소프트웨어 설계 패턴</p>
+                </div>
+              </a>
+            </div>
+          </div>
+          
+          <!-- Blog Menu -->
+          <div class="nav-item-container">
+            <div class="book-icon-wrapper">
+              <i class="uil uil-book closed-book"></i>
+              <i class="uil uil-book-open open-book"></i>
+            </div>
+            <div class="menu-link">blog</div>
+            
+            <div class="mega-dropdown horizontal-mode">
+              <div class="list-item" style="display: block; padding: 20px; background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(16px); border-radius: 16px; border: 1px solid rgba(255, 255, 255, 0.08); box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
+                <p style="color: #94a3b8; font-size: 0.95rem; text-align: center; margin: 0;">아직 작성된 글이 없습니다.</p>
+              </div>
+            </div>
+          </div>
+          
+        </div>
+      </div>
+      
+    </div>
+
+  </div>
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    // Page transition logic for name link
+    const nameLink = document.getElementById("name-link");
+    
+    if (nameLink) {
+      nameLink.addEventListener("click", (e) => {
+        e.preventDefault(); // Prevent immediate navigation
+        
+        // Add a fade-out effect to the body
+        document.body.style.transition = "opacity 0.4s ease";
+        document.body.style.opacity = "0";
+        
+        // Navigate after transition completes
+        setTimeout(() => {
+          window.location.href = nameLink.href;
+        }, 400);
+      });
+    }
+  });
+</script>

@@ -1,0 +1,850 @@
+﻿---
+layout: default
+title: Home
+---
+{% assign page_category = site.data.category_list[page.category] %}
+
+{% include header-home.html %}
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Share+Tech+Mono&display=swap');
+
+  /* Global Scrollbar Reset for Cyberpunk Theme */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #020308;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: rgba(0, 242, 254, 0.4);
+    border-radius: 3px;
+    box-shadow: 0 0 8px rgba(0, 242, 254, 0.6);
+  }
+
+  /* Noise Overlay for Texture */
+  .noise-overlay {
+    position: fixed;
+    top: 0; left: 0; width: 100vw; height: 100vh;
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0.08;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  }
+
+  /* Layout Structure */
+  .abstract-layout {
+    display: grid;
+    grid-template-columns: 45% 55%;
+    gap: 50px;
+    align-items: center;
+    min-height: 75vh;
+    margin-top: 40px;
+    transform-style: preserve-3d;
+    perspective: 1500px;
+    transition: transform 0.1s ease-out;
+  }
+  
+  /* Left Main Area Styles */
+  .left-intro-area {
+    padding-right: 20px;
+    position: relative;
+    animation: fadeSlideUp 0.8s cubic-bezier(0.25, 0.8, 0.25, 1) forwards;
+    transform-style: preserve-3d;
+    transform: translateZ(60px); /* Extrude out in 3D space */
+  }
+
+  /* 3D Hologram Cube Container */
+  .hologram-cube-container {
+    position: relative;
+    width: 160px;
+    height: 160px;
+    margin: 0 auto 35px auto;
+    perspective: 800px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 5;
+  }
+
+  .cube {
+    width: 70px;
+    height: 70px;
+    position: relative;
+    transform-style: preserve-3d;
+    animation: spin-cube 16s linear infinite;
+  }
+
+  .cube .face {
+    position: absolute;
+    width: 70px;
+    height: 70px;
+    border: 1px solid rgba(0, 242, 254, 0.6);
+    background: rgba(0, 242, 254, 0.03);
+    box-shadow: 0 0 15px rgba(0, 242, 254, 0.3), inset 0 0 10px rgba(0, 242, 254, 0.1);
+    backdrop-filter: blur(1px);
+    -webkit-backdrop-filter: blur(1px);
+    transition: all 0.5s ease;
+  }
+
+  .cube .face::after {
+    content: '';
+    position: absolute;
+    top: 50%; left: 50%;
+    width: 6px; height: 6px;
+    background: #ff007f;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 0 10px #ff007f;
+  }
+
+  /* 3D transforms for faces */
+  .cube .front  { transform: rotateY(  0deg) translateZ(35px); }
+  .cube .back   { transform: rotateY(180deg) translateZ(35px); }
+  .cube .right  { transform: rotateY( 90deg) translateZ(35px); }
+  .cube .left   { transform: rotateY(-90deg) translateZ(35px); }
+  .cube .top    { transform: rotateX( 90deg) translateZ(35px); }
+  .cube .bottom { transform: rotateX(-90deg) translateZ(35px); }
+
+  @keyframes spin-cube {
+    0% { transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg); }
+    100% { transform: rotateX(360deg) rotateY(720deg) rotateZ(360deg); }
+  }
+
+  /* Holographic projector beam */
+  .holo-beam {
+    position: absolute;
+    bottom: -10px;
+    width: 90px;
+    height: 100px;
+    background: linear-gradient(to top, rgba(0, 242, 254, 0.15) 0%, transparent 80%);
+    clip-path: polygon(25% 100%, 75% 100%, 100% 0%, 0% 0%);
+    transform: rotateX(180deg);
+    pointer-events: none;
+    animation: pulse-beam 4s ease-in-out infinite;
+  }
+
+  .holo-rings {
+    position: absolute;
+    width: 180px;
+    height: 180px;
+    transform-style: preserve-3d;
+    transform: rotateX(75deg);
+    pointer-events: none;
+  }
+
+  .holo-rings .ring {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    border: 1px solid rgba(0, 242, 254, 0.3);
+    border-radius: 50%;
+    box-shadow: 0 0 10px rgba(0, 242, 254, 0.2);
+  }
+
+  .holo-rings .ring-1 {
+    animation: ring-pulse-1 3s ease-out infinite;
+  }
+  .holo-rings .ring-2 {
+    animation: ring-pulse-2 3s ease-out infinite;
+    animation-delay: 1.5s;
+  }
+
+  @keyframes ring-pulse-1 {
+    0% { transform: scale(0.3); opacity: 1; }
+    100% { transform: scale(1.2); opacity: 0; }
+  }
+  @keyframes ring-pulse-2 {
+    0% { transform: scale(0.3); opacity: 1; }
+    100% { transform: scale(1.2); opacity: 0; }
+  }
+  @keyframes pulse-beam {
+    0%, 100% { opacity: 0.6; }
+    50% { opacity: 1; filter: brightness(1.2); }
+  }
+
+  /* Background Radar System */
+  .radar-bg {
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotateX(65deg) rotateZ(0deg) translateZ(-80px);
+    transform-style: preserve-3d;
+    width: 480px;
+    height: 480px;
+    pointer-events: none;
+    z-index: -1;
+    opacity: 0.25;
+    filter: drop-shadow(0 0 15px rgba(0, 242, 254, 0.25));
+  }
+
+  .radar-circle {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    border: 1px solid rgba(0, 242, 254, 0.15);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+  }
+  .circle-1 { width: 140px; height: 140px; }
+  .circle-2 { width: 300px; height: 300px; border-style: dashed; }
+  .circle-3 { width: 440px; height: 440px; }
+
+  .radar-sweep {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: conic-gradient(from 0deg, rgba(0, 242, 254, 0.12) 0deg, transparent 120deg, transparent 360deg);
+    animation: radar-sweep-animation 8s linear infinite;
+  }
+
+  @keyframes radar-sweep-animation {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+
+  /* High-Tech HUD Typography */
+  .hud-name-wrapper {
+    position: relative;
+    display: inline-block;
+  }
+
+  .hud-title {
+    font-family: 'Orbitron', sans-serif;
+    font-size: clamp(2.4rem, 4vw, 3.4rem);
+    font-weight: 900;
+    color: #00f2fe;
+    text-shadow: 0 0 10px rgba(0, 242, 254, 0.5), 0 0 20px rgba(0, 242, 254, 0.2);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin: 0;
+    line-height: 1.1;
+    transition: all 0.3s ease;
+  }
+
+  .hud-name-wrapper:hover .hud-title {
+    color: #ffffff;
+    text-shadow: 0 0 15px rgba(0, 242, 254, 0.8), 0 0 30px rgba(0, 242, 254, 0.4), 0 0 40px rgba(255, 0, 127, 0.5);
+  }
+
+  .hud-subtitle {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.95rem;
+    color: #ff007f;
+    letter-spacing: 5px;
+    display: block;
+    margin-top: 8px;
+    text-shadow: 0 0 8px rgba(255, 0, 127, 0.4);
+  }
+
+  /* Glassmorphism Telemetry Console */
+  .tech-console-box {
+    background: rgba(6, 12, 29, 0.55);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border: 1px solid rgba(0, 242, 254, 0.25);
+    border-radius: 10px;
+    padding: 24px;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.6), inset 0 0 20px rgba(0, 242, 254, 0.05);
+    position: relative;
+    overflow: hidden;
+    margin-top: 20px;
+  }
+
+  .tech-console-box::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(0, 242, 254, 0.6), transparent);
+    animation: scan-line 4s linear infinite;
+  }
+
+  @keyframes scan-line {
+    0% { transform: translateY(0); opacity: 0.2; }
+    50% { opacity: 0.8; }
+    100% { transform: translateY(180px); opacity: 0.2; }
+  }
+
+  .console-hdr {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-bottom: 1px solid rgba(0, 242, 254, 0.15);
+    padding-bottom: 10px;
+    margin-bottom: 15px;
+  }
+
+  .console-blink-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: #00f2fe;
+    box-shadow: 0 0 8px #00f2fe;
+    animation: blink 2s ease-in-out infinite;
+  }
+
+  .console-title {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.8rem;
+    color: #8fa0dd;
+    letter-spacing: 3px;
+    flex-grow: 1;
+  }
+
+  .console-stats {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.75rem;
+    color: #ff007f;
+    border: 1px solid rgba(255, 0, 127, 0.4);
+    padding: 1px 6px;
+    border-radius: 3px;
+    text-shadow: 0 0 5px rgba(255, 0, 127, 0.5);
+  }
+
+  .highlight-cyan {
+    color: #00f2fe;
+    font-weight: bold;
+    text-shadow: 0 0 6px rgba(0, 242, 254, 0.4);
+  }
+
+  @keyframes blink {
+    0%, 100% { opacity: 0.4; }
+    50% { opacity: 1; }
+  }
+
+  /* Right Sidebar Menu Styles */
+  .right-nav-area {
+    display: flex;
+    justify-content: flex-end;
+    width: 100%;
+    transform-style: preserve-3d;
+    transform: translateZ(30px); /* Extrude out slightly less than the left side */
+  }
+
+  .top-nav-bar {
+    display: flex;
+    gap: 40px;
+    padding-top: 20px;
+  }
+
+  .nav-item-container {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-bottom: 20px;
+  }
+  
+  /* Unicons 3D holographic icons */
+  .book-icon-wrapper {
+    font-size: 2.2rem;
+    color: #00f2fe;
+    text-shadow: 0 0 8px rgba(0, 242, 254, 0.4);
+    cursor: pointer;
+    position: relative;
+    width: 44px;
+    height: 44px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10;
+    margin-bottom: 8px;
+    perspective: 1000px;
+  }
+  
+  .book-icon-wrapper .closed-book {
+    position: absolute;
+    transform-origin: center;
+    transition: opacity 0.4s ease, transform 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    opacity: 1;
+    transform: rotateY(0deg) scale(1);
+  }
+  
+  .book-icon-wrapper .open-book {
+    position: absolute;
+    transform-origin: center;
+    transition: opacity 0.4s ease, transform 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    opacity: 0;
+    transform: rotateY(-90deg) scale(0.6);
+    color: #ff007f;
+    text-shadow: 0 0 10px rgba(255, 0, 127, 0.6);
+  }
+  
+  .menu-link {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #8fa0dd;
+    text-decoration: none !important;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    transition: all 0.3s;
+    position: relative;
+    z-index: 10;
+    cursor: pointer;
+    text-shadow: 0 0 5px rgba(143, 160, 221, 0.2);
+  }
+  
+  /* Mega Menu Dropdown */
+  .mega-dropdown {
+    position: absolute;
+    top: 90px;
+    opacity: 0;
+    transform: translateY(-20px) scale(0.98);
+    visibility: hidden;
+    transition: all 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+    z-index: 15;
+    pointer-events: none;
+    transform-origin: top right;
+  }
+
+  .mega-dropdown.vertical-mode {
+    width: max-content;
+    right: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .mega-dropdown.horizontal-mode {
+    width: max-content;
+    max-width: 55vw;
+    right: -20px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 20px;
+  }
+  
+  /* 3D Glassmorphism Cards in Dropdown */
+  .mega-dropdown .list-item {
+    width: 330px;
+    flex-shrink: 0;
+    position: relative;
+    overflow: hidden;
+    transform-style: preserve-3d;
+    will-change: transform;
+    background: rgba(6, 12, 29, 0.5) !important;
+    backdrop-filter: blur(20px) !important;
+    -webkit-backdrop-filter: blur(20px) !important;
+    border: 1px solid rgba(0, 242, 254, 0.18) !important;
+    border-radius: 8px !important;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.5), inset 0 0 15px rgba(0, 242, 254, 0.03) !important;
+    transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1) !important;
+  }
+
+  .mega-dropdown .list-item .list-content {
+    transform: translateZ(25px);
+    pointer-events: none;
+  }
+
+  .glare {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    border-radius: inherit;
+    z-index: 10;
+    mix-blend-mode: overlay;
+  }
+
+  /* Card Premium Hover Styling */
+  .mega-dropdown .list-item:hover {
+    background: rgba(6, 12, 29, 0.75) !important;
+    border-color: rgba(0, 242, 254, 0.75) !important;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.6), 0 0 25px rgba(0, 242, 254, 0.35), inset 0 0 15px rgba(0, 242, 254, 0.08) !important;
+  }
+
+  .mega-dropdown .list-title {
+    font-family: 'Orbitron', sans-serif !important;
+    color: #00f2fe !important;
+    font-weight: 700 !important;
+    text-shadow: 0 0 8px rgba(0, 242, 254, 0.3) !important;
+    font-size: 1.05rem !important;
+  }
+
+  .mega-dropdown .list-desc {
+    font-family: 'Share Tech Mono', monospace !important;
+    color: #8fa0dd !important;
+    font-size: 0.85rem !important;
+    line-height: 1.5 !important;
+  }
+
+  .mega-dropdown .tech-badges span {
+    background: rgba(0, 242, 254, 0.1) !important;
+    color: #00f2fe !important;
+    border: 1px solid rgba(0, 242, 254, 0.3) !important;
+    border-radius: 4px !important;
+    font-family: 'Share Tech Mono', monospace !important;
+    text-shadow: 0 0 5px rgba(0, 242, 254, 0.4) !important;
+    font-size: 0.75rem !important;
+    padding: 3px 10px !important;
+  }
+  
+  /* Menu Trigger Interactions */
+  .nav-item-container:hover .closed-book {
+    opacity: 0;
+    transform: rotateY(180deg) scale(1.1);
+  }
+  
+  .nav-item-container:hover .open-book {
+    opacity: 1;
+    transform: rotateY(0deg) scale(1.1);
+  }
+  
+  .nav-item-container:hover .menu-link {
+    color: #00f2fe;
+    text-shadow: 0 0 10px rgba(0, 242, 254, 0.7);
+  }
+  
+  .nav-item-container:hover .mega-dropdown {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    visibility: visible;
+    pointer-events: auto;
+  }
+
+  @keyframes fadeSlideUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @media (max-width: 992px) {
+    .abstract-layout {
+      grid-template-columns: 1fr;
+      text-align: center;
+      gap: 30px;
+    }
+    .right-nav-area {
+      justify-content: center;
+      margin-top: 40px;
+    }
+    .action-buttons {
+      justify-content: center;
+    }
+    .mega-dropdown {
+      right: 50%;
+      transform: translateX(50%) translateY(-20px) scale(0.95);
+    }
+    .mega-dropdown.horizontal-mode {
+      width: 90vw;
+      right: 50%;
+    }
+    .nav-item-container:hover .mega-dropdown {
+      transform: translateX(50%) translateY(0) scale(1);
+    }
+    .radar-bg {
+      width: 320px;
+      height: 320px;
+    }
+  }
+
+  /* Logo Text Overrides */
+  .logo-text {
+    font-family: 'Orbitron', sans-serif !important;
+    font-weight: 900 !important;
+    letter-spacing: 2px !important;
+    color: #ffffff !important;
+    text-transform: uppercase !important;
+    text-shadow: 0 0 10px rgba(0, 242, 254, 0.4) !important;
+  }
+  .logo-text span {
+    color: #00f2fe !important;
+  }
+
+  /* Nav Links Overrides */
+  .nav-links {
+    font-family: 'Share Tech Mono', monospace !important;
+    color: #8fa0dd !important;
+    letter-spacing: 1px !important;
+    text-transform: uppercase !important;
+    transition: all 0.3s ease !important;
+  }
+  .nav-links:hover {
+    color: #00f2fe !important;
+    text-shadow: 0 0 8px rgba(0, 242, 254, 0.5) !important;
+  }
+
+  /* Top button style override */
+  .header-container .btn {
+    font-family: 'Share Tech Mono', monospace !important;
+    background: transparent !important;
+    border: 1px solid rgba(0, 242, 254, 0.4) !important;
+    color: #00f2fe !important;
+    text-transform: uppercase !important;
+    letter-spacing: 1px !important;
+    border-radius: 4px !important;
+    box-shadow: 0 0 8px rgba(0, 242, 254, 0.2) !important;
+    transition: all 0.3s ease !important;
+    padding: 6px 16px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+  }
+  .header-container .btn:hover {
+    border-color: rgba(0, 242, 254, 0.8) !important;
+    box-shadow: 0 0 15px rgba(0, 242, 254, 0.5) !important;
+    color: #ffffff !important;
+    background: rgba(0, 242, 254, 0.05) !important;
+  }
+</style>
+
+<div class="noise-overlay"></div>
+<div class="container-full" style="background: radial-gradient(circle at 50% 50%, #060913 0%, #020308 100%); background-image: linear-gradient(rgba(0, 242, 254, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 242, 254, 0.03) 1px, transparent 1px); background-size: 30px 30px; padding-bottom: 120px; position: relative; min-height: calc(100vh - 80px); display: flex; align-items: center; overflow: hidden;">
+  <!-- Glow Background Effect -->
+  <div class="dashboard-glow" style="position: absolute; width: 600px; height: 600px; background: radial-gradient(circle, rgba(0, 242, 254, 0.08) 0%, transparent 70%); top: 10%; left: -10%; z-index: 1; pointer-events: none;"></div>
+
+  <div class="container" style="max-width: 1200px !important; width: 95% !important; position: relative; z-index: 2;">
+    
+    <div class="abstract-layout">
+      
+      <!-- 1. Left Main Area (About Me & Links) -->
+      <div class="left-intro-area" style="position: relative; z-index: 10;">
+        <!-- Background Radar -->
+        <div class="radar-bg">
+          <div class="radar-sweep"></div>
+          <div class="radar-circle circle-1"></div>
+          <div class="radar-circle circle-2"></div>
+          <div class="radar-circle circle-3"></div>
+        </div>
+
+        <!-- 3D Hologram Cube -->
+        <div class="hologram-cube-container">
+          <div class="cube">
+            <div class="face front"></div>
+            <div class="face back"></div>
+            <div class="face right"></div>
+            <div class="face left"></div>
+            <div class="face top"></div>
+            <div class="face bottom"></div>
+          </div>
+          <div class="holo-beam"></div>
+          <div class="holo-rings">
+            <div class="ring ring-1"></div>
+            <div class="ring ring-2"></div>
+          </div>
+        </div>
+
+        <span class="intro-label" style="font-family: 'Share Tech Mono', monospace; font-size: 0.85rem; letter-spacing: 4px; color: #ff007f; text-shadow: 0 0 8px rgba(255, 0, 127, 0.4); margin-bottom: 12px; display: inline-block;">[ SYSTEM PROTOCOL: ACTIVE ]</span>
+        
+        <!-- High-tech HUD Title -->
+        <a href="{{ site.baseurl }}/about" id="name-link" style="text-decoration: none; display: block; margin-bottom: 24px;">
+          <div class="hud-name-wrapper">
+            <h1 class="hud-title" data-text="KWON EUN JI">KWON EUN JI</h1>
+            <span class="hud-subtitle">SYSTEM & EMBEDDED ARCHITECT</span>
+          </div>
+        </a>
+        
+        <!-- Glassmorphism Summary View (Compact) -->
+        <div class="tech-console-box">
+          <div class="console-hdr">
+            <span class="console-blink-dot"></span>
+            <span class="console-title">FIRMWARE.LOG // CORE_INDEX</span>
+            <span class="console-stats">SYS_OK</span>
+          </div>
+          <div id="summary-view" class="text-view active">
+            <p class="intro-desc" style="font-family: 'Share Tech Mono', monospace; font-size: 1.05rem; color: #8fa0dd; line-height: 1.8; margin: 0;">
+              <span class="highlight-cyan">하드웨어 제어</span>와 <span class="highlight-cyan">시스템 소프트웨어</span>의 경계를 허무는 엔지니어입니다. 신뢰성 높은 아키텍처와 최적화된 로직 구현에 집중합니다.
+            </p>
+          </div>
+        </div>
+
+        <!-- Links consolidated to Header top nav -->
+      </div>
+      
+      <!-- 2. Right Horizontal Navbar Area -->
+      <div class="right-nav-area">
+        <div class="top-nav-bar">
+          
+          <!-- Projects Menu (Horizontal Mega Dropdown) -->
+          <div class="nav-item-container">
+            <div class="book-icon-wrapper">
+              <i class="uil uil-book closed-book"></i>
+              <i class="uil uil-book-open open-book"></i>
+            </div>
+            <div class="menu-link">projects</div>
+            
+            <div class="mega-dropdown horizontal-mode">
+              <a href="{{ site.baseurl }}/safety-equipment-system" class="list-item" style="display: block; padding: 24px; background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(16px); border-radius: 16px; text-decoration: none; transition: all 0.3s; border: 1px solid rgba(255, 255, 255, 0.08); box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
+                <div class="list-content">
+                  <h4 class="list-title" style="color: #e2e8f0; margin: 0 0 10px 0; font-size: 1.15rem;">안전장비 실시간 착용여부 시스템</h4>
+                  <p class="list-desc" style="color: #94a3b8; margin: 0 0 16px 0; font-size: 0.95rem; line-height: 1.5;">실시간 센서 데이터 기반 안전 모니터링 시스템</p>
+                  <div class="tech-badges" style="display: flex; gap: 8px; flex-wrap: wrap;">
+                    <span style="background: rgba(99, 102, 241, 0.2); color: #a5b4fc; padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 600;">ESP32</span>
+                    <span style="background: rgba(99, 102, 241, 0.2); color: #a5b4fc; padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 600;">App Inventor</span>
+                  </div>
+                </div>
+              </a>
+              
+              <a href="{{ site.baseurl }}/embedded-hardware-projects" class="list-item" style="display: block; padding: 24px; background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(16px); border-radius: 16px; text-decoration: none; transition: all 0.3s; border: 1px solid rgba(255, 255, 255, 0.08); box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
+                <div class="list-content">
+                  <h4 class="list-title" style="color: #e2e8f0; margin: 0 0 10px 0; font-size: 1.15rem;">스마트 화재 대피 유도 시스템</h4>
+                  <p class="list-desc" style="color: #94a3b8; margin: 0 0 16px 0; font-size: 0.95rem; line-height: 1.5;">실시간 센서 데이터 기반 하드웨어 제어 및 최적 경로 탐색</p>
+                  <div class="tech-badges" style="display: flex; gap: 8px; flex-wrap: wrap;">
+                    <span style="background: rgba(99, 102, 241, 0.2); color: #a5b4fc; padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 600;">ESP32</span>
+                    <span style="background: rgba(99, 102, 241, 0.2); color: #a5b4fc; padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 600;">C/C++</span>
+                  </div>
+                </div>
+              </a>
+              
+              <a href="{{ site.baseurl }}/system-software-projects" class="list-item" style="display: block; padding: 24px; background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(16px); border-radius: 16px; text-decoration: none; transition: all 0.3s; border: 1px solid rgba(255, 255, 255, 0.08); box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
+                <div class="list-content">
+                  <h4 class="list-title" style="color: #e2e8f0; margin: 0 0 10px 0; font-size: 1.15rem;">C# 기반 마트 관리 시스템</h4>
+                  <p class="list-desc" style="color: #94a3b8; margin: 0 0 16px 0; font-size: 0.95rem; line-height: 1.5;">객체 지향 설계(OOP) 기반의 안정적인 UI/UX 구축 및 연동</p>
+                  <div class="tech-badges" style="display: flex; gap: 8px; flex-wrap: wrap;">
+                    <span style="background: rgba(99, 102, 241, 0.2); color: #a5b4fc; padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 600;">C#</span>
+                    <span style="background: rgba(99, 102, 241, 0.2); color: #a5b4fc; padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 600;">WinForms</span>
+                  </div>
+                </div>
+              </a>
+            </div>
+          </div>
+          
+          <!-- Tech Menu (Vertical Mega Dropdown) -->
+          <div class="nav-item-container">
+            <div class="book-icon-wrapper">
+              <i class="uil uil-book closed-book"></i>
+              <i class="uil uil-book-open open-book"></i>
+            </div>
+            <div class="menu-link">tech</div>
+            
+            <div class="mega-dropdown horizontal-mode">
+              <a href="{{ site.baseurl }}/ej" class="list-item" style="display: block; padding: 20px; background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(16px); border-radius: 16px; text-decoration: none; transition: all 0.3s; border: 1px solid rgba(255, 255, 255, 0.08); box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
+                <div class="list-content">
+                  <h4 class="list-title" style="color: #e2e8f0; margin: 0 0 6px 0; font-size: 1.1rem;">Python 기초 및 알고리즘</h4>
+                  <p class="list-desc" style="color: #94a3b8; margin: 0;">데이터 구조 이해 및 로직 최적화 기반 다지기</p>
+                </div>
+              </a>
+              
+              <a href="{{ site.baseurl }}/tech-fundamentals" class="list-item" style="display: block; padding: 20px; background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(16px); border-radius: 16px; text-decoration: none; transition: all 0.3s; border: 1px solid rgba(255, 255, 255, 0.08); box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
+                <div class="list-content">
+                  <h4 class="list-title" style="color: #e2e8f0; margin: 0 0 6px 0; font-size: 1.1rem;">C/C++ 메모리 제어</h4>
+                  <p class="list-desc" style="color: #94a3b8; margin: 0;">안정적인 펌웨어 개발을 위한 포인터와 메모리 관리</p>
+                </div>
+              </a>
+
+              <a href="{{ site.baseurl }}/tech-fundamentals" class="list-item" style="display: block; padding: 20px; background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(16px); border-radius: 16px; text-decoration: none; transition: all 0.3s; border: 1px solid rgba(255, 255, 255, 0.08); box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
+                <div class="list-content">
+                  <h4 class="list-title" style="color: #e2e8f0; margin: 0 0 6px 0; font-size: 1.1rem;">C# 객체지향 프로그래밍</h4>
+                  <p class="list-desc" style="color: #94a3b8; margin: 0;">유지보수가 용이한 시스템 소프트웨어 설계 패턴</p>
+                </div>
+              </a>
+            </div>
+          </div>
+          
+          <!-- Blog Menu -->
+          <div class="nav-item-container">
+            <div class="book-icon-wrapper">
+              <i class="uil uil-book closed-book"></i>
+              <i class="uil uil-book-open open-book"></i>
+            </div>
+            <div class="menu-link">blog</div>
+            
+            <div class="mega-dropdown horizontal-mode">
+              <div class="list-item" style="display: block; padding: 20px; background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(16px); border-radius: 16px; border: 1px solid rgba(255, 255, 255, 0.08); box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
+                <p style="color: #94a3b8; font-size: 0.95rem; text-align: center; margin: 0;">아직 작성된 글이 없습니다.</p>
+              </div>
+            </div>
+          </div>
+          
+        </div>
+      </div>
+      
+    </div>
+
+  </div>
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    // Page transition logic for name link
+    const nameLink = document.getElementById("name-link");
+    
+    if (nameLink) {
+      nameLink.addEventListener("click", (e) => {
+        e.preventDefault(); // Prevent immediate navigation
+        
+        // Add a fade-out effect to the body
+        document.body.style.transition = "opacity 0.4s ease";
+        document.body.style.opacity = "0";
+        
+        // Navigate after transition completes
+        setTimeout(() => {
+          window.location.href = nameLink.href;
+        }, 400);
+      });
+    }
+
+    // 3D Tilt Effect for cards
+    const cards = document.querySelectorAll('.list-item');
+    
+    cards.forEach(card => {
+      // Create glare element
+      const glare = document.createElement('div');
+      glare.classList.add('glare');
+      card.appendChild(glare);
+
+      card.addEventListener('mouseenter', () => {
+        card.style.transition = 'transform 0.1s ease-out, background 0.3s, box-shadow 0.3s';
+      });
+
+      card.addEventListener('mousemove', (e) => {
+        const rect = card.getBoundingClientRect();
+        const x = e.clientX - rect.left; // x position within the element.
+        const y = e.clientY - rect.top;  // y position within the element.
+        
+        const centerX = rect.width / 2;
+        const centerY = rect.height / 2;
+        
+        const rotateX = ((y - centerY) / centerY) * -12; // Max rotation 12deg
+        const rotateY = ((x - centerX) / centerX) * 12;
+        
+        card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.05, 1.05, 1.05)`;
+        
+        // Glare effect calculation
+        const glareX = (x / rect.width) * 100;
+        const glareY = (y / rect.height) * 100;
+        glare.style.background = `radial-gradient(circle at ${glareX}% ${glareY}%, rgba(255,255,255,0.3) 0%, transparent 60%)`;
+        glare.style.opacity = '1';
+      });
+      
+      card.addEventListener('mouseleave', () => {
+        card.style.transition = 'transform 0.5s cubic-bezier(0.25, 0.8, 0.25, 1), background 0.3s, box-shadow 0.3s';
+        card.style.transform = `perspective(1000px) rotateX(0) rotateY(0) scale3d(1, 1, 1)`;
+        glare.style.opacity = '0';
+      });
+    });
+
+    // Entire Page 3D Layout Tilt / Parallax
+    const layout = document.querySelector('.abstract-layout');
+    const container = document.querySelector('.container-full');
+    
+    if (layout && container) {
+      container.addEventListener('mousemove', (e) => {
+        const rect = container.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        
+        const centerX = rect.width / 2;
+        const centerY = rect.height / 2;
+        
+        // Subtle tilt for the entire screen layout to feel 3D
+        const rotateX = ((y - centerY) / centerY) * -5; // Max 5deg
+        const rotateY = ((x - centerX) / centerX) * 5;  // Max 5deg
+        
+        layout.style.transform = `perspective(1500px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+      });
+      
+      container.addEventListener('mouseleave', () => {
+        layout.style.transition = 'transform 0.8s cubic-bezier(0.25, 0.8, 0.25, 1)';
+        layout.style.transform = 'perspective(1500px) rotateX(0deg) rotateY(0deg)';
+      });
+      
+      container.addEventListener('mouseenter', () => {
+        layout.style.transition = 'transform 0.1s ease-out';
+      });
+    }
+  });
+</script>

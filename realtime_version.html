@@ -1,0 +1,965 @@
+﻿---
+layout: default
+title: Home
+---
+{% assign page_category = site.data.category_list[page.category] %}
+
+{% include header-home.html %}
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Share+Tech+Mono&display=swap');
+
+  /* Global Scrollbar Reset for Cyberpunk Theme */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #020308;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: rgba(0, 242, 254, 0.4);
+    border-radius: 3px;
+    box-shadow: 0 0 8px rgba(0, 242, 254, 0.6);
+  }
+
+  /* Noise Overlay for Texture */
+  .noise-overlay {
+    position: fixed;
+    top: 0; left: 0; width: 100vw; height: 100vh;
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0.08;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  }
+
+  /* Layout Structure */
+  .abstract-layout {
+    display: grid;
+    grid-template-columns: 45% 55%;
+    gap: 50px;
+    align-items: center;
+    min-height: 75vh;
+    margin-top: 40px;
+    transform-style: preserve-3d;
+    perspective: 1500px;
+    transition: transform 0.1s ease-out;
+  }
+  
+  /* Left Main Area Styles */
+  .left-intro-area {
+    padding-right: 20px;
+    position: relative;
+    animation: fadeSlideUp 0.8s cubic-bezier(0.25, 0.8, 0.25, 1) forwards;
+    transform-style: preserve-3d;
+    transform: translateZ(60px); /* Extrude out in 3D space */
+  }
+
+  /* 3D Hologram Cube Container */
+  .hologram-cube-container {
+    position: relative;
+    width: 160px;
+    height: 160px;
+    margin: 0 auto 35px auto;
+    perspective: 800px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 5;
+  }
+
+  .cube {
+    width: 70px;
+    height: 70px;
+    position: relative;
+    transform-style: preserve-3d;
+    animation: spin-cube 16s linear infinite;
+  }
+
+  .cube .face {
+    position: absolute;
+    width: 70px;
+    height: 70px;
+    border: 1px solid rgba(0, 242, 254, 0.6);
+    background: rgba(0, 242, 254, 0.03);
+    box-shadow: 0 0 15px rgba(0, 242, 254, 0.3), inset 0 0 10px rgba(0, 242, 254, 0.1);
+    backdrop-filter: blur(1px);
+    -webkit-backdrop-filter: blur(1px);
+    transition: all 0.5s ease;
+  }
+
+  .cube .face::after {
+    content: '';
+    position: absolute;
+    top: 50%; left: 50%;
+    width: 6px; height: 6px;
+    background: #ff007f;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 0 10px #ff007f;
+  }
+
+  /* 3D transforms for faces */
+  .cube .front  { transform: rotateY(  0deg) translateZ(35px); }
+  .cube .back   { transform: rotateY(180deg) translateZ(35px); }
+  .cube .right  { transform: rotateY( 90deg) translateZ(35px); }
+  .cube .left   { transform: rotateY(-90deg) translateZ(35px); }
+  .cube .top    { transform: rotateX( 90deg) translateZ(35px); }
+  .cube .bottom { transform: rotateX(-90deg) translateZ(35px); }
+
+  @keyframes spin-cube {
+    0% { transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg); }
+    100% { transform: rotateX(360deg) rotateY(720deg) rotateZ(360deg); }
+  }
+
+  /* Holographic projector beam */
+  .holo-beam {
+    position: absolute;
+    bottom: -10px;
+    width: 90px;
+    height: 100px;
+    background: linear-gradient(to top, rgba(0, 242, 254, 0.15) 0%, transparent 80%);
+    clip-path: polygon(25% 100%, 75% 100%, 100% 0%, 0% 0%);
+    transform: rotateX(180deg);
+    pointer-events: none;
+    animation: pulse-beam 4s ease-in-out infinite;
+  }
+
+  .holo-rings {
+    position: absolute;
+    width: 180px;
+    height: 180px;
+    transform-style: preserve-3d;
+    transform: rotateX(75deg);
+    pointer-events: none;
+  }
+
+  .holo-rings .ring {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    border: 1px solid rgba(0, 242, 254, 0.3);
+    border-radius: 50%;
+    box-shadow: 0 0 10px rgba(0, 242, 254, 0.2);
+  }
+
+  .holo-rings .ring-1 {
+    animation: ring-pulse-1 3s ease-out infinite;
+  }
+  .holo-rings .ring-2 {
+    animation: ring-pulse-2 3s ease-out infinite;
+    animation-delay: 1.5s;
+  }
+
+  @keyframes ring-pulse-1 {
+    0% { transform: scale(0.3); opacity: 1; }
+    100% { transform: scale(1.2); opacity: 0; }
+  }
+  @keyframes ring-pulse-2 {
+    0% { transform: scale(0.3); opacity: 1; }
+    100% { transform: scale(1.2); opacity: 0; }
+  }
+  @keyframes pulse-beam {
+    0%, 100% { opacity: 0.6; }
+    50% { opacity: 1; filter: brightness(1.2); }
+  }
+
+  /* Background Radar System */
+  .radar-bg {
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotateX(65deg) rotateZ(0deg) translateZ(-80px);
+    transform-style: preserve-3d;
+    width: 480px;
+    height: 480px;
+    pointer-events: none;
+    z-index: -1;
+    opacity: 0.25;
+    filter: drop-shadow(0 0 15px rgba(0, 242, 254, 0.25));
+  }
+
+  .radar-circle {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    border: 1px solid rgba(0, 242, 254, 0.15);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+  }
+  .circle-1 { width: 140px; height: 140px; }
+  .circle-2 { width: 300px; height: 300px; border-style: dashed; }
+  .circle-3 { width: 440px; height: 440px; }
+
+  .radar-sweep {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: conic-gradient(from 0deg, rgba(0, 242, 254, 0.12) 0deg, transparent 120deg, transparent 360deg);
+    animation: radar-sweep-animation 8s linear infinite;
+  }
+
+  @keyframes radar-sweep-animation {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+
+  /* High-Tech HUD Typography */
+  .hud-name-wrapper {
+    position: relative;
+    display: inline-block;
+  }
+
+  .hud-title {
+    font-family: 'Orbitron', sans-serif;
+    font-size: clamp(2.4rem, 4vw, 3.4rem);
+    font-weight: 900;
+    color: #00f2fe;
+    text-shadow: 0 0 10px rgba(0, 242, 254, 0.5), 0 0 20px rgba(0, 242, 254, 0.2);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin: 0;
+    line-height: 1.1;
+    transition: all 0.3s ease;
+  }
+
+  .hud-name-wrapper:hover .hud-title {
+    color: #ffffff;
+    text-shadow: 0 0 15px rgba(0, 242, 254, 0.8), 0 0 30px rgba(0, 242, 254, 0.4), 0 0 40px rgba(255, 0, 127, 0.5);
+  }
+
+  .hud-subtitle {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.95rem;
+    color: #ff007f;
+    letter-spacing: 5px;
+    display: block;
+    margin-top: 8px;
+    text-shadow: 0 0 8px rgba(255, 0, 127, 0.4);
+  }
+
+  /* Glassmorphism Telemetry Console */
+  .tech-console-box {
+    background: rgba(6, 12, 29, 0.55);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border: 1px solid rgba(0, 242, 254, 0.25);
+    border-radius: 10px;
+    padding: 24px;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.6), inset 0 0 20px rgba(0, 242, 254, 0.05);
+    position: relative;
+    overflow: hidden;
+    margin-top: 20px;
+  }
+
+  .tech-console-box::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(0, 242, 254, 0.6), transparent);
+    animation: scan-line 4s linear infinite;
+  }
+
+  @keyframes scan-line {
+    0% { transform: translateY(0); opacity: 0.2; }
+    50% { opacity: 0.8; }
+    100% { transform: translateY(180px); opacity: 0.2; }
+  }
+
+  .console-hdr {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-bottom: 1px solid rgba(0, 242, 254, 0.15);
+    padding-bottom: 10px;
+    margin-bottom: 15px;
+  }
+
+  .console-blink-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: #00f2fe;
+    box-shadow: 0 0 8px #00f2fe;
+    animation: blink 2s ease-in-out infinite;
+  }
+
+  .console-title {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.8rem;
+    color: #8fa0dd;
+    letter-spacing: 3px;
+    flex-grow: 1;
+  }
+
+  .console-stats {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.75rem;
+    color: #ff007f;
+    border: 1px solid rgba(255, 0, 127, 0.4);
+    padding: 1px 6px;
+    border-radius: 3px;
+    text-shadow: 0 0 5px rgba(255, 0, 127, 0.5);
+  }
+
+  .highlight-cyan {
+    color: #00f2fe;
+    font-weight: bold;
+    text-shadow: 0 0 6px rgba(0, 242, 254, 0.4);
+  }
+
+  /* Right Sidebar Menu Styles */
+  .right-nav-area {
+    display: flex;
+    justify-content: flex-end;
+    width: 100%;
+    transform-style: preserve-3d;
+    transform: translateZ(30px);
+  }
+
+  .top-nav-bar {
+    display: flex;
+    gap: 40px;
+    padding-top: 20px;
+  }
+
+  .nav-item-container {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-bottom: 20px;
+  }
+  
+  .menu-link {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #8fa0dd;
+    text-decoration: none !important;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    transition: all 0.3s;
+    position: relative;
+    z-index: 10;
+    cursor: pointer;
+    text-shadow: 0 0 5px rgba(143, 160, 221, 0.2);
+  }
+  
+  .reg-bit {
+      color: #ff007f;
+      font-size: 0.8rem;
+      margin-right: 5px;
+      font-family: 'Share Tech Mono', monospace;
+  }
+
+  /* Mega Menu Dropdown */
+  .mega-dropdown {
+    position: absolute;
+    top: 90px;
+    opacity: 0;
+    transform: translateY(-20px) scale(0.98);
+    visibility: hidden;
+    transition: all 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+    z-index: 15;
+    pointer-events: none;
+    transform-origin: top right;
+  }
+
+  .mega-dropdown.horizontal-mode {
+    width: max-content;
+    max-width: 65vw;
+    right: -20px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap; /* Keep cards in a single horizontal line */
+    justify-content: flex-start;
+    gap: 20px;
+    overflow-x: auto; /* Enable smooth horizontal scrolling carousel */
+    padding: 15px 15px 25px 15px; /* Margin to ensure 3D card tilt scale doesn't clip */
+    scrollbar-width: thin;
+    scrollbar-color: rgba(0, 242, 254, 0.4) rgba(6, 12, 29, 0.3);
+  }
+
+  /* Custom Webkit scrollbar for horizontal carousel */
+  .mega-dropdown.horizontal-mode::-webkit-scrollbar {
+    height: 5px;
+  }
+  .mega-dropdown.horizontal-mode::-webkit-scrollbar-track {
+    background: rgba(6, 12, 29, 0.3);
+    border-radius: 10px;
+  }
+  .mega-dropdown.horizontal-mode::-webkit-scrollbar-thumb {
+    background: rgba(0, 242, 254, 0.5);
+    border-radius: 10px;
+    box-shadow: 0 0 6px rgba(0, 242, 254, 0.6);
+  }
+  
+  .mega-dropdown .list-item {
+    width: 330px;
+    flex-shrink: 0;
+    position: relative;
+    overflow: hidden;
+    transform-style: preserve-3d;
+    will-change: transform, opacity; /* GPU Optimizations */
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    background: rgba(6, 12, 29, 0.5) !important;
+    backdrop-filter: blur(20px) !important;
+    -webkit-backdrop-filter: blur(20px) !important;
+    border: 1px solid rgba(0, 242, 254, 0.18) !important;
+    border-radius: 8px !important;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.5), inset 0 0 15px rgba(0, 242, 254, 0.03) !important;
+    
+    /* Default closed state: tilted back, deep in Z-space, scaled down, invisible (using translate3d for GPU acceleration) */
+    opacity: 0;
+    transform: translate3d(0, 0, -150px) rotateX(-75deg) rotateY(15deg) scale(0.8);
+    transition: 
+      opacity 0.6s cubic-bezier(0.15, 0.85, 0.35, 1.1),
+      transform 0.6s cubic-bezier(0.15, 0.85, 0.35, 1.1),
+      background 0.3s,
+      border-color 0.3s,
+      box-shadow 0.3s !important;
+  }
+
+  /* Unfolded state when dropdown becomes active on hover */
+  .nav-item-container:hover .mega-dropdown .list-item {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) rotateX(0deg) rotateY(0deg) scale(1);
+  }
+
+  /* Staggered sequential unfolding transition delays */
+  .nav-item-container:hover .mega-dropdown .list-item:nth-child(1) {
+    transition-delay: 0.05s !important;
+  }
+  .nav-item-container:hover .mega-dropdown .list-item:nth-child(2) {
+    transition-delay: 0.16s !important;
+  }
+  .nav-item-container:hover .mega-dropdown .list-item:nth-child(3) {
+    transition-delay: 0.27s !important;
+  }
+
+  /* Chipset Card Board Overrides */
+  .mega-dropdown .list-item.chipset-card {
+    border-top: 3px solid #ffcc00 !important; /* Golden circuit board edge */
+    padding-top: 28px !important;
+    padding-bottom: 28px !important;
+  }
+
+  .chipset-pin-row {
+    display: flex;
+    justify-content: space-between;
+    position: absolute;
+    left: 15%;
+    width: 70%;
+    pointer-events: none;
+  }
+  .chipset-pin-row.top {
+    top: -3px;
+  }
+  .chipset-pin-row.bottom {
+    bottom: -3px;
+  }
+  .chipset-pin-row span {
+    width: 5px;
+    height: 7px;
+    background: #ffcc00;
+    border-radius: 1px;
+    box-shadow: 0 0 4px #ffcc00;
+    display: inline-block;
+  }
+  .chipset-core {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 15px;
+    padding: 6px 12px;
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px dashed rgba(0, 242, 254, 0.3);
+    border-radius: 4px;
+  }
+  .chipset-name {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.72rem;
+    color: #00f2fe;
+    letter-spacing: 1px;
+  }
+  .chipset-status {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.7rem;
+    color: #ff007f;
+    border: 1px solid rgba(255, 0, 127, 0.4);
+    padding: 0px 4px;
+    border-radius: 2px;
+    text-shadow: 0 0 4px rgba(255, 0, 127, 0.5);
+  }
+
+  .mega-dropdown .list-title {
+    font-family: 'Orbitron', sans-serif !important;
+    color: #00f2fe !important;
+    font-weight: 700 !important;
+    text-shadow: 0 0 8px rgba(0, 242, 254, 0.3) !important;
+    font-size: 1.05rem !important;
+  }
+
+  .mega-dropdown .list-desc {
+    font-family: 'Share Tech Mono', monospace !important;
+    color: #8fa0dd !important;
+    font-size: 0.85rem !important;
+    line-height: 1.5 !important;
+  }
+
+  .mega-dropdown .tech-badges {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .mega-dropdown .tech-badges span {
+    background: rgba(0, 242, 254, 0.1) !important;
+    color: #00f2fe !important;
+    border: 1px solid rgba(0, 242, 254, 0.3) !important;
+    border-radius: 4px !important;
+    font-family: 'Share Tech Mono', monospace !important;
+    text-shadow: 0 0 5px rgba(0, 242, 254, 0.4) !important;
+    font-size: 0.75rem !important;
+    padding: 3px 10px !important;
+  }
+
+  /* Laser Scanline Sweep effect */
+  .mega-dropdown .list-item::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: 0;
+    width: 100%;
+    height: 35%;
+    background: linear-gradient(to bottom, transparent 0%, rgba(0, 242, 254, 0.3) 50%, #00f2fe 90%, transparent 100%);
+    opacity: 0;
+    pointer-events: none;
+    z-index: 5;
+    mix-blend-mode: screen;
+  }
+
+  .nav-item-container:hover .mega-dropdown .list-item::after {
+    animation: scan-sweep 0.75s cubic-bezier(0.15, 0.85, 0.35, 1.1) forwards;
+  }
+
+  .nav-item-container:hover .mega-dropdown .list-item:nth-child(1)::after {
+    animation-delay: 0.05s;
+  }
+  .nav-item-container:hover .mega-dropdown .list-item:nth-child(2)::after {
+    animation-delay: 0.16s;
+  }
+  .nav-item-container:hover .mega-dropdown .list-item:nth-child(3)::after {
+    animation-delay: 0.27s;
+  }
+
+  @keyframes scan-sweep {
+    0% { top: -50%; opacity: 0; }
+    15% { opacity: 1; }
+    85% { opacity: 1; }
+    100% { top: 150%; opacity: 0; }
+  }
+
+  /* Telemetry Data Stream loading screen overlay */
+  .telemetry-stream {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(6, 12, 29, 0.95);
+    padding: 16px;
+    box-sizing: border-box;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.72rem;
+    color: #00f2fe;
+    overflow: hidden;
+    z-index: 10;
+    pointer-events: none;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    opacity: 1;
+    transition: opacity 0.3s ease;
+    text-align: left;
+  }
+
+  /* Fixed HUD Real-time Telemetry Panel */
+  .hud-telemetry-panel {
+    position: fixed;
+    bottom: 25px;
+    left: 25px;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.75rem;
+    color: rgba(0, 242, 254, 0.45);
+    background: rgba(6, 12, 29, 0.45);
+    border: 1px solid rgba(0, 242, 254, 0.12);
+    padding: 12px 18px;
+    border-radius: 6px;
+    pointer-events: none;
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4), inset 0 0 10px rgba(0, 242, 254, 0.05);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+
+  .hud-telemetry-panel .telemetry-item span {
+    color: #00f2fe;
+    text-shadow: 0 0 5px rgba(0, 242, 254, 0.4);
+    font-weight: bold;
+  }
+
+  .nav-item-container:hover .menu-link {
+    color: #00f2fe;
+    text-shadow: 0 0 10px rgba(0, 242, 254, 0.7);
+  }
+  
+  .nav-item-container:hover .mega-dropdown {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    visibility: visible;
+    pointer-events: auto;
+  }
+
+  @keyframes fadeSlideUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @media (max-width: 992px) {
+    .abstract-layout {
+      grid-template-columns: 1fr;
+      text-align: center;
+      gap: 30px;
+    }
+    .right-nav-area {
+      justify-content: center;
+      margin-top: 40px;
+    }
+  }
+</style>
+
+<div class="noise-overlay"></div>
+<div class="container-full" style="background: radial-gradient(circle at 50% 50%, #060913 0%, #020308 100%); background-image: linear-gradient(rgba(0, 242, 254, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 242, 254, 0.03) 1px, transparent 1px); background-size: 30px 30px; padding-bottom: 120px; position: relative; min-height: calc(100vh - 80px); display: flex; align-items: center; overflow: hidden;">
+  <div class="dashboard-glow" style="position: absolute; width: 600px; height: 600px; background: radial-gradient(circle, rgba(0, 242, 254, 0.08) 0%, transparent 70%); top: 10%; left: -10%; z-index: 1; pointer-events: none;"></div>
+
+  <div class="container" style="max-width: 1200px !important; width: 95% !important; position: relative; z-index: 2;">
+    
+    <div class="abstract-layout">
+      
+      <div class="left-intro-area" style="position: relative; z-index: 10;">
+        <div class="radar-bg">
+          <div class="radar-sweep"></div>
+          <div class="radar-circle circle-1"></div>
+          <div class="radar-circle circle-2"></div>
+          <div class="radar-circle circle-3"></div>
+        </div>
+
+        <span class="intro-label" style="font-family: 'Share Tech Mono', monospace; font-size: 0.85rem; letter-spacing: 4px; color: #ff007f; text-shadow: 0 0 8px rgba(255, 0, 127, 0.4); margin-bottom: 12px; display: inline-block;">[ SYSTEM PROTOCOL: ACTIVE ]</span>
+        
+        <a href="{{ site.baseurl }}/about" id="name-link" style="text-decoration: none; display: block; margin-bottom: 24px;">
+          <div class="hud-name-wrapper">
+            <h1 class="hud-title" data-text="root@KWONEUNJI:~#">root@KWONEUNJI:~#<span class="terminal-cursor">_</span></h1>
+            <span class="hud-subtitle">SYSTEM & EMBEDDED ARCHITECT</span>
+          </div>
+        </a>
+        
+        <div class="tech-console-box">
+          <div class="console-hdr">
+            <span class="console-blink-dot"></span>
+            <span class="console-title">FIRMWARE.LOG // CORE_INDEX</span>
+            <span class="console-stats">SYS_OK</span>
+          </div>
+          <div id="summary-view" class="text-view active">
+            <p class="intro-desc" style="font-family: 'Share Tech Mono', monospace; font-size: 1.05rem; color: #8fa0dd; line-height: 1.8; margin: 0;">
+              <span class="highlight-cyan">하드웨어 제어</span>와 <span class="highlight-cyan">시스템 소프트웨어</span>의 경계를 허무는 엔지니어입니다. 신뢰성 높은 아키텍처와 최적화된 로직 구현에 집중합니다.
+            </p>
+          </div>
+        </div>
+      </div>
+      
+        <div class="top-nav-bar">
+          
+          <div class="nav-item-container">
+            <div class="menu-cube-container">
+              <div class="menu-cube">
+                <div class="face front"></div><div class="face back"></div><div class="face right"></div><div class="face left"></div><div class="face top"></div><div class="face bottom"></div>
+                <div class="menu-cube-core"></div>
+              </div>
+              <div class="orbit-logs-container">
+                <div class="orbit-log log-1">[ACCESS_GRANTED]</div>
+                <div class="orbit-log log-2">[LOADING_DATA...]</div>
+              </div>
+            </div>
+            <div class="menu-link"><span class="reg-bit">001</span>projects</div>
+            
+            <div class="mega-dropdown horizontal-mode">
+              <a href="{{ site.baseurl }}/safety-equipment-system" class="list-item">
+                <div class="list-content">
+                  <h4 class="list-title">안전장비 시스템</h4>
+                </div>
+              </a>
+              <a href="{{ site.baseurl }}/embedded-hardware" class="list-item">
+                <div class="list-content">
+                  <h4 class="list-title">화재 대피 시스템</h4>
+                </div>
+              </a>
+            </div>
+          </div>
+          
+          <div class="nav-item-container">
+            <div class="menu-cube-container">
+              <div class="menu-cube">
+                <div class="face front"></div><div class="face back"></div><div class="face right"></div><div class="face left"></div><div class="face top"></div><div class="face bottom"></div>
+                <div class="menu-cube-core"></div>
+              </div>
+              <div class="orbit-logs-container">
+                <div class="orbit-log log-1">[ACCESS_GRANTED]</div>
+                <div class="orbit-log log-2">[LOADING_DATA...]</div>
+              </div>
+            </div>
+            <div class="menu-link"><span class="reg-bit">010</span>tech</div>
+            
+            <div class="mega-dropdown horizontal-mode">
+              <div class="list-item chipset-card">
+                  <div class="chipset-pin-row top"><span></span><span></span><span></span><span></span><span></span></div>
+                  <div class="list-content"><h4 class="list-title">Python</h4><p class="list-desc">Algorithm Core</p></div>
+                  <div class="chipset-pin-row bottom"><span></span><span></span><span></span><span></span><span></span></div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="nav-item-container">
+            <div class="menu-cube-container">
+              <div class="menu-cube">
+                <div class="face front"></div><div class="face back"></div><div class="face right"></div><div class="face left"></div><div class="face top"></div><div class="face bottom"></div>
+                <div class="menu-cube-core"></div>
+              </div>
+              <div class="orbit-logs-container">
+                <div class="orbit-log log-1">[ACCESS_GRANTED]</div>
+                <div class="orbit-log log-2">[LOADING_DATA...]</div>
+              </div>
+            </div>
+            <div class="menu-link"><span class="reg-bit">100</span>blog</div>
+            
+            <div class="mega-dropdown horizontal-mode">
+              <div class="list-item" style="padding: 20px;">
+                <p style="color: #94a3b8; font-size: 0.95rem; text-align: center; margin: 0;">아직 작성된 글이 없습니다.</p>
+              </div>
+            </div>
+          </div>
+          
+        </div>
+      </div>
+      
+    </div>
+
+  </div>
+  
+  <div class="hud-telemetry-panel">
+    <div class="telemetry-item">SYS_TEMP: <span id="telemetry-temp">41.8</span>°C</div>
+    <div class="telemetry-item">BUFFER_STATUS: <span id="telemetry-buf">98</span>%</div>
+    <div class="telemetry-item">BLE_RSSI: <span id="telemetry-rssi">-65</span>dBm</div>
+    <div class="telemetry-item">MCU_CLK: 240MHz</div>
+    <div class="telemetry-item">DMA_STREAM: ACTIVE</div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    // Page transition logic for name link
+    const nameLink = document.getElementById("name-link");
+    
+    if (nameLink) {
+      nameLink.addEventListener("click", (e) => {
+        e.preventDefault(); // Prevent immediate navigation
+        
+        // Add a fade-out effect to the body
+        document.body.style.transition = "opacity 0.4s ease";
+        document.body.style.opacity = "0";
+        
+        // Navigate after transition completes
+        setTimeout(() => {
+          window.location.href = nameLink.href;
+        }, 400);
+      });
+    }
+
+    // Holographic Menu Cubes driving variables
+    const cubes = document.querySelectorAll('.menu-cube');
+    let anglesX = [0, 0, 0];
+    let anglesY = [0, 0, 0];
+    let isHoveredStates = [false, false, false];
+    
+    // Staggered target lock coordinates (projects index 0, tech index 1, blog index 2)
+    let targetXAngles = [0, 0, -90];
+    let targetYAngles = [0, -90, 0];
+
+    // High speed firmware log lines array
+    const telemetryLogs = [
+      "[ESP32_BLE_CONNECTED]",
+      "[FSR_THRESHOLD_PASS]",
+      "[UART_BAUDRATE_115200]",
+      "[ADC_CHANNEL_0_READ: 4095]",
+      "[I2C_MEM_WRITE_OK]",
+      "[GPIO_PIN_12: HIGH]",
+      "[DMA_STREAM_COMPLETE]",
+      "[HAL_OK: CORE_INIT]",
+      "[MCU_TEMP_READ: 38.5C]",
+      "[WIFI_RSSI_READ: -45dBm]"
+    ];
+
+    // Independent 3D Menu Cubes loop (Idle + Sensor Jitter Jiggle + Target Locking)
+    function animateMenuCubes() {
+      cubes.forEach((cube, idx) => {
+        if (!isHoveredStates[idx]) {
+          // Slow distinct idle rotation speeds
+          anglesX[idx] += 0.35 + (idx * 0.05);
+          anglesY[idx] += 0.45 + (idx * 0.05);
+          
+          // Jiggle jitter (sensor simulation noise)
+          const jitterX = (Math.random() - 0.5) * 1.5;
+          const jitterY = (Math.random() - 0.5) * 1.5;
+          
+          cube.style.transform = `rotateX(${anglesX[idx] + jitterX}deg) rotateY(${anglesY[idx] + jitterY}deg)`;
+        } else {
+          // LERP to lock-on rotation smoothly
+          anglesX[idx] += (targetXAngles[idx] - anglesX[idx]) * 0.16;
+          anglesY[idx] += (targetYAngles[idx] - anglesY[idx]) * 0.16;
+          
+          cube.style.transform = `rotateX(${anglesX[idx]}deg) rotateY(${anglesY[idx]}deg)`;
+        }
+      });
+      requestAnimationFrame(animateMenuCubes);
+    }
+    requestAnimationFrame(animateMenuCubes);
+
+    // Setup sequence triggers on menu hover
+    const menuTriggers = document.querySelectorAll('.nav-item-container');
+    menuTriggers.forEach((trigger, idx) => {
+      trigger.addEventListener('mouseenter', () => {
+        isHoveredStates[idx] = true;
+
+        // Telemetry streams printing in child cards
+        const dropdownCards = trigger.querySelectorAll('.list-item');
+        dropdownCards.forEach(card => {
+          // Remove old logs
+          const oldStream = card.querySelector('.telemetry-stream');
+          if (oldStream) oldStream.remove();
+
+          // Create new stream
+          const stream = document.createElement('div');
+          stream.classList.add('telemetry-stream');
+          card.appendChild(stream);
+
+          let logsPrinted = 0;
+          const logInterval = setInterval(() => {
+            if (logsPrinted < 5) {
+              const logLine = document.createElement('div');
+              logLine.textContent = `> ${telemetryLogs[Math.floor(Math.random() * telemetryLogs.length)]}`;
+              stream.appendChild(logLine);
+              logsPrinted++;
+            } else {
+              clearInterval(logInterval);
+              // Fade out loading sequence
+              setTimeout(() => {
+                stream.style.opacity = '0';
+                setTimeout(() => stream.remove(), 300);
+              }, 100);
+            }
+          }, 50); // rapid stream parsing
+        });
+      });
+
+      trigger.addEventListener('mouseleave', () => {
+        isHoveredStates[idx] = false;
+      });
+    });
+
+    // 3D Tilt Effect for cards
+    const cards = document.querySelectorAll('.list-item');
+    cards.forEach(card => {
+      const glare = document.createElement('div');
+      glare.classList.add('glare');
+      card.appendChild(glare);
+
+      card.addEventListener('mouseenter', () => {
+        card.style.transition = 'transform 0.1s ease-out, background 0.3s, border-color 0.3s, box-shadow 0.3s';
+      });
+
+      card.addEventListener('mousemove', (e) => {
+        const rect = card.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        
+        const centerX = rect.width / 2;
+        const centerY = rect.height / 2;
+        
+        const rotateX = ((y - centerY) / centerY) * -12;
+        const rotateY = ((x - centerX) / centerX) * 12;
+        
+        card.style.transform = `perspective(1000px) translate3d(0,0,0) rotate3d(1, 0, 0, ${rotateX}deg) rotate3d(0, 1, 0, ${rotateY}deg) scale3d(1.05, 1.05, 1.05)`;
+        
+        const glareX = (x / rect.width) * 100;
+        const glareY = (y / rect.height) * 100;
+        glare.style.background = `radial-gradient(circle at ${glareX}% ${glareY}%, rgba(0, 242, 254, 0.3) 0%, transparent 60%)`;
+        glare.style.opacity = '1';
+
+        // Backlight neon shadow response
+        const shadowX = -rotateY * 1.5;
+        const shadowY = rotateX * 1.5;
+        card.style.setProperty('box-shadow', `0 20px 40px rgba(0,0,0,0.6), ${shadowX}px ${shadowY}px 25px rgba(0, 242, 254, 0.35), inset 0 0 15px rgba(0, 242, 254, 0.08)`, 'important');
+      });
+      
+      card.addEventListener('mouseleave', () => {
+        card.style.transition = 'transform 0.5s cubic-bezier(0.25, 0.8, 0.25, 1), background 0.3s, border-color 0.3s, box-shadow 0.5s';
+        card.style.transform = `perspective(1000px) translate3d(0,0,0) rotate3d(1,0,0, 0deg) rotate3d(0,1,0, 0deg) scale3d(1, 1, 1)`;
+        glare.style.opacity = '0';
+        card.style.setProperty('box-shadow', `0 15px 35px rgba(0,0,0,0.5), inset 0 0 15px rgba(0, 242, 254, 0.03)`, 'important');
+      });
+    });
+
+    // Entire Page 3D Layout Tilt / Parallax swiveling isometric coordinate
+    const layout = document.querySelector('.abstract-layout');
+    const container = document.querySelector('.container-full');
+    
+    if (layout && container) {
+      container.addEventListener('mousemove', (e) => {
+        const rect = container.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        
+        const centerX = rect.width / 2;
+        const centerY = rect.height / 2;
+        
+        const baseRotateX = 15; // Isometric base
+        const baseRotateY = -15; // Isometric base
+        const rotateX = baseRotateX + ((y - centerY) / centerY) * -5;
+        const rotateY = baseRotateY + ((x - centerX) / centerX) * 5;
+        
+        layout.style.transform = `perspective(1500px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+      });
+      
+      container.addEventListener('mouseleave', () => {
+        layout.style.transition = 'transform 0.8s cubic-bezier(0.25, 0.8, 0.25, 1)';
+        layout.style.transform = 'perspective(1500px) rotateX(15deg) rotateY(-15deg)';
+      });
+      
+      container.addEventListener('mouseenter', () => {
+        layout.style.transition = 'transform 0.1s ease-out';
+      });
+    }
+
+    // Dynamic Live Telemetry updates loop
+    const tempEl = document.getElementById('telemetry-temp');
+    const bufEl = document.getElementById('telemetry-buf');
+    const rssiEl = document.getElementById('telemetry-rssi');
+    
+    setInterval(() => {
+      if (tempEl) tempEl.textContent = (40.5 + Math.random() * 3).toFixed(1);
+      if (bufEl) bufEl.textContent = (94 + Math.random() * 5).toFixed(0);
+      if (rssiEl) rssiEl.textContent = (-58 - Math.floor(Math.random() * 12)).toFixed(0);
+    }, 1500);
+  });
+</script>
