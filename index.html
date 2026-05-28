@@ -73,7 +73,7 @@ title: Home
     height: 70px;
     position: relative;
     transform-style: preserve-3d;
-    animation: spin-cube 16s linear infinite;
+    /* Rotation and noise will be driven by JS for absolute control and seamless locking */
   }
 
   .cube .face {
@@ -106,6 +106,56 @@ title: Home
   .cube .left   { transform: rotateY(-90deg) translateZ(35px); }
   .cube .top    { transform: rotateX( 90deg) translateZ(35px); }
   .cube .bottom { transform: rotateX(-90deg) translateZ(35px); }
+
+  /* 3D Cube Hardware Deconstruction Face Splitting */
+  .cube.deconstructed .front  { transform: rotateY(  0deg) translateZ(65px) !important; border-color: #ff007f !important; box-shadow: 0 0 25px rgba(255, 0, 127, 0.7), inset 0 0 15px rgba(255, 0, 127, 0.3) !important; }
+  .cube.deconstructed .back   { transform: rotateY(180deg) translateZ(65px) !important; }
+  .cube.deconstructed .right  { transform: rotateY( 90deg) translateZ(65px) !important; border-color: #ff007f !important; box-shadow: 0 0 25px rgba(255, 0, 127, 0.7), inset 0 0 15px rgba(255, 0, 127, 0.3) !important; }
+  .cube.deconstructed .left   { transform: rotateY(-90deg) translateZ(65px) !important; }
+  .cube.deconstructed .top    { transform: rotateX( 90deg) translateZ(65px) !important; border-color: #ff007f !important; box-shadow: 0 0 25px rgba(255, 0, 127, 0.7), inset 0 0 15px rgba(255, 0, 127, 0.3) !important; }
+  .cube.deconstructed .bottom { transform: rotateX(-90deg) translateZ(65px) !important; }
+
+  /* Register bit tag style */
+  .reg-bit {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.75rem;
+    color: #ff007f;
+    border: 1px solid rgba(255, 0, 127, 0.3);
+    padding: 1px 5px;
+    border-radius: 2px;
+    margin-right: 8px;
+    text-shadow: 0 0 4px rgba(255, 0, 127, 0.3);
+    transition: all 0.3s ease;
+    display: inline-block;
+  }
+  
+  .nav-item-container:hover .reg-bit {
+    color: #00f2fe;
+    border-color: rgba(0, 242, 254, 0.5);
+    text-shadow: 0 0 8px rgba(0, 242, 254, 0.8);
+    box-shadow: 0 0 6px rgba(0, 242, 254, 0.3);
+  }
+
+  /* Telemetry Data Stream loading screen overlay */
+  .telemetry-stream {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(6, 12, 29, 0.95);
+    padding: 16px;
+    box-sizing: border-box;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.72rem;
+    color: #00f2fe;
+    overflow: hidden;
+    z-index: 10;
+    pointer-events: none;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    opacity: 1;
+    transition: opacity 0.3s ease;
+    text-align: left;
+  }
 
   @keyframes spin-cube {
     0% { transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg); }
@@ -331,6 +381,49 @@ title: Home
     padding-bottom: 20px;
   }
   
+  /* Advanced 3D Book Icon Animation */
+  .book-icon-wrapper {
+    font-size: 2.2rem;
+    color: #cbd5e1;
+    cursor: pointer;
+    position: relative;
+    width: 44px;
+    height: 44px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10;
+    margin-bottom: 8px;
+    perspective: 1000px;
+  }
+  
+  .book-icon-wrapper .closed-book {
+    position: absolute;
+    transform-origin: center;
+    transition: opacity 0.4s ease, transform 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    opacity: 1;
+    transform: rotateY(0deg) scale(1);
+  }
+  
+  .book-icon-wrapper .open-book {
+    position: absolute;
+    transform-origin: center;
+    transition: opacity 0.4s ease, transform 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    opacity: 0;
+    transform: rotateY(-90deg) scale(0.6);
+    color: #00f2fe;
+  }
+  
+  .nav-item-container:hover .closed-book {
+    opacity: 0;
+    transform: rotateY(180deg) scale(1.1);
+  }
+  
+  .nav-item-container:hover .open-book {
+    opacity: 1;
+    transform: rotateY(0deg) scale(1.1);
+  }
+  
   .menu-link {
     font-family: 'Orbitron', sans-serif;
     font-size: 1.15rem;
@@ -494,6 +587,7 @@ title: Home
     text-shadow: 0 0 4px rgba(255, 0, 127, 0.5);
   }
 
+<<<<<<< HEAD
   .mega-dropdown .list-title {
     font-family: 'Orbitron', sans-serif !important;
     color: #00f2fe !important;
@@ -525,6 +619,8 @@ title: Home
     padding: 3px 10px !important;
   }
 
+=======
+>>>>>>> parent of 1ba42be (Revert "3D2")
   /* Laser Scanline Sweep effect */
   .mega-dropdown .list-item::after {
     content: '';
@@ -654,6 +750,22 @@ title: Home
           <div class="radar-circle circle-1"></div>
           <div class="radar-circle circle-2"></div>
           <div class="radar-circle circle-3"></div>
+        </div>
+
+        <div class="hologram-cube-container">
+          <div class="holo-beam"></div>
+          <div class="holo-rings">
+            <div class="ring ring-1"></div>
+            <div class="ring ring-2"></div>
+          </div>
+          <div class="cube">
+            <div class="face front"></div>
+            <div class="face back"></div>
+            <div class="face right"></div>
+            <div class="face left"></div>
+            <div class="face top"></div>
+            <div class="face bottom"></div>
+          </div>
         </div>
 
         <span class="intro-label" style="font-family: 'Share Tech Mono', monospace; font-size: 0.85rem; letter-spacing: 4px; color: #ff007f; text-shadow: 0 0 8px rgba(255, 0, 127, 0.4); margin-bottom: 12px; display: inline-block;">[ SYSTEM PROTOCOL: ACTIVE ]</span>
@@ -786,15 +898,45 @@ title: Home
       });
     }
 
-    // Holographic Menu Cubes driving variables
-    const cubes = document.querySelectorAll('.menu-cube');
-    let anglesX = [0, 0, 0];
-    let anglesY = [0, 0, 0];
-    let isHoveredStates = [false, false, false];
+    // 3D Hologram Cube Controller Variables
+    const cube = document.querySelector('.cube');
+    let idleAngleX = 0;
+    let idleAngleY = 0;
+    let isHovered = false;
     
-    // Staggered target lock coordinates (projects index 0, tech index 1, blog index 2)
-    let targetXAngles = [0, 0, -90];
-    let targetYAngles = [0, -90, 0];
+    // Smooth lock-on variables
+    let currentAngleX = 0;
+    let currentAngleY = 0;
+    let targetAngleX = 0;
+    let targetAngleY = 0;
+
+    // 3D Cube Animation Loop (handles Idle + Sensor Jitter + Lock targeting)
+    function animateCube() {
+      if (!isHovered) {
+        // Slow idle rotation
+        idleAngleX += 0.35;
+        idleAngleY += 0.45;
+        
+        // Jitter simulation (simulating micro-vibrations of analog sensors)
+        const jitterX = (Math.random() - 0.5) * 1.5;
+        const jitterY = (Math.random() - 0.5) * 1.5;
+        
+        currentAngleX = idleAngleX + jitterX;
+        currentAngleY = idleAngleY + jitterY;
+        
+        cube.style.transform = `rotateX(${currentAngleX}deg) rotateY(${currentAngleY}deg)`;
+      } else {
+        // Linear interpolation for smooth target locking
+        currentAngleX += (targetAngleX - currentAngleX) * 0.15;
+        currentAngleY += (targetAngleY - currentAngleY) * 0.15;
+        
+        cube.style.transform = `rotateX(${currentAngleX}deg) rotateY(${currentAngleY}deg)`;
+      }
+      requestAnimationFrame(animateCube);
+    }
+    if (cube) {
+      requestAnimationFrame(animateCube);
+    }
 
     // High speed firmware log lines array
     const telemetryLogs = [
@@ -810,45 +952,31 @@ title: Home
       "[WIFI_RSSI_READ: -45dBm]"
     ];
 
-    // Independent 3D Menu Cubes loop (Idle + Sensor Jitter Jiggle + Target Locking)
-    function animateMenuCubes() {
-      cubes.forEach((cube, idx) => {
-        if (!isHoveredStates[idx]) {
-          // Slow distinct idle rotation speeds
-          anglesX[idx] += 0.35 + (idx * 0.05);
-          anglesY[idx] += 0.45 + (idx * 0.05);
-          
-          // Jiggle jitter (sensor simulation noise)
-          const jitterX = (Math.random() - 0.5) * 1.5;
-          const jitterY = (Math.random() - 0.5) * 1.5;
-          
-          cube.style.transform = `rotateX(${anglesX[idx] + jitterX}deg) rotateY(${anglesY[idx] + jitterY}deg)`;
-        } else {
-          // LERP to lock-on rotation smoothly
-          anglesX[idx] += (targetXAngles[idx] - anglesX[idx]) * 0.16;
-          anglesY[idx] += (targetYAngles[idx] - anglesY[idx]) * 0.16;
-          
-          cube.style.transform = `rotateX(${anglesX[idx]}deg) rotateY(${anglesY[idx]}deg)`;
-        }
-      });
-      requestAnimationFrame(animateMenuCubes);
-    }
-    requestAnimationFrame(animateMenuCubes);
-
     // Setup sequence triggers on menu hover
     const menuTriggers = document.querySelectorAll('.nav-item-container');
     menuTriggers.forEach((trigger, idx) => {
-      trigger.addEventListener('mouseenter', () => {
-        isHoveredStates[idx] = true;
+      // Determine locking angles (projects: index 0, tech: index 1, blog: index 2)
+      let xAngle = 0, yAngle = 0;
+      if (idx === 0) { xAngle = 0; yAngle = 0; }        // Projects -> Locks to Front Face
+      if (idx === 1) { xAngle = 0; yAngle = -90; }      // Tech -> Locks to Right Face
+      if (idx === 2) { xAngle = -90; yAngle = 0; }      // Blog -> Locks to Top Face
 
-        // Telemetry streams printing in child cards
+      trigger.addEventListener('mouseenter', () => {
+        if (cube) {
+          isHovered = true;
+          targetAngleX = xAngle;
+          targetAngleY = yAngle;
+          cube.classList.add('deconstructed');
+        }
+
+        // Telemetry datastream execution for child cards
         const dropdownCards = trigger.querySelectorAll('.list-item');
         dropdownCards.forEach(card => {
-          // Remove old logs
+          // Remove existing log screens
           const oldStream = card.querySelector('.telemetry-stream');
           if (oldStream) oldStream.remove();
 
-          // Create new stream
+          // Create new stream overlay
           const stream = document.createElement('div');
           stream.classList.add('telemetry-stream');
           card.appendChild(stream);
@@ -868,12 +996,15 @@ title: Home
                 setTimeout(() => stream.remove(), 300);
               }, 100);
             }
-          }, 50); // rapid stream parsing
+          }, 55); // high speed stream printing
         });
       });
 
       trigger.addEventListener('mouseleave', () => {
-        isHoveredStates[idx] = false;
+        if (cube) {
+          isHovered = false;
+          cube.classList.remove('deconstructed');
+        }
       });
     });
 
