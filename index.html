@@ -418,7 +418,7 @@ title: Home
     gap: 20px;
   }
   
-  /* 3D Glassmorphism Cards in Dropdown */
+  /* 3D Glassmorphism Cards in Dropdown - Holographic Unfold */
   .mega-dropdown .list-item {
     width: 330px;
     flex-shrink: 0;
@@ -432,7 +432,79 @@ title: Home
     border: 1px solid rgba(0, 242, 254, 0.18) !important;
     border-radius: 8px !important;
     box-shadow: 0 15px 35px rgba(0,0,0,0.5), inset 0 0 15px rgba(0, 242, 254, 0.03) !important;
-    transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1) !important;
+    
+    /* Default closed state: tilted back, deep in Z-space, scaled down, invisible */
+    opacity: 0;
+    transform: rotateX(-75deg) rotateY(15deg) translateZ(-150px) scale(0.8);
+    transition: 
+      opacity 0.6s cubic-bezier(0.15, 0.85, 0.35, 1.1),
+      transform 0.6s cubic-bezier(0.15, 0.85, 0.35, 1.1),
+      background 0.3s,
+      border-color 0.3s,
+      box-shadow 0.3s !important;
+  }
+
+  /* Unfolded state when dropdown becomes active on hover */
+  .nav-item-container:hover .mega-dropdown .list-item {
+    opacity: 1;
+    transform: rotateX(0deg) rotateY(0deg) translateZ(0) scale(1);
+  }
+
+  /* Staggered sequential unfolding transition delays */
+  .nav-item-container:hover .mega-dropdown .list-item:nth-child(1) {
+    transition-delay: 0.05s !important;
+  }
+  .nav-item-container:hover .mega-dropdown .list-item:nth-child(2) {
+    transition-delay: 0.16s !important;
+  }
+  .nav-item-container:hover .mega-dropdown .list-item:nth-child(3) {
+    transition-delay: 0.27s !important;
+  }
+
+  /* Laser Scanline Sweep effect */
+  .mega-dropdown .list-item::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: 0;
+    width: 100%;
+    height: 35%;
+    background: linear-gradient(to bottom, transparent 0%, rgba(0, 242, 254, 0.3) 50%, #00f2fe 90%, transparent 100%);
+    opacity: 0;
+    pointer-events: none;
+    z-index: 5;
+    mix-blend-mode: screen;
+  }
+
+  .nav-item-container:hover .mega-dropdown .list-item::after {
+    animation: scan-sweep 0.75s cubic-bezier(0.15, 0.85, 0.35, 1.1) forwards;
+  }
+
+  .nav-item-container:hover .mega-dropdown .list-item:nth-child(1)::after {
+    animation-delay: 0.05s;
+  }
+  .nav-item-container:hover .mega-dropdown .list-item:nth-child(2)::after {
+    animation-delay: 0.16s;
+  }
+  .nav-item-container:hover .mega-dropdown .list-item:nth-child(3)::after {
+    animation-delay: 0.27s;
+  }
+
+  @keyframes scan-sweep {
+    0% {
+      top: -50%;
+      opacity: 0;
+    }
+    15% {
+      opacity: 1;
+    }
+    85% {
+      opacity: 1;
+    }
+    100% {
+      top: 150%;
+      opacity: 0;
+    }
   }
 
   .mega-dropdown .list-item .list-content {
@@ -787,7 +859,7 @@ title: Home
       card.appendChild(glare);
 
       card.addEventListener('mouseenter', () => {
-        card.style.transition = 'transform 0.1s ease-out, background 0.3s, box-shadow 0.3s';
+        card.style.transition = 'transform 0.1s ease-out, background 0.3s, border-color 0.3s, box-shadow 0.3s';
       });
 
       card.addEventListener('mousemove', (e) => {
@@ -806,14 +878,20 @@ title: Home
         // Glare effect calculation
         const glareX = (x / rect.width) * 100;
         const glareY = (y / rect.height) * 100;
-        glare.style.background = `radial-gradient(circle at ${glareX}% ${glareY}%, rgba(255,255,255,0.3) 0%, transparent 60%)`;
+        glare.style.background = `radial-gradient(circle at ${glareX}% ${glareY}%, rgba(0, 242, 254, 0.3) 0%, transparent 60%)`;
         glare.style.opacity = '1';
+
+        // Physical light-reactive glowing shadow: shifts shadow opposite to mouse movement
+        const shadowX = -rotateY * 1.5;
+        const shadowY = rotateX * 1.5;
+        card.style.setProperty('box-shadow', `0 20px 40px rgba(0,0,0,0.6), ${shadowX}px ${shadowY}px 25px rgba(0, 242, 254, 0.35), inset 0 0 15px rgba(0, 242, 254, 0.08)`, 'important');
       });
       
       card.addEventListener('mouseleave', () => {
-        card.style.transition = 'transform 0.5s cubic-bezier(0.25, 0.8, 0.25, 1), background 0.3s, box-shadow 0.3s';
+        card.style.transition = 'transform 0.5s cubic-bezier(0.25, 0.8, 0.25, 1), background 0.3s, border-color 0.3s, box-shadow 0.5s';
         card.style.transform = `perspective(1000px) rotateX(0) rotateY(0) scale3d(1, 1, 1)`;
         glare.style.opacity = '0';
+        card.style.setProperty('box-shadow', `0 15px 35px rgba(0,0,0,0.5), inset 0 0 15px rgba(0, 242, 254, 0.03)`, 'important');
       });
     });
 
