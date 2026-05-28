@@ -308,18 +308,13 @@ title: Home
     text-shadow: 0 0 6px rgba(0, 242, 254, 0.4);
   }
 
-  @keyframes blink {
-    0%, 100% { opacity: 0.4; }
-    50% { opacity: 1; }
-  }
-
   /* Right Sidebar Menu Styles */
   .right-nav-area {
     display: flex;
     justify-content: flex-end;
     width: 100%;
     transform-style: preserve-3d;
-    transform: translateZ(30px); /* Extrude out slightly less than the left side */
+    transform: translateZ(30px);
   }
 
   .top-nav-bar {
@@ -334,41 +329,6 @@ title: Home
     flex-direction: column;
     align-items: center;
     padding-bottom: 20px;
-  }
-  
-  /* Unicons 3D holographic icons */
-  .book-icon-wrapper {
-    font-size: 2.2rem;
-    color: #00f2fe;
-    text-shadow: 0 0 8px rgba(0, 242, 254, 0.4);
-    cursor: pointer;
-    position: relative;
-    width: 44px;
-    height: 44px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 10;
-    margin-bottom: 8px;
-    perspective: 1000px;
-  }
-  
-  .book-icon-wrapper .closed-book {
-    position: absolute;
-    transform-origin: center;
-    transition: opacity 0.4s ease, transform 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-    opacity: 1;
-    transform: rotateY(0deg) scale(1);
-  }
-  
-  .book-icon-wrapper .open-book {
-    position: absolute;
-    transform-origin: center;
-    transition: opacity 0.4s ease, transform 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-    opacity: 0;
-    transform: rotateY(-90deg) scale(0.6);
-    color: #ff007f;
-    text-shadow: 0 0 10px rgba(255, 0, 127, 0.6);
   }
   
   .menu-link {
@@ -386,6 +346,13 @@ title: Home
     text-shadow: 0 0 5px rgba(143, 160, 221, 0.2);
   }
   
+  .reg-bit {
+      color: #ff007f;
+      font-size: 0.8rem;
+      margin-right: 5px;
+      font-family: 'Share Tech Mono', monospace;
+  }
+
   /* Mega Menu Dropdown */
   .mega-dropdown {
     position: absolute;
@@ -399,33 +366,44 @@ title: Home
     transform-origin: top right;
   }
 
-  .mega-dropdown.vertical-mode {
-    width: max-content;
-    right: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-  }
-
   .mega-dropdown.horizontal-mode {
     width: max-content;
-    max-width: 55vw;
+    max-width: 65vw;
     right: -20px;
     display: flex;
     flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: flex-end;
+    flex-wrap: nowrap; /* Keep cards in a single horizontal line */
+    justify-content: flex-start;
     gap: 20px;
+    overflow-x: auto; /* Enable smooth horizontal scrolling carousel */
+    padding: 15px 15px 25px 15px; /* Margin to ensure 3D card tilt scale doesn't clip */
+    scrollbar-width: thin;
+    scrollbar-color: rgba(0, 242, 254, 0.4) rgba(6, 12, 29, 0.3);
+  }
+
+  /* Custom Webkit scrollbar for horizontal carousel */
+  .mega-dropdown.horizontal-mode::-webkit-scrollbar {
+    height: 5px;
+  }
+  .mega-dropdown.horizontal-mode::-webkit-scrollbar-track {
+    background: rgba(6, 12, 29, 0.3);
+    border-radius: 10px;
+  }
+  .mega-dropdown.horizontal-mode::-webkit-scrollbar-thumb {
+    background: rgba(0, 242, 254, 0.5);
+    border-radius: 10px;
+    box-shadow: 0 0 6px rgba(0, 242, 254, 0.6);
   }
   
-  /* 3D Glassmorphism Cards in Dropdown - Holographic Unfold */
   .mega-dropdown .list-item {
     width: 330px;
     flex-shrink: 0;
     position: relative;
     overflow: hidden;
     transform-style: preserve-3d;
-    will-change: transform;
+    will-change: transform, opacity; /* GPU Optimizations */
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
     background: rgba(6, 12, 29, 0.5) !important;
     backdrop-filter: blur(20px) !important;
     -webkit-backdrop-filter: blur(20px) !important;
@@ -433,9 +411,9 @@ title: Home
     border-radius: 8px !important;
     box-shadow: 0 15px 35px rgba(0,0,0,0.5), inset 0 0 15px rgba(0, 242, 254, 0.03) !important;
     
-    /* Default closed state: tilted back, deep in Z-space, scaled down, invisible */
+    /* Default closed state: tilted back, deep in Z-space, scaled down, invisible (using translate3d for GPU acceleration) */
     opacity: 0;
-    transform: rotateX(-75deg) rotateY(15deg) translateZ(-150px) scale(0.8);
+    transform: translate3d(0, 0, -150px) rotateX(-75deg) rotateY(15deg) scale(0.8);
     transition: 
       opacity 0.6s cubic-bezier(0.15, 0.85, 0.35, 1.1),
       transform 0.6s cubic-bezier(0.15, 0.85, 0.35, 1.1),
@@ -447,7 +425,7 @@ title: Home
   /* Unfolded state when dropdown becomes active on hover */
   .nav-item-container:hover .mega-dropdown .list-item {
     opacity: 1;
-    transform: rotateX(0deg) rotateY(0deg) translateZ(0) scale(1);
+    transform: translate3d(0, 0, 0) rotateX(0deg) rotateY(0deg) scale(1);
   }
 
   /* Staggered sequential unfolding transition delays */
@@ -459,6 +437,92 @@ title: Home
   }
   .nav-item-container:hover .mega-dropdown .list-item:nth-child(3) {
     transition-delay: 0.27s !important;
+  }
+
+  /* Chipset Card Board Overrides */
+  .mega-dropdown .list-item.chipset-card {
+    border-top: 3px solid #ffcc00 !important; /* Golden circuit board edge */
+    padding-top: 28px !important;
+    padding-bottom: 28px !important;
+  }
+
+  .chipset-pin-row {
+    display: flex;
+    justify-content: space-between;
+    position: absolute;
+    left: 15%;
+    width: 70%;
+    pointer-events: none;
+  }
+  .chipset-pin-row.top {
+    top: -3px;
+  }
+  .chipset-pin-row.bottom {
+    bottom: -3px;
+  }
+  .chipset-pin-row span {
+    width: 5px;
+    height: 7px;
+    background: #ffcc00;
+    border-radius: 1px;
+    box-shadow: 0 0 4px #ffcc00;
+    display: inline-block;
+  }
+  .chipset-core {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 15px;
+    padding: 6px 12px;
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px dashed rgba(0, 242, 254, 0.3);
+    border-radius: 4px;
+  }
+  .chipset-name {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.72rem;
+    color: #00f2fe;
+    letter-spacing: 1px;
+  }
+  .chipset-status {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.7rem;
+    color: #ff007f;
+    border: 1px solid rgba(255, 0, 127, 0.4);
+    padding: 0px 4px;
+    border-radius: 2px;
+    text-shadow: 0 0 4px rgba(255, 0, 127, 0.5);
+  }
+
+  .mega-dropdown .list-title {
+    font-family: 'Orbitron', sans-serif !important;
+    color: #00f2fe !important;
+    font-weight: 700 !important;
+    text-shadow: 0 0 8px rgba(0, 242, 254, 0.3) !important;
+    font-size: 1.05rem !important;
+  }
+
+  .mega-dropdown .list-desc {
+    font-family: 'Share Tech Mono', monospace !important;
+    color: #8fa0dd !important;
+    font-size: 0.85rem !important;
+    line-height: 1.5 !important;
+  }
+
+  .mega-dropdown .tech-badges {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .mega-dropdown .tech-badges span {
+    background: rgba(0, 242, 254, 0.1) !important;
+    color: #00f2fe !important;
+    border: 1px solid rgba(0, 242, 254, 0.3) !important;
+    border-radius: 4px !important;
+    font-family: 'Share Tech Mono', monospace !important;
+    text-shadow: 0 0 5px rgba(0, 242, 254, 0.4) !important;
+    font-size: 0.75rem !important;
+    padding: 3px 10px !important;
   }
 
   /* Laser Scanline Sweep effect */
@@ -491,82 +555,61 @@ title: Home
   }
 
   @keyframes scan-sweep {
-    0% {
-      top: -50%;
-      opacity: 0;
-    }
-    15% {
-      opacity: 1;
-    }
-    85% {
-      opacity: 1;
-    }
-    100% {
-      top: 150%;
-      opacity: 0;
-    }
+    0% { top: -50%; opacity: 0; }
+    15% { opacity: 1; }
+    85% { opacity: 1; }
+    100% { top: 150%; opacity: 0; }
   }
 
-  .mega-dropdown .list-item .list-content {
-    transform: translateZ(25px);
-    pointer-events: none;
-  }
-
-  .glare {
+  /* Telemetry Data Stream loading screen overlay */
+  .telemetry-stream {
     position: absolute;
     top: 0; left: 0; width: 100%; height: 100%;
-    pointer-events: none;
-    opacity: 0;
-    transition: opacity 0.4s ease;
-    border-radius: inherit;
+    background: rgba(6, 12, 29, 0.95);
+    padding: 16px;
+    box-sizing: border-box;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.72rem;
+    color: #00f2fe;
+    overflow: hidden;
     z-index: 10;
-    mix-blend-mode: overlay;
-  }
-
-  /* Card Premium Hover Styling */
-  .mega-dropdown .list-item:hover {
-    background: rgba(6, 12, 29, 0.75) !important;
-    border-color: rgba(0, 242, 254, 0.75) !important;
-    box-shadow: 0 20px 40px rgba(0,0,0,0.6), 0 0 25px rgba(0, 242, 254, 0.35), inset 0 0 15px rgba(0, 242, 254, 0.08) !important;
-  }
-
-  .mega-dropdown .list-title {
-    font-family: 'Orbitron', sans-serif !important;
-    color: #00f2fe !important;
-    font-weight: 700 !important;
-    text-shadow: 0 0 8px rgba(0, 242, 254, 0.3) !important;
-    font-size: 1.05rem !important;
-  }
-
-  .mega-dropdown .list-desc {
-    font-family: 'Share Tech Mono', monospace !important;
-    color: #8fa0dd !important;
-    font-size: 0.85rem !important;
-    line-height: 1.5 !important;
-  }
-
-  .mega-dropdown .tech-badges span {
-    background: rgba(0, 242, 254, 0.1) !important;
-    color: #00f2fe !important;
-    border: 1px solid rgba(0, 242, 254, 0.3) !important;
-    border-radius: 4px !important;
-    font-family: 'Share Tech Mono', monospace !important;
-    text-shadow: 0 0 5px rgba(0, 242, 254, 0.4) !important;
-    font-size: 0.75rem !important;
-    padding: 3px 10px !important;
-  }
-  
-  /* Menu Trigger Interactions */
-  .nav-item-container:hover .closed-book {
-    opacity: 0;
-    transform: rotateY(180deg) scale(1.1);
-  }
-  
-  .nav-item-container:hover .open-book {
+    pointer-events: none;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
     opacity: 1;
-    transform: rotateY(0deg) scale(1.1);
+    transition: opacity 0.3s ease;
+    text-align: left;
   }
-  
+
+  /* Fixed HUD Real-time Telemetry Panel */
+  .hud-telemetry-panel {
+    position: fixed;
+    bottom: 25px;
+    left: 25px;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.75rem;
+    color: rgba(0, 242, 254, 0.45);
+    background: rgba(6, 12, 29, 0.45);
+    border: 1px solid rgba(0, 242, 254, 0.12);
+    padding: 12px 18px;
+    border-radius: 6px;
+    pointer-events: none;
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4), inset 0 0 10px rgba(0, 242, 254, 0.05);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+
+  .hud-telemetry-panel .telemetry-item span {
+    color: #00f2fe;
+    text-shadow: 0 0 5px rgba(0, 242, 254, 0.4);
+    font-weight: bold;
+  }
+
   .nav-item-container:hover .menu-link {
     color: #00f2fe;
     text-shadow: 0 0 10px rgba(0, 242, 254, 0.7);
@@ -594,87 +637,18 @@ title: Home
       justify-content: center;
       margin-top: 40px;
     }
-    .action-buttons {
-      justify-content: center;
-    }
-    .mega-dropdown {
-      right: 50%;
-      transform: translateX(50%) translateY(-20px) scale(0.95);
-    }
-    .mega-dropdown.horizontal-mode {
-      width: 90vw;
-      right: 50%;
-    }
-    .nav-item-container:hover .mega-dropdown {
-      transform: translateX(50%) translateY(0) scale(1);
-    }
-    .radar-bg {
-      width: 320px;
-      height: 320px;
-    }
-  }
-
-  /* Logo Text Overrides */
-  .logo-text {
-    font-family: 'Orbitron', sans-serif !important;
-    font-weight: 900 !important;
-    letter-spacing: 2px !important;
-    color: #ffffff !important;
-    text-transform: uppercase !important;
-    text-shadow: 0 0 10px rgba(0, 242, 254, 0.4) !important;
-  }
-  .logo-text span {
-    color: #00f2fe !important;
-  }
-
-  /* Nav Links Overrides */
-  .nav-links {
-    font-family: 'Share Tech Mono', monospace !important;
-    color: #8fa0dd !important;
-    letter-spacing: 1px !important;
-    text-transform: uppercase !important;
-    transition: all 0.3s ease !important;
-  }
-  .nav-links:hover {
-    color: #00f2fe !important;
-    text-shadow: 0 0 8px rgba(0, 242, 254, 0.5) !important;
-  }
-
-  /* Top button style override */
-  .header-container .btn {
-    font-family: 'Share Tech Mono', monospace !important;
-    background: transparent !important;
-    border: 1px solid rgba(0, 242, 254, 0.4) !important;
-    color: #00f2fe !important;
-    text-transform: uppercase !important;
-    letter-spacing: 1px !important;
-    border-radius: 4px !important;
-    box-shadow: 0 0 8px rgba(0, 242, 254, 0.2) !important;
-    transition: all 0.3s ease !important;
-    padding: 6px 16px !important;
-    display: inline-flex !important;
-    align-items: center !important;
-  }
-  .header-container .btn:hover {
-    border-color: rgba(0, 242, 254, 0.8) !important;
-    box-shadow: 0 0 15px rgba(0, 242, 254, 0.5) !important;
-    color: #ffffff !important;
-    background: rgba(0, 242, 254, 0.05) !important;
   }
 </style>
 
 <div class="noise-overlay"></div>
 <div class="container-full" style="background: radial-gradient(circle at 50% 50%, #060913 0%, #020308 100%); background-image: linear-gradient(rgba(0, 242, 254, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 242, 254, 0.03) 1px, transparent 1px); background-size: 30px 30px; padding-bottom: 120px; position: relative; min-height: calc(100vh - 80px); display: flex; align-items: center; overflow: hidden;">
-  <!-- Glow Background Effect -->
   <div class="dashboard-glow" style="position: absolute; width: 600px; height: 600px; background: radial-gradient(circle, rgba(0, 242, 254, 0.08) 0%, transparent 70%); top: 10%; left: -10%; z-index: 1; pointer-events: none;"></div>
 
   <div class="container" style="max-width: 1200px !important; width: 95% !important; position: relative; z-index: 2;">
     
     <div class="abstract-layout">
       
-      <!-- 1. Left Main Area (About Me & Links) -->
       <div class="left-intro-area" style="position: relative; z-index: 10;">
-        <!-- Background Radar -->
         <div class="radar-bg">
           <div class="radar-sweep"></div>
           <div class="radar-circle circle-1"></div>
@@ -682,34 +656,15 @@ title: Home
           <div class="radar-circle circle-3"></div>
         </div>
 
-        <!-- 3D Hologram Cube -->
-        <div class="hologram-cube-container">
-          <div class="cube">
-            <div class="face front"></div>
-            <div class="face back"></div>
-            <div class="face right"></div>
-            <div class="face left"></div>
-            <div class="face top"></div>
-            <div class="face bottom"></div>
-          </div>
-          <div class="holo-beam"></div>
-          <div class="holo-rings">
-            <div class="ring ring-1"></div>
-            <div class="ring ring-2"></div>
-          </div>
-        </div>
-
         <span class="intro-label" style="font-family: 'Share Tech Mono', monospace; font-size: 0.85rem; letter-spacing: 4px; color: #ff007f; text-shadow: 0 0 8px rgba(255, 0, 127, 0.4); margin-bottom: 12px; display: inline-block;">[ SYSTEM PROTOCOL: ACTIVE ]</span>
         
-        <!-- High-tech HUD Title -->
         <a href="{{ site.baseurl }}/about" id="name-link" style="text-decoration: none; display: block; margin-bottom: 24px;">
           <div class="hud-name-wrapper">
-            <h1 class="hud-title" data-text="KWON EUN JI">KWON EUN JI</h1>
+            <h1 class="hud-title" data-text="root@KWONEUNJI:~#">root@KWONEUNJI:~#<span class="terminal-cursor">_</span></h1>
             <span class="hud-subtitle">SYSTEM & EMBEDDED ARCHITECT</span>
           </div>
         </a>
         
-        <!-- Glassmorphism Summary View (Compact) -->
         <div class="tech-console-box">
           <div class="console-hdr">
             <span class="console-blink-dot"></span>
@@ -722,100 +677,74 @@ title: Home
             </p>
           </div>
         </div>
-
-        <!-- Links consolidated to Header top nav -->
       </div>
       
-      <!-- 2. Right Horizontal Navbar Area -->
-      <div class="right-nav-area">
         <div class="top-nav-bar">
           
-          <!-- Projects Menu (Horizontal Mega Dropdown) -->
           <div class="nav-item-container">
-            <div class="book-icon-wrapper">
-              <i class="uil uil-book closed-book"></i>
-              <i class="uil uil-book-open open-book"></i>
+            <div class="menu-cube-container">
+              <div class="menu-cube">
+                <div class="face front"></div><div class="face back"></div><div class="face right"></div><div class="face left"></div><div class="face top"></div><div class="face bottom"></div>
+                <div class="menu-cube-core"></div>
+              </div>
+              <div class="orbit-logs-container">
+                <div class="orbit-log log-1">[ACCESS_GRANTED]</div>
+                <div class="orbit-log log-2">[LOADING_DATA...]</div>
+              </div>
             </div>
-            <div class="menu-link">projects</div>
+            <div class="menu-link"><span class="reg-bit">001</span>projects</div>
             
             <div class="mega-dropdown horizontal-mode">
-              <a href="{{ site.baseurl }}/safety-equipment-system" class="list-item" style="display: block; padding: 24px; background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(16px); border-radius: 16px; text-decoration: none; transition: all 0.3s; border: 1px solid rgba(255, 255, 255, 0.08); box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
+              <a href="{{ site.baseurl }}/safety-equipment-system" class="list-item">
                 <div class="list-content">
-                  <h4 class="list-title" style="color: #e2e8f0; margin: 0 0 10px 0; font-size: 1.15rem;">안전장비 실시간 착용여부 시스템</h4>
-                  <p class="list-desc" style="color: #94a3b8; margin: 0 0 16px 0; font-size: 0.95rem; line-height: 1.5;">실시간 센서 데이터 기반 안전 모니터링 시스템</p>
-                  <div class="tech-badges" style="display: flex; gap: 8px; flex-wrap: wrap;">
-                    <span style="background: rgba(99, 102, 241, 0.2); color: #a5b4fc; padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 600;">ESP32</span>
-                    <span style="background: rgba(99, 102, 241, 0.2); color: #a5b4fc; padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 600;">App Inventor</span>
-                  </div>
+                  <h4 class="list-title">안전장비 시스템</h4>
                 </div>
               </a>
-              
-              <a href="{{ site.baseurl }}/embedded-hardware-projects" class="list-item" style="display: block; padding: 24px; background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(16px); border-radius: 16px; text-decoration: none; transition: all 0.3s; border: 1px solid rgba(255, 255, 255, 0.08); box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
+              <a href="{{ site.baseurl }}/embedded-hardware" class="list-item">
                 <div class="list-content">
-                  <h4 class="list-title" style="color: #e2e8f0; margin: 0 0 10px 0; font-size: 1.15rem;">스마트 화재 대피 유도 시스템</h4>
-                  <p class="list-desc" style="color: #94a3b8; margin: 0 0 16px 0; font-size: 0.95rem; line-height: 1.5;">실시간 센서 데이터 기반 하드웨어 제어 및 최적 경로 탐색</p>
-                  <div class="tech-badges" style="display: flex; gap: 8px; flex-wrap: wrap;">
-                    <span style="background: rgba(99, 102, 241, 0.2); color: #a5b4fc; padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 600;">ESP32</span>
-                    <span style="background: rgba(99, 102, 241, 0.2); color: #a5b4fc; padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 600;">C/C++</span>
-                  </div>
-                </div>
-              </a>
-              
-              <a href="{{ site.baseurl }}/system-software-projects" class="list-item" style="display: block; padding: 24px; background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(16px); border-radius: 16px; text-decoration: none; transition: all 0.3s; border: 1px solid rgba(255, 255, 255, 0.08); box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
-                <div class="list-content">
-                  <h4 class="list-title" style="color: #e2e8f0; margin: 0 0 10px 0; font-size: 1.15rem;">C# 기반 마트 관리 시스템</h4>
-                  <p class="list-desc" style="color: #94a3b8; margin: 0 0 16px 0; font-size: 0.95rem; line-height: 1.5;">객체 지향 설계(OOP) 기반의 안정적인 UI/UX 구축 및 연동</p>
-                  <div class="tech-badges" style="display: flex; gap: 8px; flex-wrap: wrap;">
-                    <span style="background: rgba(99, 102, 241, 0.2); color: #a5b4fc; padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 600;">C#</span>
-                    <span style="background: rgba(99, 102, 241, 0.2); color: #a5b4fc; padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 600;">WinForms</span>
-                  </div>
+                  <h4 class="list-title">화재 대피 시스템</h4>
                 </div>
               </a>
             </div>
           </div>
           
-          <!-- Tech Menu (Vertical Mega Dropdown) -->
           <div class="nav-item-container">
-            <div class="book-icon-wrapper">
-              <i class="uil uil-book closed-book"></i>
-              <i class="uil uil-book-open open-book"></i>
+            <div class="menu-cube-container">
+              <div class="menu-cube">
+                <div class="face front"></div><div class="face back"></div><div class="face right"></div><div class="face left"></div><div class="face top"></div><div class="face bottom"></div>
+                <div class="menu-cube-core"></div>
+              </div>
+              <div class="orbit-logs-container">
+                <div class="orbit-log log-1">[ACCESS_GRANTED]</div>
+                <div class="orbit-log log-2">[LOADING_DATA...]</div>
+              </div>
             </div>
-            <div class="menu-link">tech</div>
+            <div class="menu-link"><span class="reg-bit">010</span>tech</div>
             
             <div class="mega-dropdown horizontal-mode">
-              <a href="{{ site.baseurl }}/ej" class="list-item" style="display: block; padding: 20px; background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(16px); border-radius: 16px; text-decoration: none; transition: all 0.3s; border: 1px solid rgba(255, 255, 255, 0.08); box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
-                <div class="list-content">
-                  <h4 class="list-title" style="color: #e2e8f0; margin: 0 0 6px 0; font-size: 1.1rem;">Python 기초 및 알고리즘</h4>
-                  <p class="list-desc" style="color: #94a3b8; margin: 0;">데이터 구조 이해 및 로직 최적화 기반 다지기</p>
-                </div>
-              </a>
-              
-              <a href="{{ site.baseurl }}/tech-fundamentals" class="list-item" style="display: block; padding: 20px; background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(16px); border-radius: 16px; text-decoration: none; transition: all 0.3s; border: 1px solid rgba(255, 255, 255, 0.08); box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
-                <div class="list-content">
-                  <h4 class="list-title" style="color: #e2e8f0; margin: 0 0 6px 0; font-size: 1.1rem;">C/C++ 메모리 제어</h4>
-                  <p class="list-desc" style="color: #94a3b8; margin: 0;">안정적인 펌웨어 개발을 위한 포인터와 메모리 관리</p>
-                </div>
-              </a>
-
-              <a href="{{ site.baseurl }}/tech-fundamentals" class="list-item" style="display: block; padding: 20px; background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(16px); border-radius: 16px; text-decoration: none; transition: all 0.3s; border: 1px solid rgba(255, 255, 255, 0.08); box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
-                <div class="list-content">
-                  <h4 class="list-title" style="color: #e2e8f0; margin: 0 0 6px 0; font-size: 1.1rem;">C# 객체지향 프로그래밍</h4>
-                  <p class="list-desc" style="color: #94a3b8; margin: 0;">유지보수가 용이한 시스템 소프트웨어 설계 패턴</p>
-                </div>
-              </a>
+              <div class="list-item chipset-card">
+                  <div class="chipset-pin-row top"><span></span><span></span><span></span><span></span><span></span></div>
+                  <div class="list-content"><h4 class="list-title">Python</h4><p class="list-desc">Algorithm Core</p></div>
+                  <div class="chipset-pin-row bottom"><span></span><span></span><span></span><span></span><span></span></div>
+              </div>
             </div>
           </div>
           
-          <!-- Blog Menu -->
           <div class="nav-item-container">
-            <div class="book-icon-wrapper">
-              <i class="uil uil-book closed-book"></i>
-              <i class="uil uil-book-open open-book"></i>
+            <div class="menu-cube-container">
+              <div class="menu-cube">
+                <div class="face front"></div><div class="face back"></div><div class="face right"></div><div class="face left"></div><div class="face top"></div><div class="face bottom"></div>
+                <div class="menu-cube-core"></div>
+              </div>
+              <div class="orbit-logs-container">
+                <div class="orbit-log log-1">[ACCESS_GRANTED]</div>
+                <div class="orbit-log log-2">[LOADING_DATA...]</div>
+              </div>
             </div>
-            <div class="menu-link">blog</div>
+            <div class="menu-link"><span class="reg-bit">100</span>blog</div>
             
             <div class="mega-dropdown horizontal-mode">
-              <div class="list-item" style="display: block; padding: 20px; background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(16px); border-radius: 16px; border: 1px solid rgba(255, 255, 255, 0.08); box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
+              <div class="list-item" style="padding: 20px;">
                 <p style="color: #94a3b8; font-size: 0.95rem; text-align: center; margin: 0;">아직 작성된 글이 없습니다.</p>
               </div>
             </div>
@@ -826,6 +755,14 @@ title: Home
       
     </div>
 
+  </div>
+  
+  <div class="hud-telemetry-panel">
+    <div class="telemetry-item">SYS_TEMP: <span id="telemetry-temp">41.8</span>°C</div>
+    <div class="telemetry-item">BUFFER_STATUS: <span id="telemetry-buf">98</span>%</div>
+    <div class="telemetry-item">BLE_RSSI: <span id="telemetry-rssi">-65</span>dBm</div>
+    <div class="telemetry-item">MCU_CLK: 240MHz</div>
+    <div class="telemetry-item">DMA_STREAM: ACTIVE</div>
   </div>
 </div>
 
@@ -849,11 +786,100 @@ title: Home
       });
     }
 
+    // Holographic Menu Cubes driving variables
+    const cubes = document.querySelectorAll('.menu-cube');
+    let anglesX = [0, 0, 0];
+    let anglesY = [0, 0, 0];
+    let isHoveredStates = [false, false, false];
+    
+    // Staggered target lock coordinates (projects index 0, tech index 1, blog index 2)
+    let targetXAngles = [0, 0, -90];
+    let targetYAngles = [0, -90, 0];
+
+    // High speed firmware log lines array
+    const telemetryLogs = [
+      "[ESP32_BLE_CONNECTED]",
+      "[FSR_THRESHOLD_PASS]",
+      "[UART_BAUDRATE_115200]",
+      "[ADC_CHANNEL_0_READ: 4095]",
+      "[I2C_MEM_WRITE_OK]",
+      "[GPIO_PIN_12: HIGH]",
+      "[DMA_STREAM_COMPLETE]",
+      "[HAL_OK: CORE_INIT]",
+      "[MCU_TEMP_READ: 38.5C]",
+      "[WIFI_RSSI_READ: -45dBm]"
+    ];
+
+    // Independent 3D Menu Cubes loop (Idle + Sensor Jitter Jiggle + Target Locking)
+    function animateMenuCubes() {
+      cubes.forEach((cube, idx) => {
+        if (!isHoveredStates[idx]) {
+          // Slow distinct idle rotation speeds
+          anglesX[idx] += 0.35 + (idx * 0.05);
+          anglesY[idx] += 0.45 + (idx * 0.05);
+          
+          // Jiggle jitter (sensor simulation noise)
+          const jitterX = (Math.random() - 0.5) * 1.5;
+          const jitterY = (Math.random() - 0.5) * 1.5;
+          
+          cube.style.transform = `rotateX(${anglesX[idx] + jitterX}deg) rotateY(${anglesY[idx] + jitterY}deg)`;
+        } else {
+          // LERP to lock-on rotation smoothly
+          anglesX[idx] += (targetXAngles[idx] - anglesX[idx]) * 0.16;
+          anglesY[idx] += (targetYAngles[idx] - anglesY[idx]) * 0.16;
+          
+          cube.style.transform = `rotateX(${anglesX[idx]}deg) rotateY(${anglesY[idx]}deg)`;
+        }
+      });
+      requestAnimationFrame(animateMenuCubes);
+    }
+    requestAnimationFrame(animateMenuCubes);
+
+    // Setup sequence triggers on menu hover
+    const menuTriggers = document.querySelectorAll('.nav-item-container');
+    menuTriggers.forEach((trigger, idx) => {
+      trigger.addEventListener('mouseenter', () => {
+        isHoveredStates[idx] = true;
+
+        // Telemetry streams printing in child cards
+        const dropdownCards = trigger.querySelectorAll('.list-item');
+        dropdownCards.forEach(card => {
+          // Remove old logs
+          const oldStream = card.querySelector('.telemetry-stream');
+          if (oldStream) oldStream.remove();
+
+          // Create new stream
+          const stream = document.createElement('div');
+          stream.classList.add('telemetry-stream');
+          card.appendChild(stream);
+
+          let logsPrinted = 0;
+          const logInterval = setInterval(() => {
+            if (logsPrinted < 5) {
+              const logLine = document.createElement('div');
+              logLine.textContent = `> ${telemetryLogs[Math.floor(Math.random() * telemetryLogs.length)]}`;
+              stream.appendChild(logLine);
+              logsPrinted++;
+            } else {
+              clearInterval(logInterval);
+              // Fade out loading sequence
+              setTimeout(() => {
+                stream.style.opacity = '0';
+                setTimeout(() => stream.remove(), 300);
+              }, 100);
+            }
+          }, 50); // rapid stream parsing
+        });
+      });
+
+      trigger.addEventListener('mouseleave', () => {
+        isHoveredStates[idx] = false;
+      });
+    });
+
     // 3D Tilt Effect for cards
     const cards = document.querySelectorAll('.list-item');
-    
     cards.forEach(card => {
-      // Create glare element
       const glare = document.createElement('div');
       glare.classList.add('glare');
       card.appendChild(glare);
@@ -864,24 +890,23 @@ title: Home
 
       card.addEventListener('mousemove', (e) => {
         const rect = card.getBoundingClientRect();
-        const x = e.clientX - rect.left; // x position within the element.
-        const y = e.clientY - rect.top;  // y position within the element.
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
         
         const centerX = rect.width / 2;
         const centerY = rect.height / 2;
         
-        const rotateX = ((y - centerY) / centerY) * -12; // Max rotation 12deg
+        const rotateX = ((y - centerY) / centerY) * -12;
         const rotateY = ((x - centerX) / centerX) * 12;
         
-        card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.05, 1.05, 1.05)`;
+        card.style.transform = `perspective(1000px) translate3d(0,0,0) rotate3d(1, 0, 0, ${rotateX}deg) rotate3d(0, 1, 0, ${rotateY}deg) scale3d(1.05, 1.05, 1.05)`;
         
-        // Glare effect calculation
         const glareX = (x / rect.width) * 100;
         const glareY = (y / rect.height) * 100;
         glare.style.background = `radial-gradient(circle at ${glareX}% ${glareY}%, rgba(0, 242, 254, 0.3) 0%, transparent 60%)`;
         glare.style.opacity = '1';
 
-        // Physical light-reactive glowing shadow: shifts shadow opposite to mouse movement
+        // Backlight neon shadow response
         const shadowX = -rotateY * 1.5;
         const shadowY = rotateX * 1.5;
         card.style.setProperty('box-shadow', `0 20px 40px rgba(0,0,0,0.6), ${shadowX}px ${shadowY}px 25px rgba(0, 242, 254, 0.35), inset 0 0 15px rgba(0, 242, 254, 0.08)`, 'important');
@@ -889,13 +914,13 @@ title: Home
       
       card.addEventListener('mouseleave', () => {
         card.style.transition = 'transform 0.5s cubic-bezier(0.25, 0.8, 0.25, 1), background 0.3s, border-color 0.3s, box-shadow 0.5s';
-        card.style.transform = `perspective(1000px) rotateX(0) rotateY(0) scale3d(1, 1, 1)`;
+        card.style.transform = `perspective(1000px) translate3d(0,0,0) rotate3d(1,0,0, 0deg) rotate3d(0,1,0, 0deg) scale3d(1, 1, 1)`;
         glare.style.opacity = '0';
         card.style.setProperty('box-shadow', `0 15px 35px rgba(0,0,0,0.5), inset 0 0 15px rgba(0, 242, 254, 0.03)`, 'important');
       });
     });
 
-    // Entire Page 3D Layout Tilt / Parallax
+    // Entire Page 3D Layout Tilt / Parallax swiveling isometric coordinate
     const layout = document.querySelector('.abstract-layout');
     const container = document.querySelector('.container-full');
     
@@ -908,21 +933,33 @@ title: Home
         const centerX = rect.width / 2;
         const centerY = rect.height / 2;
         
-        // Subtle tilt for the entire screen layout to feel 3D
-        const rotateX = ((y - centerY) / centerY) * -5; // Max 5deg
-        const rotateY = ((x - centerX) / centerX) * 5;  // Max 5deg
+        const baseRotateX = 15; // Isometric base
+        const baseRotateY = -15; // Isometric base
+        const rotateX = baseRotateX + ((y - centerY) / centerY) * -5;
+        const rotateY = baseRotateY + ((x - centerX) / centerX) * 5;
         
         layout.style.transform = `perspective(1500px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
       });
       
       container.addEventListener('mouseleave', () => {
         layout.style.transition = 'transform 0.8s cubic-bezier(0.25, 0.8, 0.25, 1)';
-        layout.style.transform = 'perspective(1500px) rotateX(0deg) rotateY(0deg)';
+        layout.style.transform = 'perspective(1500px) rotateX(15deg) rotateY(-15deg)';
       });
       
       container.addEventListener('mouseenter', () => {
         layout.style.transition = 'transform 0.1s ease-out';
       });
     }
+
+    // Dynamic Live Telemetry updates loop
+    const tempEl = document.getElementById('telemetry-temp');
+    const bufEl = document.getElementById('telemetry-buf');
+    const rssiEl = document.getElementById('telemetry-rssi');
+    
+    setInterval(() => {
+      if (tempEl) tempEl.textContent = (40.5 + Math.random() * 3).toFixed(1);
+      if (bufEl) bufEl.textContent = (94 + Math.random() * 5).toFixed(0);
+      if (rssiEl) rssiEl.textContent = (-58 - Math.floor(Math.random() * 12)).toFixed(0);
+    }, 1500);
   });
 </script>
