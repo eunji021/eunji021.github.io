@@ -9,358 +9,71 @@ title: Home
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Share+Tech+Mono&display=swap');
 
-  /* Force Midnight Dark Grid Theme bypassing compile fallbacks */
+  /* Absolute Flat Dark Portfolio Theme */
   body {
-    background-color: #0b111e !important;
-    background: radial-gradient(circle at 50% 50%, #0b111e 0%, #070b14 100%) !important;
-    background-image: linear-gradient(rgba(0, 242, 254, 0.05) 1px, transparent 1px),
-                      linear-gradient(90deg, rgba(0, 242, 254, 0.05) 1px, transparent 1px) !important;
-    background-size: 30px 30px !important;
-    color: #849ca8 !important;
-  }
-
-  /* Global Scrollbar Reset for Cyberpunk Theme */
-  ::-webkit-scrollbar {
-    width: 6px;
-    height: 6px;
-  }
-  ::-webkit-scrollbar-track {
-    background: #020308;
-  }
-  ::-webkit-scrollbar-thumb {
-    background: rgba(0, 242, 254, 0.4);
-    border-radius: 3px;
-    box-shadow: 0 0 8px rgba(0, 242, 254, 0.6);
-  }
-
-  /* Noise Overlay for Texture */
-  .noise-overlay {
-    position: fixed;
-    top: 0; left: 0; width: 100vw; height: 100vh;
-    pointer-events: none;
-    z-index: 1;
-    opacity: 0.08;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+    background-color: #060814 !important;
+    background: radial-gradient(circle at 50% 50%, #0c0f1d 0%, #060814 100%) !important;
+    color: #94a3b8 !important;
+    font-family: 'Share Tech Mono', 'Pretendard', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
   }
 
   /* Layout Structure */
   .abstract-layout {
     display: grid;
-    grid-template-columns: 48% 52%;
-    gap: 50px;
+    grid-template-columns: 46% 54%;
+    gap: 40px;
     align-items: center;
-    min-height: 75vh;
-    margin-top: 40px;
+    min-height: 72vh;
+    margin-top: 60px;
   }
-  
-  /* Left Main Area Styles */
+
+  /* Left Main Profile Area */
   .left-intro-area {
-    padding-right: 20px;
-    position: relative;
+    padding-right: 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
     animation: fadeSlideUp 0.8s cubic-bezier(0.25, 0.8, 0.25, 1) forwards;
   }
 
-  /* 3D Hologram Cube Container */
-  .hologram-cube-container {
-    position: relative;
-    width: 160px;
-    height: 160px;
-    margin: 0 auto 35px auto;
-    perspective: 800px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 5;
-  }
-
-  .cube {
-    width: 70px;
-    height: 70px;
-    position: relative;
-    transform-style: preserve-3d;
-    /* Rotation and noise will be driven by JS for absolute control and seamless locking */
-  }
-
-  .cube .face {
-    position: absolute;
-    width: 70px;
-    height: 70px;
-    border: 1px solid rgba(0, 242, 254, 0.6);
-    background: rgba(0, 242, 254, 0.03);
-    box-shadow: 0 0 15px rgba(0, 242, 254, 0.3), inset 0 0 10px rgba(0, 242, 254, 0.1);
-    backdrop-filter: blur(1px);
-    -webkit-backdrop-filter: blur(1px);
-    transition: all 0.5s ease;
-  }
-
-  .cube .face::after {
-    content: '';
-    position: absolute;
-    top: 50%; left: 50%;
-    width: 6px; height: 6px;
-    background: #ff007f;
-    border-radius: 50%;
-    transform: translate(-50%, -50%);
-    box-shadow: 0 0 10px #ff007f;
-  }
-
-  /* 3D transforms for faces */
-  .cube .front  { transform: rotateY(  0deg) translateZ(35px); }
-  .cube .back   { transform: rotateY(180deg) translateZ(35px); }
-  .cube .right  { transform: rotateY( 90deg) translateZ(35px); }
-  .cube .left   { transform: rotateY(-90deg) translateZ(35px); }
-  .cube .top    { transform: rotateX( 90deg) translateZ(35px); }
-  .cube .bottom { transform: rotateX(-90deg) translateZ(35px); }
-
-  /* 3D Cube Hardware Deconstruction Face Splitting */
-  .cube.deconstructed .front  { transform: rotateY(  0deg) translateZ(65px) !important; border-color: #ff007f !important; box-shadow: 0 0 25px rgba(255, 0, 127, 0.7), inset 0 0 15px rgba(255, 0, 127, 0.3) !important; }
-  .cube.deconstructed .back   { transform: rotateY(180deg) translateZ(65px) !important; }
-  .cube.deconstructed .right  { transform: rotateY( 90deg) translateZ(65px) !important; border-color: #ff007f !important; box-shadow: 0 0 25px rgba(255, 0, 127, 0.7), inset 0 0 15px rgba(255, 0, 127, 0.3) !important; }
-  .cube.deconstructed .left   { transform: rotateY(-90deg) translateZ(65px) !important; }
-  .cube.deconstructed .top    { transform: rotateX( 90deg) translateZ(65px) !important; border-color: #ff007f !important; box-shadow: 0 0 25px rgba(255, 0, 127, 0.7), inset 0 0 15px rgba(255, 0, 127, 0.3) !important; }
-  .cube.deconstructed .bottom { transform: rotateX(-90deg) translateZ(65px) !important; }
-
-  /* Register bit tag style */
-  .reg-bit {
-    font-family: 'Share Tech Mono', monospace;
-    font-size: 0.75rem;
-    color: #ff007f;
-    border: 1px solid rgba(255, 0, 127, 0.3);
-    padding: 1px 5px;
-    border-radius: 2px;
-    margin-right: 8px;
-    text-shadow: 0 0 4px rgba(255, 0, 127, 0.3);
-    transition: all 0.3s ease;
-    display: inline-block;
-  }
-  
-  .nav-item-container:hover .reg-bit {
-    color: #00f2fe;
-    border-color: rgba(0, 242, 254, 0.5);
-    text-shadow: 0 0 8px rgba(0, 242, 254, 0.8);
-    box-shadow: 0 0 6px rgba(0, 242, 254, 0.3);
-  }
-
-  /* Telemetry Data Stream loading screen overlay */
-  .telemetry-stream {
-    position: absolute;
-    top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(6, 12, 29, 0.95);
-    padding: 16px;
-    box-sizing: border-box;
-    font-family: 'Share Tech Mono', monospace;
-    font-size: 0.72rem;
-    color: #00f2fe;
-    overflow: hidden;
-    z-index: 10;
-    pointer-events: none;
-    display: flex;
-    flex-direction: column;
-    gap: 3px;
-    opacity: 1;
-    transition: opacity 0.3s ease;
-    text-align: left;
-  }
-
-  @keyframes spin-cube {
-    0% { transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg); }
-    100% { transform: rotateX(360deg) rotateY(720deg) rotateZ(360deg); }
-  }
-
-  /* Holographic projector beam */
-  .holo-beam {
-    position: absolute;
-    bottom: -10px;
-    width: 90px;
-    height: 100px;
-    background: linear-gradient(to top, rgba(0, 242, 254, 0.15) 0%, transparent 80%);
-    clip-path: polygon(25% 100%, 75% 100%, 100% 0%, 0% 0%);
-    transform: rotateX(180deg);
-    pointer-events: none;
-    animation: pulse-beam 4s ease-in-out infinite;
-  }
-
-  .holo-rings {
-    position: absolute;
-    width: 180px;
-    height: 180px;
-    transform-style: preserve-3d;
-    transform: rotateX(75deg);
-    pointer-events: none;
-  }
-
-  .holo-rings .ring {
-    position: absolute;
-    top: 0; left: 0; width: 100%; height: 100%;
-    border: 1px solid rgba(0, 242, 254, 0.3);
-    border-radius: 50%;
-    box-shadow: 0 0 10px rgba(0, 242, 254, 0.2);
-  }
-
-  .holo-rings .ring-1 {
-    animation: ring-pulse-1 3s ease-out infinite;
-  }
-  .holo-rings .ring-2 {
-    animation: ring-pulse-2 3s ease-out infinite;
-    animation-delay: 1.5s;
-  }
-
-  @keyframes ring-pulse-1 {
-    0% { transform: scale(0.3); opacity: 1; }
-    100% { transform: scale(1.2); opacity: 0; }
-  }
-  @keyframes ring-pulse-2 {
-    0% { transform: scale(0.3); opacity: 1; }
-    100% { transform: scale(1.2); opacity: 0; }
-  }
-  @keyframes pulse-beam {
-    0%, 100% { opacity: 0.6; }
-    50% { opacity: 1; filter: brightness(1.2); }
-  }
-
-  /* Background Radar System */
-  .radar-bg {
-    position: absolute;
-    top: 40%;
-    left: 50%;
-    transform: translate(-50%, -50%) rotateX(65deg) rotateZ(0deg) translateZ(-80px);
-    transform-style: preserve-3d;
-    width: 480px;
-    height: 480px;
-    pointer-events: none;
-    z-index: -1;
-    opacity: 0.25;
-    filter: drop-shadow(0 0 15px rgba(0, 242, 254, 0.25));
-  }
-
-  .radar-circle {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    border: 1px solid rgba(0, 242, 254, 0.15);
-    border-radius: 50%;
-    transform: translate(-50%, -50%);
-  }
-  .circle-1 { width: 140px; height: 140px; }
-  .circle-2 { width: 300px; height: 300px; border-style: dashed; }
-  .circle-3 { width: 440px; height: 440px; }
-
-  .radar-sweep {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    border-radius: 50%;
-    background: conic-gradient(from 0deg, rgba(0, 242, 254, 0.12) 0deg, transparent 120deg, transparent 360deg);
-    animation: radar-sweep-animation 8s linear infinite;
-  }
-
-  @keyframes radar-sweep-animation {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
-  }
-
-  /* High-Tech HUD Typography */
-  .hud-name-wrapper {
-    position: relative;
-    display: inline-block;
-  }
-
-  .hud-title {
+  .about-me-label {
     font-family: 'Orbitron', sans-serif;
-    font-size: clamp(2.4rem, 4vw, 3.4rem);
-    font-weight: 900;
-    color: #00f2fe;
-    text-shadow: 0 0 10px rgba(0, 242, 254, 0.5), 0 0 20px rgba(0, 242, 254, 0.2);
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #818cf8;
     letter-spacing: 3px;
     text-transform: uppercase;
-    margin: 0;
-    line-height: 1.1;
-    transition: all 0.3s ease;
   }
 
-  .hud-name-wrapper:hover .hud-title {
+  .profile-name {
+    font-family: 'Pretendard', sans-serif;
+    font-size: clamp(3.2rem, 5.5vw, 4.4rem);
+    font-weight: 900;
     color: #ffffff;
-    text-shadow: 0 0 15px rgba(0, 242, 254, 0.8), 0 0 30px rgba(0, 242, 254, 0.4), 0 0 40px rgba(255, 0, 127, 0.5);
+    margin: 12px 0 6px 0;
+    letter-spacing: -1px;
+    line-height: 1.1;
   }
 
-  .hud-subtitle {
-    font-family: 'Share Tech Mono', monospace;
-    font-size: 0.95rem;
-    color: #ff007f;
-    letter-spacing: 5px;
-    display: block;
-    margin-top: 8px;
-    text-shadow: 0 0 8px rgba(255, 0, 127, 0.4);
+  .profile-job {
+    font-family: 'Orbitron', sans-serif;
+    font-size: clamp(1.6rem, 2.8vw, 2.2rem);
+    font-weight: 700;
+    color: #818cf8;
+    margin: 0 0 24px 0;
+    letter-spacing: 1px;
   }
 
-  /* Glassmorphism Telemetry Console */
-  .tech-console-box {
-    background: rgba(6, 12, 29, 0.55);
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
-    border: 1px solid rgba(0, 242, 254, 0.25);
-    border-radius: 10px;
-    padding: 24px;
-    box-shadow: 0 15px 35px rgba(0,0,0,0.6), inset 0 0 20px rgba(0, 242, 254, 0.05);
-    position: relative;
-    overflow: hidden;
-    margin-top: 20px;
-  }
-
-  .tech-console-box::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; width: 100%; height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(0, 242, 254, 0.6), transparent);
-    animation: scan-line 4s linear infinite;
-  }
-
-  @keyframes scan-line {
-    0% { transform: translateY(0); opacity: 0.2; }
-    50% { opacity: 0.8; }
-    100% { transform: translateY(180px); opacity: 0.2; }
-  }
-
-  .console-hdr {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    border-bottom: 1px solid rgba(0, 242, 254, 0.15);
-    padding-bottom: 10px;
-    margin-bottom: 15px;
-  }
-
-  .console-blink-dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background-color: #00f2fe;
-    box-shadow: 0 0 8px #00f2fe;
-    animation: blink 2s ease-in-out infinite;
-  }
-
-  .console-title {
-    font-family: 'Share Tech Mono', monospace;
-    font-size: 0.8rem;
+  .profile-desc {
+    font-family: 'Pretendard', sans-serif;
+    font-size: 1.08rem;
     color: #849ca8;
-    letter-spacing: 3px;
-    flex-grow: 1;
-  }
-
-  .console-stats {
-    font-family: 'Share Tech Mono', monospace;
-    font-size: 0.75rem;
-    color: #ff007f;
-    border: 1px solid rgba(255, 0, 127, 0.4);
-    padding: 1px 6px;
-    border-radius: 3px;
-    text-shadow: 0 0 5px rgba(255, 0, 127, 0.5);
-  }
-
-  .highlight-cyan {
-    color: #00f2fe;
-    font-weight: bold;
-    text-shadow: 0 0 6px rgba(0, 242, 254, 0.4);
+    line-height: 1.8;
+    max-width: 520px;
+    margin: 0;
+    text-align: justify;
   }
 
   /* Right Sidebar Menu Styles */
@@ -370,94 +83,143 @@ title: Home
     width: 100%;
   }
 
-  .menu-item-group {
+  .top-nav-bar {
     display: flex;
     gap: 50px;
-    justify-content: flex-end;
-    align-items: center;
+    position: relative;
+    z-index: 10;
   }
 
-  .menu-item-link {
+  .nav-item-container {
+    position: relative;
     display: flex;
     flex-direction: column;
     align-items: center;
-    text-decoration: none !important;
-    transition: all 0.3s ease;
+    cursor: pointer;
   }
-
-  .menu-icon-box {
-    width: 34px;
-    height: 52px;
-    border: 3px solid #00f2fe;
-    border-radius: 5px;
-    position: relative;
-    box-shadow: 0 0 12px rgba(0, 242, 254, 0.7), inset 0 0 8px rgba(0, 242, 254, 0.4);
-    background: rgba(0, 242, 254, 0.05);
-    margin-bottom: 12px;
+  
+  .book-icon-wrapper {
+    font-size: 2.3rem;
+    color: #cbd5e1;
+    width: 48px;
+    height: 48px;
     display: flex;
     justify-content: center;
     align-items: center;
+    margin-bottom: 10px;
     transition: all 0.3s ease;
   }
 
-  .menu-icon-box::before {
-    content: '';
-    position: absolute;
-    top: 6px;
-    width: 14px;
-    height: 28px;
-    border: 1.5px solid rgba(0, 242, 254, 0.7);
-    border-radius: 2px;
-    transition: all 0.3s ease;
-  }
-
-  .menu-icon-box::after {
-    content: '';
-    position: absolute;
-    bottom: 4px;
-    width: 6px;
-    height: 6px;
-    border: 1.5px solid #00f2fe;
-    border-radius: 50%;
-    box-shadow: 0 0 4px rgba(0, 242, 254, 0.8);
-    transition: all 0.3s ease;
-  }
-
-  .menu-text-label {
-    font-family: 'Orbitron', sans-serif;
-    font-size: 1.15rem;
-    font-weight: 700;
-    color: #849ca8;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    text-shadow: 0 0 5px rgba(132, 156, 168, 0.2);
-    transition: all 0.3s ease;
-  }
-
-  .menu-item-link:hover .menu-text-label {
-    color: #00f2fe;
-    text-shadow: 0 0 10px rgba(0, 242, 254, 0.8);
-  }
-
-  .menu-item-link:hover .menu-icon-box {
-    border-color: #ffffff;
-    box-shadow: 0 0 20px rgba(255, 255, 255, 0.8), inset 0 0 12px rgba(255, 255, 255, 0.4);
-    background: rgba(255, 255, 255, 0.1);
-  }
-
-  .menu-item-link:hover .menu-icon-box::before {
-    border-color: rgba(255, 255, 255, 0.8);
-  }
-
-  .menu-item-link:hover .menu-icon-box::after {
-    border-color: #ffffff;
-    box-shadow: 0 0 6px rgba(255, 255, 255, 0.9);
+  .nav-item-container:hover .book-icon-wrapper {
+    color: #818cf8;
+    transform: translateY(-3px);
   }
   
+  .menu-link {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #849ca8;
+    text-decoration: none !important;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    transition: all 0.3s;
+    text-shadow: 0 0 5px rgba(132, 156, 168, 0.2);
+  }
 
+  .nav-item-container:hover .menu-link {
+    color: #818cf8;
+    text-shadow: 0 0 10px rgba(129, 140, 248, 0.6);
+  }
+
+  /* Flat Mega Menu Dropdown */
+  .mega-dropdown {
+    position: absolute;
+    top: 90px;
+    opacity: 0;
+    transform: translateY(-15px);
+    visibility: hidden;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    z-index: 100;
+    pointer-events: none;
+    transform-origin: top center;
+  }
+
+  .mega-dropdown.horizontal-mode {
+    width: max-content;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    gap: 20px;
+    padding: 10px 0;
+  }
+
+  .nav-item-container:hover .mega-dropdown {
+    opacity: 1;
+    transform: translateY(0);
+    visibility: visible;
+    pointer-events: auto;
+  }
+  
+  .mega-dropdown .list-item {
+    width: 290px;
+    background: rgba(15, 23, 42, 0.5) !important;
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.06) !important;
+    border-radius: 10px !important;
+    padding: 24px !important;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.5) !important;
+    transition: all 0.3s ease !important;
+    text-decoration: none !important;
+    display: block !important;
+    text-align: left !important;
+  }
+
+  .mega-dropdown .list-item:hover {
+    border-color: rgba(129, 140, 248, 0.4) !important;
+    background: rgba(15, 23, 42, 0.8) !important;
+    transform: translateY(-4px) !important;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.6), 0 0 15px rgba(129, 140, 248, 0.15) !important;
+  }
+
+  .mega-dropdown .list-title {
+    font-family: 'Pretendard', 'Orbitron', sans-serif !important;
+    color: #ffffff !important;
+    font-weight: 700 !important;
+    font-size: 1.1rem !important;
+    margin: 0 0 8px 0 !important;
+    letter-spacing: -0.5px !important;
+    text-shadow: none !important;
+  }
+
+  .mega-dropdown .list-desc {
+    font-family: 'Pretendard', sans-serif !important;
+    color: #849ca8 !important;
+    font-size: 0.88rem !important;
+    line-height: 1.5 !important;
+    margin: 0 0 16px 0 !important;
+  }
+
+  .mega-dropdown .tech-badges {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .mega-dropdown .tech-badges span {
+    background: rgba(129, 140, 248, 0.12) !important;
+    color: #a5b4fc !important;
+    border: 1px solid rgba(129, 140, 248, 0.25) !important;
+    border-radius: 20px !important;
+    font-family: 'Share Tech Mono', monospace !important;
+    font-size: 0.72rem !important;
+    padding: 3px 10px !important;
+    font-weight: 600 !important;
+  }
 
   @keyframes fadeSlideUp {
-    from { opacity: 0; transform: translateY(30px); }
+    from { opacity: 0; transform: translateY(20px); }
     to { opacity: 1; transform: translateY(0); }
   }
 
@@ -465,207 +227,154 @@ title: Home
     .abstract-layout {
       grid-template-columns: 1fr;
       text-align: center;
-      gap: 30px;
+      gap: 50px;
+    }
+    .left-intro-area {
+      align-items: center;
+      padding-right: 0;
     }
     .right-nav-area {
       justify-content: center;
-      margin-top: 40px;
+    }
+    .top-nav-bar {
+      gap: 30px;
+    }
+    .mega-dropdown {
+      left: 50%;
+      transform: translateX(-50%) translateY(-15px);
+    }
+    .nav-item-container:hover .mega-dropdown {
+      transform: translateX(-50%) translateY(0);
     }
   }
 </style>
 
-<div class="noise-overlay"></div>
-<div class="container-full" style="background: radial-gradient(circle at 50% 50%, #0b111e 0%, #070b14 100%); background-image: linear-gradient(rgba(0, 242, 254, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 242, 254, 0.05) 1px, transparent 1px); background-size: 30px 30px; padding-bottom: 120px; position: relative; min-height: calc(100vh - 80px); display: flex; align-items: center; overflow: hidden;">
-  <div class="dashboard-glow" style="position: absolute; width: 600px; height: 600px; background: radial-gradient(circle, rgba(0, 242, 254, 0.08) 0%, transparent 70%); top: 10%; left: -10%; z-index: 1; pointer-events: none;"></div>
-
+<div class="container-full" style="padding-bottom: 80px; min-height: calc(100vh - 80px); display: flex; align-items: center; position: relative;">
+  
   <div class="container" style="max-width: 1200px !important; width: 95% !important; position: relative; z-index: 2;">
     
     <div class="abstract-layout">
       
-      <div class="left-intro-area" style="position: relative; z-index: 10;">
-        <div class="radar-bg">
-          <div class="radar-sweep"></div>
-          <div class="radar-circle circle-1"></div>
-          <div class="radar-circle circle-2"></div>
-          <div class="radar-circle circle-3"></div>
-        </div>
-
-        <div class="hologram-cube-container">
-          <div class="holo-beam"></div>
-          <div class="holo-rings">
-            <div class="ring ring-1"></div>
-            <div class="ring ring-2"></div>
-          </div>
-          <div class="cube">
-            <div class="face front"></div>
-            <div class="face back"></div>
-            <div class="face right"></div>
-            <div class="face left"></div>
-            <div class="face top"></div>
-            <div class="face bottom"></div>
-          </div>
-        </div>
-
-        <span class="intro-label" style="font-family: 'Share Tech Mono', monospace; font-size: 0.85rem; letter-spacing: 4px; color: #ff007f; text-shadow: 0 0 8px rgba(255, 0, 127, 0.4); margin-bottom: 12px; display: inline-block;">[ SYSTEM PROTOCOL: ACTIVE ]</span>
-        
-        <a href="{{ site.baseurl }}/about" id="name-link" style="text-decoration: none; display: block; margin-bottom: 24px;">
-          <div class="hud-name-wrapper" style="display: flex; flex-direction: column; align-items: flex-start; gap: 8px;">
-            <div class="name-logo-container" style="display: flex; align-items: center; gap: 8px; font-family: 'Orbitron', sans-serif;">
-              <span class="name-block-blue" style="background-color: #004cff; color: #ffffff; padding: 6px 20px; font-size: clamp(2rem, 3.5vw, 3rem); font-weight: 900; letter-spacing: 2px; text-transform: uppercase; box-shadow: 0 0 15px rgba(0, 76, 255, 0.35); display: inline-block; line-height: 1;">KWON EUN</span>
-              <span class="name-block-cyan" style="color: #00f2fe; border: 2px solid #00f2fe; padding: 4px 18px; font-size: clamp(2rem, 3.5vw, 3rem); font-weight: 900; letter-spacing: 2px; text-transform: uppercase; text-shadow: 0 0 10px rgba(0, 242, 254, 0.8); box-shadow: 0 0 15px rgba(0, 242, 254, 0.5), inset 0 0 10px rgba(0, 242, 254, 0.3); display: inline-block; line-height: 1; background: rgba(0, 242, 254, 0.05);">JI</span>
-            </div>
-            <span class="hud-subtitle" style="font-family: 'Share Tech Mono', monospace; font-size: 0.95rem; color: #ff007f; letter-spacing: 5px; display: block; margin-top: 8px; text-shadow: 0 0 8px rgba(255, 0, 127, 0.4);">SYSTEM & EMBEDDED ARCHITECT</span>
-          </div>
-        </a>
-        
-        <div class="tech-console-box">
-          <div class="console-hdr">
-            <span class="console-blink-dot"></span>
-            <span class="console-title">FIRMWARE.LOG // CORE_INDEX</span>
-            <span class="console-stats">SYS_OK</span>
-          </div>
-          <div id="summary-view" class="text-view active">
-            <p class="intro-desc" style="font-family: 'Share Tech Mono', monospace; font-size: 1.05rem; color: #849ca8; line-height: 1.8; margin: 0;">
-              <span class="highlight-cyan">하드웨어 제어</span>와 <span class="highlight-cyan">시스템 소프트웨어</span>의 경계를 허무는 엔지니어입니다. 신뢰성 높은 아키텍처와 최적화된 로직 구현에 집중합니다.
-            </p>
-          </div>
-        </div>
+      <!-- Left Profile Description Area -->
+      <div class="left-intro-area">
+        <span class="about-me-label">ABOUT ME</span>
+        <h1 class="profile-name">권은지</h1>
+        <h2 class="profile-job">System & Embedded</h2>
+        <p class="profile-desc">
+          하드웨어 제어와 시스템 소프트웨어의 경계를 허무는 엔지니어입니다. 신뢰성 높은 아키텍처와 최적화된 로직 구현에 집중합니다.
+        </p>
       </div>
       
+      <!-- Right Side Node Navigation -->
       <div class="right-nav-area">
-        <div class="menu-item-group">
+        <div class="top-nav-bar">
           
           <!-- PROJECTS -->
-          <a href="{{ site.baseurl }}/safety-equipment-system" class="menu-item-link">
-            <div class="menu-icon-box"></div>
-            <span class="menu-text-label">PROJECTS</span>
-          </a>
-
+          <div class="nav-item-container">
+            <div class="book-icon-wrapper">
+              <i class="closed-book uil uil-book-open"></i>
+            </div>
+            <div class="menu-link">projects</div>
+            
+            <div class="mega-dropdown horizontal-mode" style="right: 0;">
+              <a href="{{ site.baseurl }}/safety-equipment-system" class="list-item">
+                <div class="list-content">
+                  <h4 class="list-title">스마트 화재 대피 유도 시스템</h4>
+                  <p class="list-desc">실시간 센서 데이터 기반 하드웨어 제어 및 최적 경로 탐색</p>
+                  <div class="tech-badges">
+                    <span>ESP32</span>
+                    <span>C/C++</span>
+                  </div>
+                </div>
+              </a>
+              <a href="{{ site.baseurl }}/safety-equipment-system" class="list-item">
+                <div class="list-content">
+                  <h4 class="list-title">C# 기반 마트 관리 시스템</h4>
+                  <p class="list-desc">객체 지향 설계(OOP) 기반의 안정적인 UI/UX 구축 및 연동</p>
+                  <div class="tech-badges">
+                    <span>C#</span>
+                    <span>WinForms</span>
+                  </div>
+                </div>
+              </a>
+            </div>
+          </div>
+          
           <!-- TECH -->
-          <a href="{{ site.baseurl }}/about#tech" class="menu-item-link">
-            <div class="menu-icon-box"></div>
-            <span class="menu-text-label">TECH</span>
-          </a>
-
+          <div class="nav-item-container">
+            <div class="book-icon-wrapper">
+              <i class="closed-book uil uil-mobile-android"></i>
+            </div>
+            <div class="menu-link">tech</div>
+            
+            <div class="mega-dropdown horizontal-mode" style="right: -100px;">
+              <div class="list-item">
+                <div class="list-content">
+                  <h4 class="list-title">C / C++</h4>
+                  <p class="list-desc">임베디드 시스템 펌웨어 제어 및 메모리 최적화</p>
+                  <div class="tech-badges">
+                    <span>STM32</span>
+                    <span>ESP32</span>
+                  </div>
+                </div>
+              </div>
+              <div class="list-item">
+                <div class="list-content">
+                  <h4 class="list-title">Python & SQL</h4>
+                  <p class="list-desc">데이터 전송 모니터링 및 알고리즘 구현</p>
+                  <div class="tech-badges">
+                    <span>Jupyter</span>
+                    <span>PostgreSQL</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
           <!-- BLOG -->
-          <a href="{{ site.baseurl }}/blog" class="menu-item-link">
-            <div class="menu-icon-box"></div>
-            <span class="menu-text-label">BLOG</span>
-          </a>
-
+          <div class="nav-item-container">
+            <div class="book-icon-wrapper">
+              <i class="closed-book uil uil-mobile-android"></i>
+            </div>
+            <div class="menu-link">blog</div>
+            
+            <div class="mega-dropdown horizontal-mode" style="right: -200px;">
+              <div class="list-item">
+                <div class="list-content">
+                  <h4 class="list-title">Embedded System</h4>
+                  <p class="list-desc">MCU 펌웨어 및 무선 프로토콜 개발 일지</p>
+                  <div class="tech-badges">
+                    <span>BLE</span>
+                    <span>SPP</span>
+                  </div>
+                </div>
+              </div>
+              <div class="list-item">
+                <div class="list-content">
+                  <h4 class="list-title">Study Notes</h4>
+                  <p class="list-desc">자료구조, 알고리즘 및 CS 학습 요약</p>
+                  <div class="tech-badges">
+                    <span>C++</span>
+                    <span>CS</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
         </div>
       </div>
       
     </div>
-      
-    </div>
 
-  </div>
-  
-  <div class="hud-telemetry-panel">
-    <div class="telemetry-item">SYS_TEMP: <span id="telemetry-temp">41.8</span>°C</div>
-    <div class="telemetry-item">BUFFER_STATUS: <span id="telemetry-buf">98</span>%</div>
-    <div class="telemetry-item">BLE_RSSI: <span id="telemetry-rssi">-65</span>dBm</div>
-    <div class="telemetry-item">MCU_CLK: 240MHz</div>
-    <div class="telemetry-item">DMA_STREAM: ACTIVE</div>
   </div>
 </div>
 
 <script>
+  // Simple page load animations or core transitions if required
   document.addEventListener("DOMContentLoaded", () => {
-    // Page transition logic for name link
-    const nameLink = document.getElementById("name-link");
-    
-    if (nameLink) {
-      nameLink.addEventListener("click", (e) => {
-        e.preventDefault(); // Prevent immediate navigation
-        
-        // Add a fade-out effect to the body
-        document.body.style.transition = "opacity 0.4s ease";
-        document.body.style.opacity = "0";
-        
-        // Navigate after transition completes
-        setTimeout(() => {
-          window.location.href = nameLink.href;
-        }, 400);
-      });
-    }
-
-    // 3D Hologram Cube Controller Variables
-    const cube = document.querySelector('.cube');
-    let idleAngleX = 0;
-    let idleAngleY = 0;
-    let isHovered = false;
-    
-    // Smooth lock-on variables
-    let currentAngleX = 0;
-    let currentAngleY = 0;
-    let targetAngleX = 0;
-    let targetAngleY = 0;
-
-    // 3D Cube Animation Loop (handles Idle + Sensor Jitter + Lock targeting)
-    function animateCube() {
-      if (!isHovered) {
-        // Slow idle rotation
-        idleAngleX += 0.35;
-        idleAngleY += 0.45;
-        
-        // Jitter simulation (simulating micro-vibrations of analog sensors)
-        const jitterX = (Math.random() - 0.5) * 1.5;
-        const jitterY = (Math.random() - 0.5) * 1.5;
-        
-        currentAngleX = idleAngleX + jitterX;
-        currentAngleY = idleAngleY + jitterY;
-        
-        cube.style.transform = `rotateX(${currentAngleX}deg) rotateY(${currentAngleY}deg)`;
-      } else {
-        // Linear interpolation for smooth target locking
-        currentAngleX += (targetAngleX - currentAngleX) * 0.15;
-        currentAngleY += (targetAngleY - currentAngleY) * 0.15;
-        
-        cube.style.transform = `rotateX(${currentAngleX}deg) rotateY(${currentAngleY}deg)`;
-      }
-      requestAnimationFrame(animateCube);
-    }
-    if (cube) {
-      requestAnimationFrame(animateCube);
-    }
-
-    // Setup sequence triggers on menu hover
-    const menuTriggers = document.querySelectorAll('.menu-item-link');
-    menuTriggers.forEach((trigger, idx) => {
-      // Determine locking angles (projects: index 0, tech: index 1, blog: index 2)
-      let xAngle = 0, yAngle = 0;
-      if (idx === 0) { xAngle = 0; yAngle = 0; }        // Projects -> Locks to Front Face
-      if (idx === 1) { xAngle = 0; yAngle = -90; }      // Tech -> Locks to Right Face
-      if (idx === 2) { xAngle = -90; yAngle = 0; }      // Blog -> Locks to Top Face
-
-      trigger.addEventListener('mouseenter', () => {
-        if (cube) {
-          isHovered = true;
-          targetAngleX = xAngle;
-          targetAngleY = yAngle;
-          cube.classList.add('deconstructed');
-        }
-      });
-
-      trigger.addEventListener('mouseleave', () => {
-        if (cube) {
-          isHovered = false;
-          cube.classList.remove('deconstructed');
-        }
-      });
-    });
-
-    // Dynamic Live Telemetry updates loop
-    const tempEl = document.getElementById('telemetry-temp');
-    const bufEl = document.getElementById('telemetry-buf');
-    const rssiEl = document.getElementById('telemetry-rssi');
-    
-    setInterval(() => {
-      if (tempEl) tempEl.textContent = (40.5 + Math.random() * 3).toFixed(1);
-      if (bufEl) bufEl.textContent = (94 + Math.random() * 5).toFixed(0);
-      if (rssiEl) rssiEl.textContent = (-58 - Math.floor(Math.random() * 12)).toFixed(0);
-    }, 1500);
+    // Fade in effect
+    document.body.style.transition = "opacity 0.5s ease";
+    document.body.style.opacity = "1";
   });
 </script>
