@@ -73,7 +73,7 @@ title: Home
     height: 70px;
     position: relative;
     transform-style: preserve-3d;
-    animation: spin-cube 16s linear infinite;
+    /* Rotation and noise will be driven by JS for absolute control and seamless locking */
   }
 
   .cube .face {
@@ -106,6 +106,56 @@ title: Home
   .cube .left   { transform: rotateY(-90deg) translateZ(35px); }
   .cube .top    { transform: rotateX( 90deg) translateZ(35px); }
   .cube .bottom { transform: rotateX(-90deg) translateZ(35px); }
+
+  /* 3D Cube Hardware Deconstruction Face Splitting */
+  .cube.deconstructed .front  { transform: rotateY(  0deg) translateZ(65px) !important; border-color: #ff007f !important; box-shadow: 0 0 25px rgba(255, 0, 127, 0.7), inset 0 0 15px rgba(255, 0, 127, 0.3) !important; }
+  .cube.deconstructed .back   { transform: rotateY(180deg) translateZ(65px) !important; }
+  .cube.deconstructed .right  { transform: rotateY( 90deg) translateZ(65px) !important; border-color: #ff007f !important; box-shadow: 0 0 25px rgba(255, 0, 127, 0.7), inset 0 0 15px rgba(255, 0, 127, 0.3) !important; }
+  .cube.deconstructed .left   { transform: rotateY(-90deg) translateZ(65px) !important; }
+  .cube.deconstructed .top    { transform: rotateX( 90deg) translateZ(65px) !important; border-color: #ff007f !important; box-shadow: 0 0 25px rgba(255, 0, 127, 0.7), inset 0 0 15px rgba(255, 0, 127, 0.3) !important; }
+  .cube.deconstructed .bottom { transform: rotateX(-90deg) translateZ(65px) !important; }
+
+  /* Register bit tag style */
+  .reg-bit {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.75rem;
+    color: #ff007f;
+    border: 1px solid rgba(255, 0, 127, 0.3);
+    padding: 1px 5px;
+    border-radius: 2px;
+    margin-right: 8px;
+    text-shadow: 0 0 4px rgba(255, 0, 127, 0.3);
+    transition: all 0.3s ease;
+    display: inline-block;
+  }
+  
+  .nav-item-container:hover .reg-bit {
+    color: #00f2fe;
+    border-color: rgba(0, 242, 254, 0.5);
+    text-shadow: 0 0 8px rgba(0, 242, 254, 0.8);
+    box-shadow: 0 0 6px rgba(0, 242, 254, 0.3);
+  }
+
+  /* Telemetry Data Stream loading screen overlay */
+  .telemetry-stream {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(6, 12, 29, 0.95);
+    padding: 16px;
+    box-sizing: border-box;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.72rem;
+    color: #00f2fe;
+    overflow: hidden;
+    z-index: 10;
+    pointer-events: none;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    opacity: 1;
+    transition: opacity 0.3s ease;
+    text-align: left;
+  }
 
   @keyframes spin-cube {
     0% { transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg); }
@@ -409,13 +459,31 @@ title: Home
 
   .mega-dropdown.horizontal-mode {
     width: max-content;
-    max-width: 55vw;
+    max-width: 65vw;
     right: -20px;
     display: flex;
     flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: flex-end;
+    flex-wrap: nowrap; /* Keep cards in a single horizontal line */
+    justify-content: flex-start;
     gap: 20px;
+    overflow-x: auto; /* Enable smooth horizontal scrolling carousel */
+    padding: 15px 15px 25px 15px; /* Margin to ensure 3D card tilt scale doesn't clip */
+    scrollbar-width: thin;
+    scrollbar-color: rgba(0, 242, 254, 0.4) rgba(6, 12, 29, 0.3);
+  }
+
+  /* Custom Webkit scrollbar for horizontal carousel */
+  .mega-dropdown.horizontal-mode::-webkit-scrollbar {
+    height: 5px;
+  }
+  .mega-dropdown.horizontal-mode::-webkit-scrollbar-track {
+    background: rgba(6, 12, 29, 0.3);
+    border-radius: 10px;
+  }
+  .mega-dropdown.horizontal-mode::-webkit-scrollbar-thumb {
+    background: rgba(0, 242, 254, 0.5);
+    border-radius: 10px;
+    box-shadow: 0 0 6px rgba(0, 242, 254, 0.6);
   }
   
   /* 3D Glassmorphism Cards in Dropdown - Holographic Unfold */
@@ -425,7 +493,9 @@ title: Home
     position: relative;
     overflow: hidden;
     transform-style: preserve-3d;
-    will-change: transform;
+    will-change: transform, opacity; /* GPU Optimizations */
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
     background: rgba(6, 12, 29, 0.5) !important;
     backdrop-filter: blur(20px) !important;
     -webkit-backdrop-filter: blur(20px) !important;
@@ -433,9 +503,9 @@ title: Home
     border-radius: 8px !important;
     box-shadow: 0 15px 35px rgba(0,0,0,0.5), inset 0 0 15px rgba(0, 242, 254, 0.03) !important;
     
-    /* Default closed state: tilted back, deep in Z-space, scaled down, invisible */
+    /* Default closed state: tilted back, deep in Z-space, scaled down, invisible (using translate3d for GPU acceleration) */
     opacity: 0;
-    transform: rotateX(-75deg) rotateY(15deg) translateZ(-150px) scale(0.8);
+    transform: translate3d(0, 0, -150px) rotateX(-75deg) rotateY(15deg) scale(0.8);
     transition: 
       opacity 0.6s cubic-bezier(0.15, 0.85, 0.35, 1.1),
       transform 0.6s cubic-bezier(0.15, 0.85, 0.35, 1.1),
@@ -447,7 +517,7 @@ title: Home
   /* Unfolded state when dropdown becomes active on hover */
   .nav-item-container:hover .mega-dropdown .list-item {
     opacity: 1;
-    transform: rotateX(0deg) rotateY(0deg) translateZ(0) scale(1);
+    transform: translate3d(0, 0, 0) rotateX(0deg) rotateY(0deg) scale(1);
   }
 
   /* Staggered sequential unfolding transition delays */
@@ -459,6 +529,61 @@ title: Home
   }
   .nav-item-container:hover .mega-dropdown .list-item:nth-child(3) {
     transition-delay: 0.27s !important;
+  }
+
+  /* Chipset Card Board Overrides */
+  .mega-dropdown .list-item.chipset-card {
+    border-top: 3px solid #ffcc00 !important; /* Golden circuit board edge */
+    padding-top: 28px !important;
+    padding-bottom: 28px !important;
+  }
+
+  .chipset-pin-row {
+    display: flex;
+    justify-content: space-between;
+    position: absolute;
+    left: 15%;
+    width: 70%;
+    pointer-events: none;
+  }
+  .chipset-pin-row.top {
+    top: -3px;
+  }
+  .chipset-pin-row.bottom {
+    bottom: -3px;
+  }
+  .chipset-pin-row span {
+    width: 5px;
+    height: 7px;
+    background: #ffcc00;
+    border-radius: 1px;
+    box-shadow: 0 0 4px #ffcc00;
+    display: inline-block;
+  }
+  .chipset-core {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 15px;
+    padding: 6px 12px;
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px dashed rgba(0, 242, 254, 0.3);
+    border-radius: 4px;
+  }
+  .chipset-name {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.72rem;
+    color: #00f2fe;
+    letter-spacing: 1px;
+  }
+  .chipset-status {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.7rem;
+    color: #ff007f;
+    border: 1px solid rgba(255, 0, 127, 0.4);
+    padding: 0px 4px;
+    border-radius: 2px;
+    text-shadow: 0 0 4px rgba(255, 0, 127, 0.5);
   }
 
   /* Laser Scanline Sweep effect */
@@ -704,7 +829,7 @@ title: Home
         <!-- High-tech HUD Title -->
         <a href="{{ site.baseurl }}/about" id="name-link" style="text-decoration: none; display: block; margin-bottom: 24px;">
           <div class="hud-name-wrapper">
-            <h1 class="hud-title" data-text="KWON EUN JI">KWON EUN JI</h1>
+            <h1 class="hud-title" data-text="root@KwonEunJi:~#">root@KwonEunJi:~#</h1>
             <span class="hud-subtitle">SYSTEM & EMBEDDED ARCHITECT</span>
           </div>
         </a>
@@ -736,7 +861,7 @@ title: Home
               <i class="uil uil-book closed-book"></i>
               <i class="uil uil-book-open open-book"></i>
             </div>
-            <div class="menu-link">projects</div>
+            <div class="menu-link"><span class="reg-bit">001</span>projects</div>
             
             <div class="mega-dropdown horizontal-mode">
               <a href="{{ site.baseurl }}/safety-equipment-system" class="list-item" style="display: block; padding: 24px; background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(16px); border-radius: 16px; text-decoration: none; transition: all 0.3s; border: 1px solid rgba(255, 255, 255, 0.08); box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
@@ -780,27 +905,57 @@ title: Home
               <i class="uil uil-book closed-book"></i>
               <i class="uil uil-book-open open-book"></i>
             </div>
-            <div class="menu-link">tech</div>
+            <div class="menu-link"><span class="reg-bit">010</span>tech</div>
             
             <div class="mega-dropdown horizontal-mode">
-              <a href="{{ site.baseurl }}/ej" class="list-item" style="display: block; padding: 20px; background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(16px); border-radius: 16px; text-decoration: none; transition: all 0.3s; border: 1px solid rgba(255, 255, 255, 0.08); box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
+              <a href="{{ site.baseurl }}/ej" class="list-item chipset-card" style="display: block; padding: 20px; background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(16px); border-radius: 16px; text-decoration: none; transition: all 0.3s; border: 1px solid rgba(255, 255, 255, 0.08); box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
+                <div class="chipset-pin-row top">
+                  <span></span><span></span><span></span><span></span><span></span>
+                </div>
                 <div class="list-content">
                   <h4 class="list-title" style="color: #e2e8f0; margin: 0 0 6px 0; font-size: 1.1rem;">Python 기초 및 알고리즘</h4>
                   <p class="list-desc" style="color: #94a3b8; margin: 0;">데이터 구조 이해 및 로직 최적화 기반 다지기</p>
+                  <div class="chipset-core">
+                    <span class="chipset-name">MCU CORE: PY_310</span>
+                    <span class="chipset-status">READY</span>
+                  </div>
+                </div>
+                <div class="chipset-pin-row bottom">
+                  <span></span><span></span><span></span><span></span><span></span>
                 </div>
               </a>
               
-              <a href="{{ site.baseurl }}/tech-fundamentals" class="list-item" style="display: block; padding: 20px; background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(16px); border-radius: 16px; text-decoration: none; transition: all 0.3s; border: 1px solid rgba(255, 255, 255, 0.08); box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
+              <a href="{{ site.baseurl }}/tech-fundamentals" class="list-item chipset-card" style="display: block; padding: 20px; background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(16px); border-radius: 16px; text-decoration: none; transition: all 0.3s; border: 1px solid rgba(255, 255, 255, 0.08); box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
+                <div class="chipset-pin-row top">
+                  <span></span><span></span><span></span><span></span><span></span>
+                </div>
                 <div class="list-content">
                   <h4 class="list-title" style="color: #e2e8f0; margin: 0 0 6px 0; font-size: 1.1rem;">C/C++ 메모리 제어</h4>
                   <p class="list-desc" style="color: #94a3b8; margin: 0;">안정적인 펌웨어 개발을 위한 포인터와 메모리 관리</p>
+                  <div class="chipset-core">
+                    <span class="chipset-name">MCU CORE: C_MEM_CTRL</span>
+                    <span class="chipset-status">DMA_ON</span>
+                  </div>
+                </div>
+                <div class="chipset-pin-row bottom">
+                  <span></span><span></span><span></span><span></span><span></span>
                 </div>
               </a>
 
-              <a href="{{ site.baseurl }}/tech-fundamentals" class="list-item" style="display: block; padding: 20px; background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(16px); border-radius: 16px; text-decoration: none; transition: all 0.3s; border: 1px solid rgba(255, 255, 255, 0.08); box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
+              <a href="{{ site.baseurl }}/tech-fundamentals" class="list-item chipset-card" style="display: block; padding: 20px; background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(16px); border-radius: 16px; text-decoration: none; transition: all 0.3s; border: 1px solid rgba(255, 255, 255, 0.08); box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
+                <div class="chipset-pin-row top">
+                  <span></span><span></span><span></span><span></span><span></span>
+                </div>
                 <div class="list-content">
                   <h4 class="list-title" style="color: #e2e8f0; margin: 0 0 6px 0; font-size: 1.1rem;">C# 객체지향 프로그래밍</h4>
                   <p class="list-desc" style="color: #94a3b8; margin: 0;">유지보수가 용이한 시스템 소프트웨어 설계 패턴</p>
+                  <div class="chipset-core">
+                    <span class="chipset-name">MCU CORE: C_SHARP</span>
+                    <span class="chipset-status">ACTIVE</span>
+                  </div>
+                </div>
+                <div class="chipset-pin-row bottom">
+                  <span></span><span></span><span></span><span></span><span></span>
                 </div>
               </a>
             </div>
@@ -812,7 +967,7 @@ title: Home
               <i class="uil uil-book closed-book"></i>
               <i class="uil uil-book-open open-book"></i>
             </div>
-            <div class="menu-link">blog</div>
+            <div class="menu-link"><span class="reg-bit">100</span>blog</div>
             
             <div class="mega-dropdown horizontal-mode">
               <div class="list-item" style="display: block; padding: 20px; background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(16px); border-radius: 16px; border: 1px solid rgba(255, 255, 255, 0.08); box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
@@ -829,7 +984,6 @@ title: Home
   </div>
 </div>
 
-<script>
   document.addEventListener("DOMContentLoaded", () => {
     // Page transition logic for name link
     const nameLink = document.getElementById("name-link");
@@ -849,11 +1003,113 @@ title: Home
       });
     }
 
+    // 3D Hologram Cube Controller Variables
+    const cube = document.querySelector('.cube');
+    let idleAngleX = 0;
+    let idleAngleY = 0;
+    let isHovered = false;
+    
+    // Smooth lock-on variables
+    let currentAngleX = 0;
+    let currentAngleY = 0;
+    let targetAngleX = 0;
+    let targetAngleY = 0;
+
+    // Fast firmware telemetry logs array
+    const telemetryLogs = [
+      "[ESP32_BLE_CONNECTED]",
+      "[FSR_THRESHOLD_PASS]",
+      "[UART_BAUDRATE_115200]",
+      "[ADC_CHANNEL_0_READ: 4095]",
+      "[I2C_MEM_WRITE_OK]",
+      "[GPIO_PIN_12: HIGH]",
+      "[DMA_STREAM_COMPLETE]",
+      "[HAL_OK: CORE_INIT]",
+      "[MCU_TEMP_READ: 38.5C]",
+      "[WIFI_RSSI_READ: -45dBm]"
+    ];
+
+    // 3D Cube Animation Loop (handles Idle + Sensor Jitter + Lock targeting)
+    function animateCube() {
+      if (!isHovered) {
+        // Slow idle rotation
+        idleAngleX += 0.35;
+        idleAngleY += 0.45;
+        
+        // Jitter simulation (simulating micro-vibrations of analog sensors)
+        const jitterX = (Math.random() - 0.5) * 1.5;
+        const jitterY = (Math.random() - 0.5) * 1.5;
+        
+        currentAngleX = idleAngleX + jitterX;
+        currentAngleY = idleAngleY + jitterY;
+        
+        cube.style.transform = `rotateX(${currentAngleX}deg) rotateY(${currentAngleY}deg)`;
+      } else {
+        // Linear interpolation for smooth target locking
+        currentAngleX += (targetAngleX - currentAngleX) * 0.15;
+        currentAngleY += (targetAngleY - currentAngleY) * 0.15;
+        
+        cube.style.transform = `rotateX(${currentAngleX}deg) rotateY(${currentAngleY}deg)`;
+      }
+      requestAnimationFrame(animateCube);
+    }
+    requestAnimationFrame(animateCube);
+
+    // Setup sequence triggers on menu hover
+    const menuTriggers = document.querySelectorAll('.nav-item-container');
+    menuTriggers.forEach((trigger, idx) => {
+      // Determine locking angles (projects: index 0, tech: index 1, blog: index 2)
+      let xAngle = 0, yAngle = 0;
+      if (idx === 0) { xAngle = 0; yAngle = 0; }        // Projects -> Locks to Front Face
+      if (idx === 1) { xAngle = 0; yAngle = -90; }      // Tech -> Locks to Right Face
+      if (idx === 2) { xAngle = -90; yAngle = 0; }      // Blog -> Locks to Top Face
+
+      trigger.addEventListener('mouseenter', () => {
+        isHovered = true;
+        targetAngleX = xAngle;
+        targetAngleY = yAngle;
+        cube.classList.add('deconstructed');
+
+        // Telemetry datastream execution for child cards
+        const dropdownCards = trigger.querySelectorAll('.list-item');
+        dropdownCards.forEach(card => {
+          // Remove existing log screens
+          const oldStream = card.querySelector('.telemetry-stream');
+          if (oldStream) oldStream.remove();
+
+          // Create new stream overlay
+          const stream = document.createElement('div');
+          stream.classList.add('telemetry-stream');
+          card.appendChild(stream);
+
+          let logsPrinted = 0;
+          const logInterval = setInterval(() => {
+            if (logsPrinted < 5) {
+              const logLine = document.createElement('div');
+              logLine.textContent = `> ${telemetryLogs[Math.floor(Math.random() * telemetryLogs.length)]}`;
+              stream.appendChild(logLine);
+              logsPrinted++;
+            } else {
+              clearInterval(logInterval);
+              // Fade out loading sequence
+              setTimeout(() => {
+                stream.style.opacity = '0';
+                setTimeout(() => stream.remove(), 300);
+              }, 100);
+            }
+          }, 55); // high speed stream printing
+        });
+      });
+
+      trigger.addEventListener('mouseleave', () => {
+        isHovered = false;
+        cube.classList.remove('deconstructed');
+      });
+    });
+
     // 3D Tilt Effect for cards
     const cards = document.querySelectorAll('.list-item');
-    
     cards.forEach(card => {
-      // Create glare element
       const glare = document.createElement('div');
       glare.classList.add('glare');
       card.appendChild(glare);
@@ -864,24 +1120,23 @@ title: Home
 
       card.addEventListener('mousemove', (e) => {
         const rect = card.getBoundingClientRect();
-        const x = e.clientX - rect.left; // x position within the element.
-        const y = e.clientY - rect.top;  // y position within the element.
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
         
         const centerX = rect.width / 2;
         const centerY = rect.height / 2;
         
-        const rotateX = ((y - centerY) / centerY) * -12; // Max rotation 12deg
+        const rotateX = ((y - centerY) / centerY) * -12;
         const rotateY = ((x - centerX) / centerX) * 12;
         
         card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.05, 1.05, 1.05)`;
         
-        // Glare effect calculation
         const glareX = (x / rect.width) * 100;
         const glareY = (y / rect.height) * 100;
         glare.style.background = `radial-gradient(circle at ${glareX}% ${glareY}%, rgba(0, 242, 254, 0.3) 0%, transparent 60%)`;
         glare.style.opacity = '1';
 
-        // Physical light-reactive glowing shadow: shifts shadow opposite to mouse movement
+        // Backlight neon shadow response
         const shadowX = -rotateY * 1.5;
         const shadowY = rotateX * 1.5;
         card.style.setProperty('box-shadow', `0 20px 40px rgba(0,0,0,0.6), ${shadowX}px ${shadowY}px 25px rgba(0, 242, 254, 0.35), inset 0 0 15px rgba(0, 242, 254, 0.08)`, 'important');
@@ -908,9 +1163,8 @@ title: Home
         const centerX = rect.width / 2;
         const centerY = rect.height / 2;
         
-        // Subtle tilt for the entire screen layout to feel 3D
-        const rotateX = ((y - centerY) / centerY) * -5; // Max 5deg
-        const rotateY = ((x - centerX) / centerX) * 5;  // Max 5deg
+        const rotateX = ((y - centerY) / centerY) * -5;
+        const rotateY = ((x - centerX) / centerX) * 5;
         
         layout.style.transform = `perspective(1500px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
       });
