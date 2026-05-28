@@ -2,18 +2,24 @@
 @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
 
 body {
-  background-color: #0b1120; // Deep slate dark
+  background-color: #020308;
+  background: radial-gradient(circle at 50% 50%, #060913 0%, #020308 100%);
+  background-image: linear-gradient(rgba(0, 242, 254, 0.02) 1px, transparent 1px),
+                    linear-gradient(90deg, rgba(0, 242, 254, 0.02) 1px, transparent 1px);
+  background-size: 30px 30px;
   color: #f8fafc;
-  font-family: 'Pretendard', 'Inter', sans-serif;
+  font-family: 'Share Tech Mono', 'Pretendard', 'Inter', sans-serif;
   -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
 }
 
 // Typography Overrides
 h1, h2, h3, h4, h5, h6 {
-  font-family: 'Pretendard', 'Inter', sans-serif;
+  font-family: 'Orbitron', 'Pretendard', 'Inter', sans-serif;
   color: #ffffff;
   font-weight: 700;
-  letter-spacing: -0.02em;
+  letter-spacing: 0.02em;
+  text-shadow: 0 0 10px rgba(0, 242, 254, 0.3);
 }
 
 // Premium Hero Section
@@ -48,21 +54,21 @@ h1, h2, h3, h4, h5, h6 {
 
 // Glassmorphism Cards
 .card {
-  background: rgba(30, 41, 59, 0.6) !important;
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.1) !important;
-  border-radius: 16px !important;
+  background: rgba(6, 12, 29, 0.55) !important;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(0, 242, 254, 0.18) !important;
+  border-radius: 12px !important;
   padding: 32px 24px !important;
-  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06) !important;
+  transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1) !important;
+  box-shadow: 0 15px 35px rgba(0,0,0,0.5), inset 0 0 15px rgba(0, 242, 254, 0.03) !important;
   height: 100%;
 
   &:hover {
-    transform: translateY(-8px) !important;
-    border: 1px solid rgba(99, 102, 241, 0.5) !important;
-    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2), 0 10px 10px -5px rgba(0, 0, 0, 0.04), 0 0 20px rgba(99, 102, 241, 0.2) !important;
-    background: rgba(30, 41, 59, 0.8) !important;
+    transform: translateY(-6px) !important;
+    border-color: rgba(0, 242, 254, 0.5) !important;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.6), 0 0 25px rgba(0, 242, 254, 0.35), inset 0 0 15px rgba(0, 242, 254, 0.08) !important;
+    background: rgba(6, 12, 29, 0.8) !important;
   }
 
   .card-title {
@@ -347,6 +353,20 @@ h1, h2, h3, h4, h5, h6 {
 .dashboard-panel {
   display: flex;
   flex-direction: column;
+}
+
+// System-wide Cyber-Cyan Scrollbars
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #020308;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 242, 254, 0.4);
+  border-radius: 3px;
+  box-shadow: 0 0 8px rgba(0, 242, 254, 0.6);
 }
 
 // Modern Dashboard Styles
