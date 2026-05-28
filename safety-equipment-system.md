@@ -13,16 +13,16 @@ category: embedded-hardware-projects
     width: 95%;
     margin: 40px auto;
     padding: 30px;
-    background: rgba(11, 17, 32, 0.85);
-    border: 1px solid rgba(0, 242, 254, 0.25);
+    background: rgba(11, 17, 30, 0.95);
+    border: 1px solid rgba(0, 242, 254, 0.3);
     border-radius: 12px;
-    box-shadow: 0 20px 50px rgba(0,0,0,0.8), inset 0 0 30px rgba(0, 242, 254, 0.03);
-    backdrop-filter: blur(15px);
-    -webkit-backdrop-filter: blur(15px);
+    box-shadow: 0 20px 50px rgba(0,0,0,0.9), inset 0 0 30px rgba(0, 242, 254, 0.05);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
     position: relative;
     overflow: hidden;
     font-family: 'Share Tech Mono', 'Pretendard', sans-serif;
-    color: #cbd5e1;
+    color: #8fa0dd;
   }
 
   .cockpit-container::before {
@@ -30,9 +30,9 @@ category: embedded-hardware-projects
     position: absolute;
     top: 0; left: 0; width: 100%; height: 100%;
     background-image: 
-      linear-gradient(rgba(0, 242, 254, 0.015) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(0, 242, 254, 0.015) 1px, transparent 1px);
-    background-size: 20px 20px;
+      linear-gradient(rgba(0, 242, 254, 0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0, 242, 254, 0.05) 1px, transparent 1px);
+    background-size: 30px 30px;
     pointer-events: none;
   }
 
