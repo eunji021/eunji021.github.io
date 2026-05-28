@@ -217,7 +217,7 @@ category: embedded-hardware-projects
 
   .node-sensor {
     font-size: 0.72rem;
-    color: #8fa0dd;
+    color: #849ca8;
   }
 
   /* Node customization for Central Master Gateway & Client App */
@@ -317,7 +317,7 @@ category: embedded-hardware-projects
     margin-bottom: 6px;
   }
   .cmd-resp {
-    color: #8fa0dd;
+    color: #849ca8;
     margin-bottom: 12px;
     line-height: 1.5;
     text-align: justify;
@@ -418,7 +418,7 @@ category: embedded-hardware-projects
 
   .metric-subtitle {
     font-size: 0.75rem;
-    color: #8fa0dd;
+    color: #849ca8;
     margin: 0;
   }
 
@@ -561,7 +561,7 @@ category: embedded-hardware-projects
             <div class="topo-node master-gateway">
               <span class="node-tag" style="color: #ff007f; text-shadow: 0 0 5px rgba(255,0,127,0.4);">CENTRAL MASTER</span>
               <div class="node-name" style="color: #ff007f;">ESP32 게이트웨이</div>
-              <div class="node-sensor" style="color: #8fa0dd;">BLE 수신 & Classic SPP 전송</div>
+              <div class="node-sensor" style="color: #849ca8;">BLE 수신 & Classic SPP 전송</div>
               <div class="node-sensor" style="font-size: 0.65rem; margin-top: 5px; color: #ff99cc;">• Ring Buffer Stack</div>
             </div>
           </div>
@@ -687,7 +687,7 @@ int getFilteredRSSI(int newRawValue) {
         <span class="status-board-pill">SECURE</span>
         <div class="status-desc-text">
           <strong>고유 MAC 주소 기반 사설망 필터링 시스템</strong><br>
-          <span style="font-size: 0.72rem; color: #8fa0dd; display: block; margin-top: 6px; line-height: 1.4;">
+          <span style="font-size: 0.72rem; color: #849ca8; display: block; margin-top: 6px; line-height: 1.4;">
             타 장비 노드의 패킷이 수신될 시 게이트웨이 EEPROM 페어링 헤더 정보 유효 검사 단계를 거쳐 즉각 버퍼에서 소거 및 폐기 처리하여 혼선을 방지합니다.
           </span>
         </div>
