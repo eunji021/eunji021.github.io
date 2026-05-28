@@ -4,218 +4,784 @@ title: Home
 ---
 {% assign page_category = site.data.category_list[page.category] %}
 
-{% include header-home.html %}
-
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Share+Tech+Mono&display=swap');
 
-  /* Absolute Flat Dark Portfolio Theme */
-  body {
-    background-color: #060814 !important;
-    background: radial-gradient(circle at 50% 50%, #0c0f1d 0%, #060814 100%) !important;
-    color: #94a3b8 !important;
-    font-family: 'Share Tech Mono', 'Pretendard', sans-serif;
-    min-height: 100vh;
-    overflow-x: hidden;
+  /* Global Scrollbar Reset for Cyberpunk Theme */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #020308;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: rgba(0, 242, 254, 0.4);
+    border-radius: 3px;
+    box-shadow: 0 0 8px rgba(0, 242, 254, 0.6);
   }
 
-  /* Layout Structure */
-  .abstract-layout {
+  /* Hide default layout header and footer completely */
+  .header-container, footer, .navbar-custom, .footer {
+    display: none !important;
+  }
+
+  /* Strict Cyberpunk Dark Grid Theme Overrides */
+  html, body {
+    background-color: #0b111e !important;
+    background-image: 
+      radial-gradient(circle at 50% 50%, rgba(15, 23, 42, 0.7) 0%, #0b111e 100%),
+      linear-gradient(rgba(0, 242, 254, 0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0, 242, 254, 0.05) 1px, transparent 1px) !important;
+    background-size: 100% 100%, 30px 30px, 30px 30px !important;
+    color: #94a3b8 !important;
+    font-family: 'Share Tech Mono', 'Pretendard', sans-serif !important;
+    height: 100vh !important;
+    min-height: 100vh !important;
+    overflow: hidden !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    box-sizing: border-box;
+  }
+
+  /* Noise Overlay */
+  .noise-overlay {
+    position: fixed;
+    top: 0; left: 0; width: 100vw; height: 100vh;
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0.05;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  }
+
+  /* --- Cyber Top Header --- */
+  .cyber-header {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 65px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 40px;
+    border-bottom: 1px solid rgba(0, 242, 254, 0.18);
+    background: rgba(11, 17, 30, 0.7);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    z-index: 1000;
+  }
+  
+  .cyber-logo {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1.4rem;
+    font-weight: 900;
+    color: #ffffff;
+    letter-spacing: 2px;
+    cursor: pointer;
+    text-shadow: 0 0 10px rgba(0, 242, 254, 0.3);
+    transition: all 0.3s ease;
+  }
+
+  .cyber-logo:hover {
+    text-shadow: 0 0 15px rgba(0, 242, 254, 0.8);
+  }
+
+  .cyber-logo span {
+    color: #00f2fe;
+    text-shadow: 0 0 12px rgba(0, 242, 254, 0.8);
+    margin-left: 6px;
+  }
+
+  .cyber-menu {
+    display: flex;
+    gap: 25px;
+  }
+
+  .menu-btn {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #8fa0dd !important;
+    text-decoration: none !important;
+    letter-spacing: 2px;
+    transition: all 0.3s ease;
+    padding: 6px 14px;
+    border-radius: 4px;
+    border: 1px solid transparent;
+  }
+
+  .menu-btn:hover, .menu-btn.active {
+    color: #00f2fe !important;
+    border-color: rgba(0, 242, 254, 0.4);
+    background: rgba(0, 242, 254, 0.05);
+    text-shadow: 0 0 12px rgba(0, 242, 254, 0.8);
+    box-shadow: 0 0 15px rgba(0, 242, 254, 0.2);
+  }
+
+  /* --- Cyber Bottom Footer --- */
+  .cyber-footer {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 50px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 40px;
+    border-top: 1px solid rgba(0, 242, 254, 0.18);
+    background: rgba(11, 17, 30, 0.7);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    z-index: 1000;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.85rem;
+  }
+
+  .footer-status {
+    color: #00f2fe;
+    text-shadow: 0 0 5px rgba(0, 242, 254, 0.5);
+    letter-spacing: 1px;
+  }
+
+  .footer-links {
+    display: flex;
+    gap: 25px;
+  }
+
+  .footer-btn {
+    color: #8fa0dd !important;
+    text-decoration: none !important;
+    letter-spacing: 1px;
+    transition: all 0.3s ease;
+  }
+
+  .footer-btn:hover {
+    color: #ff007f !important;
+    text-shadow: 0 0 8px rgba(255, 0, 127, 0.8);
+  }
+
+  /* --- Viewport Layout Grid --- */
+  .viewport-container {
+    margin-top: 65px;
+    height: calc(100vh - 115px);
     display: grid;
     grid-template-columns: 46% 54%;
     gap: 40px;
     align-items: center;
-    min-height: 72vh;
-    margin-top: 60px;
+    padding: 0 40px;
+    box-sizing: border-box;
+    transform-style: preserve-3d;
+    perspective: 1500px;
   }
 
-  /* Left Main Profile Area */
+  /* --- Left Intro & Telemetry Area --- */
   .left-intro-area {
     padding-right: 30px;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
+    position: relative;
     animation: fadeSlideUp 0.8s cubic-bezier(0.25, 0.8, 0.25, 1) forwards;
+    transform-style: preserve-3d;
+    transform: translateZ(50px);
   }
 
-  .about-me-label {
+  .hud-name-title {
+    font-family: 'Orbitron', sans-serif;
+    font-size: clamp(2.0rem, 3.8vw, 2.9rem);
+    font-weight: 900;
+    color: #ffffff;
+    letter-spacing: 2px;
+    margin: 0;
+    line-height: 1.1;
+    cursor: pointer;
+    text-shadow: 0 0 10px rgba(0, 242, 254, 0.4);
+    transition: all 0.3s ease;
+    display: inline-block;
+  }
+
+  .hud-name-title:hover {
+    text-shadow: 0 0 15px rgba(0, 242, 254, 0.8), 0 0 30px rgba(255, 0, 127, 0.4);
+  }
+
+  .hud-name-title span.cyan {
+    color: #00f2fe;
+  }
+
+  .hud-name-title span.pink {
+    color: #ff007f;
+    text-shadow: 0 0 10px rgba(255, 0, 127, 0.8);
+  }
+
+  .blink-cursor {
+    animation: step-blink 1s step-end infinite;
+  }
+
+  @keyframes step-blink {
+    50% { opacity: 0; }
+  }
+
+  .hud-subtitle-pink {
     font-family: 'Orbitron', sans-serif;
     font-size: 0.95rem;
     font-weight: 700;
-    color: #818cf8;
-    letter-spacing: 3px;
+    color: #ff007f;
+    letter-spacing: 5px;
+    display: block;
+    margin-top: 12px;
+    margin-bottom: 25px;
+    text-shadow: 0 0 8px rgba(255, 0, 127, 0.6);
     text-transform: uppercase;
   }
 
-  .profile-name {
-    font-family: 'Pretendard', sans-serif;
-    font-size: clamp(3.2rem, 5.5vw, 4.4rem);
-    font-weight: 900;
-    color: #ffffff;
-    margin: 12px 0 6px 0;
-    letter-spacing: -1px;
-    line-height: 1.1;
+  /* Telemetry Console */
+  .tech-console-box {
+    background: rgba(6, 12, 29, 0.65) !important;
+    backdrop-filter: blur(14px) !important;
+    -webkit-backdrop-filter: blur(14px) !important;
+    border: 1px solid rgba(0, 242, 254, 0.25) !important;
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.6), inset 0 0 20px rgba(0, 242, 254, 0.05);
+    position: relative;
+    overflow: hidden;
+    transform: translateZ(40px);
+    min-height: 180px;
   }
 
-  .profile-job {
-    font-family: 'Orbitron', sans-serif;
-    font-size: clamp(1.6rem, 2.8vw, 2.2rem);
-    font-weight: 700;
-    color: #818cf8;
-    margin: 0 0 24px 0;
-    letter-spacing: 1px;
+  .tech-console-box::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(0, 242, 254, 0.6), transparent);
+    animation: scan-line 4s linear infinite;
   }
 
-  .profile-desc {
-    font-family: 'Pretendard', sans-serif;
-    font-size: 1.08rem;
-    color: #849ca8;
+  @keyframes scan-line {
+    0% { transform: translateY(0); opacity: 0.2; }
+    50% { opacity: 0.8; }
+    100% { transform: translateY(180px); opacity: 0.2; }
+  }
+
+  .console-hdr {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-bottom: 1px solid rgba(0, 242, 254, 0.15);
+    padding-bottom: 10px;
+    margin-bottom: 15px;
+  }
+
+  .console-blink-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: #00f2fe;
+    box-shadow: 0 0 8px #00f2fe;
+    animation: blink 2s ease-in-out infinite;
+  }
+
+  .console-title {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.8rem;
+    color: #8fa0dd;
+    letter-spacing: 3px;
+    flex-grow: 1;
+  }
+
+  .console-stats {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.75rem;
+    color: #ff007f;
+    border: 1px solid rgba(255, 0, 127, 0.4);
+    padding: 1px 6px;
+    border-radius: 3px;
+    text-shadow: 0 0 5px rgba(255, 0, 127, 0.5);
+  }
+
+  .console-desc {
+    font-family: 'Share Tech Mono', 'Pretendard', monospace;
+    font-size: 1.05rem;
+    color: #8fa0dd;
     line-height: 1.8;
-    max-width: 520px;
     margin: 0;
     text-align: justify;
+    word-break: keep-all;
   }
 
-  /* Right Sidebar Menu Styles */
-  .right-nav-area {
-    display: flex;
-    justify-content: flex-end;
+  .highlight-cyan {
+    color: #00f2fe;
+    font-weight: bold;
+    text-shadow: 0 0 6px rgba(0, 242, 254, 0.4);
+  }
+
+  @keyframes blink {
+    0%, 100% { opacity: 0.4; }
+    50% { opacity: 1; }
+  }
+
+  /* --- Right Dynamic 3D Arena --- */
+  .right-panel {
+    position: relative;
+    height: 100%;
     width: 100%;
+    transform-style: preserve-3d;
+    transform: translateZ(30px);
   }
 
-  .top-nav-bar {
-    display: flex;
-    gap: 50px;
-    position: relative;
-    z-index: 10;
+  /* --- 1. PROJECTS Arena & 3D Node Tree --- */
+  .topology-arena {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0; left: 0;
+    transform-style: preserve-3d;
+    transition: transform 0.5s ease;
   }
 
-  .nav-item-container {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+  /* Glitch-shake trigger class */
+  .glitch-shake {
+    animation: glitch-shake-anim 0.38s ease-in-out;
+  }
+
+  @keyframes glitch-shake-anim {
+    0% { transform: translate(0, 0) skew(0deg); filter: hue-rotate(0deg) contrast(1); }
+    20% { transform: translate(-4px, 2px) skew(-2deg); filter: hue-rotate(45deg) contrast(1.3); }
+    40% { transform: translate(3px, -3px) skew(3deg); filter: hue-rotate(90deg) contrast(1.6); }
+    60% { transform: translate(-2px, -1px) skew(-1deg); filter: hue-rotate(180deg) contrast(1.1); }
+    80% { transform: translate(4px, 4px) skew(1deg); filter: hue-rotate(270deg) contrast(1.4); }
+    100% { transform: translate(0, 0) skew(0deg); filter: hue-rotate(360deg) contrast(1); }
+  }
+
+  .circuit-lines-svg {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .topology-line {
+    stroke: #00f2fe;
+    stroke-width: 2;
+    stroke-linecap: round;
+    opacity: 0;
+    stroke-dasharray: 400;
+    stroke-dashoffset: 400;
+    transition: all 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+    filter: drop-shadow(0 0 6px rgba(0, 242, 254, 0.8));
+  }
+
+  .topology-arena.active .topology-line {
+    opacity: 0.55;
+    stroke-dashoffset: 0;
+  }
+
+  /* 3D Cube Elements */
+  .master-cube-container {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%) translateZ(60px);
+    transform-style: preserve-3d;
     cursor: pointer;
+    z-index: 15;
+    transition: all 0.8s cubic-bezier(0.25, 1, 0.5, 1);
   }
-  
-  .book-icon-wrapper {
-    font-size: 2.3rem;
-    color: #cbd5e1;
-    width: 48px;
-    height: 48px;
+
+  .topology-arena.active .master-cube-container {
+    transform: translate(-50%, -50%) scale(0.8) translateZ(30px);
+  }
+
+  .cube {
+    position: relative;
+    transform-style: preserve-3d;
+  }
+
+  .master-cube {
+    width: 120px;
+    height: 120px;
+  }
+
+  .cube .face {
+    position: absolute;
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-bottom: 10px;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 900;
+    border: 2.5px solid #00f2fe;
+    background: rgba(11, 17, 30, 0.85);
+    box-shadow: 0 0 25px rgba(0, 242, 254, 0.5), inset 0 0 15px rgba(0, 242, 254, 0.2);
+    color: #00f2fe;
+    text-shadow: 0 0 8px rgba(0, 242, 254, 0.8);
+    transition: all 0.4s ease;
+  }
+
+  /* Master Cube faces */
+  .master-cube .face {
+    width: 120px;
+    height: 120px;
+  }
+
+  .master-cube .front  { transform: rotateY(  0deg) translateZ(60px); }
+  .master-cube .back   { transform: rotateY(180deg) translateZ(60px); }
+  .master-cube .right  { transform: rotateY( 90deg) translateZ(60px); }
+  .master-cube .left   { transform: rotateY(-90deg) translateZ(60px); }
+  .master-cube .top    { transform: rotateX( 90deg) translateZ(60px); }
+  .master-cube .bottom { transform: rotateX(-90deg) translateZ(60px); }
+
+  /* Subnodes definitions */
+  .subnode-cube-container {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%) scale(0) translate3d(0, 0, 0);
+    transform-style: preserve-3d;
+    cursor: pointer;
+    z-index: 12;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .topology-arena.active .subnode-cube-container {
+    transform: translate(-50%, -50%) scale(1) translate3d(var(--x), var(--y), 40px);
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .sub-cube {
+    width: 75px;
+    height: 75px;
+  }
+
+  .sub-cube .face {
+    width: 75px;
+    height: 75px;
+    font-size: 0.65rem;
+    border: 1.5px solid var(--color);
+    box-shadow: 0 0 15px var(--glow), inset 0 0 8px rgba(0, 242, 254, 0.1);
+    color: var(--color);
+    text-shadow: 0 0 6px var(--color);
+  }
+
+  .sub-cube .front  { transform: rotateY(  0deg) translateZ(37.5px); }
+  .sub-cube .back   { transform: rotateY(180deg) translateZ(37.5px); }
+  .sub-cube .right  { transform: rotateY( 90deg) translateZ(37.5px); }
+  .sub-cube .left   { transform: rotateY(-90deg) translateZ(37.5px); }
+  .sub-cube .top    { transform: rotateX( 90deg) translateZ(37.5px); }
+  .sub-cube .bottom { transform: rotateX(-90deg) translateZ(37.5px); }
+
+  .sub-cube:hover .face {
+    border-color: #ff007f;
+    color: #ff007f;
+    box-shadow: 0 0 25px rgba(255, 0, 127, 0.8), inset 0 0 10px rgba(255, 0, 127, 0.2);
+    text-shadow: 0 0 8px rgba(255, 0, 127, 0.8);
+  }
+
+  .node-label {
+    position: absolute;
+    bottom: -30px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.72rem;
+    color: #8fa0dd;
+    letter-spacing: 2px;
+    white-space: nowrap;
+    text-shadow: 0 0 5px rgba(143, 160, 221, 0.5);
+  }
+
+  /* Master Hologram beam ring overlay */
+  .holo-ring-arena {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%) rotateX(75deg);
+    width: 250px;
+    height: 250px;
+    border: 1px solid rgba(0, 242, 254, 0.15);
+    border-radius: 50%;
+    pointer-events: none;
+    transition: all 0.5s ease;
+  }
+  .topology-arena.active .holo-ring-arena {
+    width: 480px;
+    height: 480px;
+    border-color: rgba(0, 242, 254, 0.25);
+    box-shadow: 0 0 25px rgba(0, 242, 254, 0.1);
+  }
+
+  /* --- Zoom in & Hide node rules --- */
+  .topology-arena.zoomed .subnode-cube-container:not(.selected) {
+    opacity: 0 !important;
+    transform: translate(-50%, -50%) scale(0) !important;
+    pointer-events: none;
+  }
+
+  .topology-arena.zoomed .master-cube-container {
+    opacity: 0 !important;
+    transform: translate(-50%, -50%) scale(0) !important;
+    pointer-events: none;
+  }
+
+  .topology-arena.zoomed .topology-line {
+    opacity: 0 !important;
+  }
+
+  .topology-arena.zoomed .holo-ring-arena {
+    opacity: 0 !important;
+  }
+
+  .topology-arena.zoomed .selected {
+    transform: translate(-50%, -50%) scale(2.2) translate3d(0, -60px, 120px) !important;
+    left: 50%;
+    top: 35%;
+    z-index: 1000;
+  }
+
+  /* --- 2. TECH Arena Grid --- */
+  .tech-stack-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    height: 100%;
+    width: 100%;
+    padding: 40px;
+    box-sizing: border-box;
+    align-content: center;
+  }
+
+  .tech-card {
+    background: rgba(6, 12, 29, 0.55);
+    border: 1px solid rgba(143, 160, 221, 0.18);
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+    transition: all 0.3s ease;
+    transform-style: preserve-3d;
+    cursor: default;
+  }
+
+  .tech-card:hover {
+    border-color: var(--card-color);
+    box-shadow: 0 15px 30px rgba(0,0,0,0.6), 0 0 15px rgba(var(--rgb), 0.25);
+    transform: translate3d(0, -5px, 20px);
+  }
+
+  .tech-card-title {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1.15rem;
+    font-weight: 700;
+    margin: 0 0 10px 0;
+    color: #ffffff;
+    letter-spacing: 1px;
+  }
+
+  .tech-card:hover .tech-card-title {
+    color: var(--card-color);
+    text-shadow: 0 0 8px rgba(var(--rgb), 0.5);
+  }
+
+  .tech-card-desc {
+    font-family: 'Pretendard', sans-serif;
+    font-size: 0.88rem;
+    color: #8fa0dd;
+    line-height: 1.6;
+    margin: 0 0 15px 0;
+    text-align: justify;
+  }
+
+  .tech-card-tag {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.72rem;
+    color: #ff007f;
+    letter-spacing: 1px;
+  }
+
+  /* --- 3. BLOG Arena --- */
+  .blog-list-container {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    padding: 30px 40px;
+    box-sizing: border-box;
+  }
+
+  .blog-file-item {
+    background: rgba(6, 12, 29, 0.65);
+    border: 1px solid rgba(0, 242, 254, 0.15);
+    border-radius: 6px;
+    padding: 14px 20px;
+    display: flex;
+    gap: 15px;
+    cursor: pointer;
+    font-family: 'Share Tech Mono', monospace;
     transition: all 0.3s ease;
   }
 
-  .nav-item-container:hover .book-icon-wrapper {
-    color: #818cf8;
-    transform: translateY(-3px);
-  }
-  
-  .menu-link {
-    font-family: 'Orbitron', sans-serif;
-    font-size: 1.1rem;
-    font-weight: 700;
-    color: #849ca8;
-    text-decoration: none !important;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    transition: all 0.3s;
-    text-shadow: 0 0 5px rgba(132, 156, 168, 0.2);
+  .blog-file-item:hover, .blog-file-item.active {
+    border-color: #00f2fe;
+    box-shadow: 0 0 12px rgba(0, 242, 254, 0.25);
+    background: rgba(0, 242, 254, 0.04);
   }
 
-  .nav-item-container:hover .menu-link {
-    color: #818cf8;
-    text-shadow: 0 0 10px rgba(129, 140, 248, 0.6);
+  .file-icon {
+    color: #ff007f;
+    text-shadow: 0 0 5px rgba(255, 0, 127, 0.4);
   }
 
-  /* Flat Mega Menu Dropdown */
-  .mega-dropdown {
+  .file-name {
+    color: #ffffff;
+    letter-spacing: 1px;
+  }
+
+  .blog-file-item:hover .file-name, .blog-file-item.active .file-name {
+    color: #00f2fe;
+    text-shadow: 0 0 5px rgba(0, 242, 254, 0.5);
+  }
+
+  .blog-console-view {
+    margin: 15px 40px 30px 40px;
+    background: rgba(6, 12, 29, 0.85);
+    border: 1px solid rgba(0, 242, 254, 0.25);
+    border-radius: 8px;
+    padding: 16px;
+    box-shadow: inset 0 0 15px rgba(0,242,254,0.05);
+    height: 180px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .blog-console-view .console-body {
+    flex-grow: 1;
+    overflow-y: auto;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.85rem;
+    color: #8fa0dd;
+    line-height: 1.5;
+    white-space: pre-wrap;
+    padding-top: 10px;
+  }
+
+  /* --- Holographic Tech Report Panel overlay --- */
+  .hologram-panel {
     position: absolute;
-    top: 90px;
+    top: 55%;
+    left: 4%;
+    right: 4%;
+    bottom: 4%;
+    background: rgba(11, 17, 30, 0.95);
+    border: 2px solid #00f2fe;
+    border-radius: 12px;
+    box-shadow: 0 0 30px rgba(0, 242, 254, 0.45), inset 0 0 20px rgba(0, 242, 254, 0.15);
+    z-index: 2000;
     opacity: 0;
-    transform: translateY(-15px);
+    transform: translateY(30px) scale(0.96);
     visibility: hidden;
-    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-    z-index: 100;
-    pointer-events: none;
-    transform-origin: top center;
-  }
-
-  .mega-dropdown.horizontal-mode {
-    width: max-content;
+    transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    padding: 24px;
     display: flex;
-    flex-direction: row;
-    justify-content: flex-start;
-    gap: 20px;
-    padding: 10px 0;
+    flex-direction: column;
+    box-sizing: border-box;
   }
 
-  .nav-item-container:hover .mega-dropdown {
+  .hologram-panel.active {
     opacity: 1;
-    transform: translateY(0);
+    transform: translateY(0) scale(1);
     visibility: visible;
-    pointer-events: auto;
-  }
-  
-  .mega-dropdown .list-item {
-    width: 290px;
-    background: rgba(15, 23, 42, 0.5) !important;
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    border: 1px solid rgba(255, 255, 255, 0.06) !important;
-    border-radius: 10px !important;
-    padding: 24px !important;
-    box-shadow: 0 15px 35px rgba(0,0,0,0.5) !important;
-    transition: all 0.3s ease !important;
-    text-decoration: none !important;
-    display: block !important;
-    text-align: left !important;
   }
 
-  .mega-dropdown .list-item:hover {
-    border-color: rgba(129, 140, 248, 0.4) !important;
-    background: rgba(15, 23, 42, 0.8) !important;
-    transform: translateY(-4px) !important;
-    box-shadow: 0 20px 40px rgba(0,0,0,0.6), 0 0 15px rgba(129, 140, 248, 0.15) !important;
-  }
-
-  .mega-dropdown .list-title {
-    font-family: 'Pretendard', 'Orbitron', sans-serif !important;
-    color: #ffffff !important;
-    font-weight: 700 !important;
-    font-size: 1.1rem !important;
-    margin: 0 0 8px 0 !important;
-    letter-spacing: -0.5px !important;
-    text-shadow: none !important;
-  }
-
-  .mega-dropdown .list-desc {
-    font-family: 'Pretendard', sans-serif !important;
-    color: #849ca8 !important;
-    font-size: 0.88rem !important;
-    line-height: 1.5 !important;
-    margin: 0 0 16px 0 !important;
-  }
-
-  .mega-dropdown .tech-badges {
+  .panel-header {
     display: flex;
-    gap: 8px;
-    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(0, 242, 254, 0.25);
+    padding-bottom: 12px;
+    margin-bottom: 15px;
   }
 
-  .mega-dropdown .tech-badges span {
-    background: rgba(129, 140, 248, 0.12) !important;
-    color: #a5b4fc !important;
-    border: 1px solid rgba(129, 140, 248, 0.25) !important;
-    border-radius: 20px !important;
-    font-family: 'Share Tech Mono', monospace !important;
-    font-size: 0.72rem !important;
-    padding: 3px 10px !important;
-    font-weight: 600 !important;
+  .panel-tag {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.82rem;
+    color: #00f2fe;
+    letter-spacing: 2px;
+    text-shadow: 0 0 6px rgba(0, 242, 254, 0.5);
+  }
+
+  .close-panel-btn {
+    background: transparent;
+    border: none;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.85rem;
+    color: #ff007f;
+    cursor: pointer;
+    letter-spacing: 1px;
+    transition: all 0.3s ease;
+    text-shadow: 0 0 5px rgba(255, 0, 127, 0.5);
+  }
+
+  .close-panel-btn:hover {
+    color: #ffffff;
+    text-shadow: 0 0 10px #ffffff, 0 0 15px #ff007f;
+  }
+
+  .panel-body {
+    flex-grow: 1;
+    overflow-y: auto;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.88rem;
+    color: #cbd5e1;
+    line-height: 1.6;
+    padding-right: 10px;
+    text-align: left;
+  }
+
+  /* Technical Report elements */
+  .report-title {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1.18rem;
+    font-weight: 900;
+    color: #ffffff;
+    margin-top: 0;
+    margin-bottom: 18px;
+    border-left: 4px solid #ff007f;
+    padding-left: 12px;
+  }
+
+  .report-sec {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #00f2fe;
+    margin-top: 20px;
+    margin-bottom: 10px;
+    text-shadow: 0 0 5px rgba(0, 242, 254, 0.4);
+  }
+
+  .report-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .report-list li {
+    margin-bottom: 10px;
+    padding-left: 15px;
+    position: relative;
+  }
+
+  .report-list li::before {
+    content: '>';
+    position: absolute;
+    left: 0;
+    color: #ff007f;
+  }
+
+  .hl-cyan {
+    color: #00f2fe;
+    font-weight: bold;
+    text-shadow: 0 0 5px rgba(0, 242, 254, 0.5);
+  }
+
+  .hl-pink {
+    color: #ff007f;
+    font-weight: bold;
+    text-shadow: 0 0 5px rgba(255, 0, 127, 0.5);
   }
 
   @keyframes fadeSlideUp {
@@ -224,157 +790,609 @@ title: Home
   }
 
   @media (max-width: 992px) {
-    .abstract-layout {
+    body {
+      overflow-y: auto !important;
+      height: auto !important;
+    }
+    .cyber-header {
+      position: static;
+      height: auto;
+      flex-direction: column;
+      padding: 15px;
+      gap: 15px;
+    }
+    .cyber-footer {
+      position: static;
+      height: auto;
+      flex-direction: column;
+      padding: 15px;
+      gap: 15px;
+    }
+    .viewport-container {
+      margin-top: 20px;
+      height: auto;
       grid-template-columns: 1fr;
-      text-align: center;
-      gap: 50px;
+      padding: 0 20px 40px 20px;
     }
     .left-intro-area {
-      align-items: center;
       padding-right: 0;
     }
-    .right-nav-area {
-      justify-content: center;
+    .right-panel {
+      height: 480px;
+      margin-top: 40px;
     }
-    .top-nav-bar {
-      gap: 30px;
+    .tech-stack-container {
+      grid-template-columns: 1fr;
+      padding: 10px;
     }
-    .mega-dropdown {
-      left: 50%;
-      transform: translateX(-50%) translateY(-15px);
-    }
-    .nav-item-container:hover .mega-dropdown {
-      transform: translateX(-50%) translateY(0);
+    .hologram-panel {
+      top: 5%;
+      bottom: 5%;
+      left: 5%;
+      right: 5%;
+      height: 90%;
     }
   }
 </style>
 
-<div class="container-full" style="padding-bottom: 80px; min-height: calc(100vh - 80px); display: flex; align-items: center; position: relative;">
+<div class="noise-overlay"></div>
+
+<!-- Cyber Top Header -->
+<div class="cyber-header">
+  <div class="cyber-logo" id="logo-trigger">
+    KWON <span>EUN JI</span>
+  </div>
+  <div class="cyber-menu">
+    <a href="#" class="menu-btn active" id="btn-projects">[PROJECTS]</a>
+    <a href="#" class="menu-btn" id="btn-tech">[TECH]</a>
+    <a href="#" class="menu-btn" id="btn-blog">[BLOG]</a>
+  </div>
+</div>
+
+<!-- Main Interactive Viewport Container -->
+<div class="viewport-container">
   
-  <div class="container" style="max-width: 1200px !important; width: 95% !important; position: relative; z-index: 2;">
-    
-    <div class="abstract-layout">
-      
-      <!-- Left Profile Description Area -->
-      <div class="left-intro-area">
-        <span class="about-me-label">ABOUT ME</span>
-        <h1 class="profile-name">권은지</h1>
-        <h2 class="profile-job">System & Embedded</h2>
-        <p class="profile-desc">
-          하드웨어 제어와 시스템 소프트웨어의 경계를 허무는 엔지니어입니다. 신뢰성 높은 아키텍처와 최적화된 로직 구현에 집중합니다.
+  <!-- Left Side: Profile Intro Panel -->
+  <div class="left-intro-area">
+    <!-- Main Command Title click resets screen -->
+    <h1 class="hud-name-title" id="title-trigger">
+      <span class="cyan">ROOT@</span>KWONEUNJI<span class="pink">:~#</span> <span class="blink-cursor">_</span>
+    </h1>
+
+    <!-- Subtitle red/pink glow -->
+    <h2 class="hud-subtitle-pink">System & Embedded Architect</h2>
+
+    <!-- Translucent neon rounded edge FIRMWARE.LOG box -->
+    <div class="tech-console-box">
+      <div class="console-hdr">
+        <span class="console-blink-dot"></span>
+        <span class="console-title" id="console-hdr-title">FIRMWARE.LOG // CORE_INDEX</span>
+        <span class="console-stats">SYS_OK</span>
+      </div>
+      <div class="console-body">
+        <p class="console-desc" id="console-log-text">
+          <!-- Dynamically printed profile log -->
         </p>
       </div>
-      
-      <!-- Right Side Node Navigation -->
-      <div class="right-nav-area">
-        <div class="top-nav-bar">
-          
-          <!-- PROJECTS -->
-          <div class="nav-item-container">
-            <div class="book-icon-wrapper">
-              <i class="closed-book uil uil-book-open"></i>
-            </div>
-            <div class="menu-link">projects</div>
-            
-            <div class="mega-dropdown horizontal-mode" style="right: 0;">
-              <a href="{{ site.baseurl }}/safety-equipment-system" class="list-item">
-                <div class="list-content">
-                  <h4 class="list-title">스마트 화재 대피 유도 시스템</h4>
-                  <p class="list-desc">실시간 센서 데이터 기반 하드웨어 제어 및 최적 경로 탐색</p>
-                  <div class="tech-badges">
-                    <span>ESP32</span>
-                    <span>C/C++</span>
-                  </div>
-                </div>
-              </a>
-              <a href="{{ site.baseurl }}/safety-equipment-system" class="list-item">
-                <div class="list-content">
-                  <h4 class="list-title">C# 기반 마트 관리 시스템</h4>
-                  <p class="list-desc">객체 지향 설계(OOP) 기반의 안정적인 UI/UX 구축 및 연동</p>
-                  <div class="tech-badges">
-                    <span>C#</span>
-                    <span>WinForms</span>
-                  </div>
-                </div>
-              </a>
-            </div>
-          </div>
-          
-          <!-- TECH -->
-          <div class="nav-item-container">
-            <div class="book-icon-wrapper">
-              <i class="closed-book uil uil-mobile-android"></i>
-            </div>
-            <div class="menu-link">tech</div>
-            
-            <div class="mega-dropdown horizontal-mode" style="right: -100px;">
-              <div class="list-item">
-                <div class="list-content">
-                  <h4 class="list-title">C / C++</h4>
-                  <p class="list-desc">임베디드 시스템 펌웨어 제어 및 메모리 최적화</p>
-                  <div class="tech-badges">
-                    <span>STM32</span>
-                    <span>ESP32</span>
-                  </div>
-                </div>
-              </div>
-              <div class="list-item">
-                <div class="list-content">
-                  <h4 class="list-title">Python & SQL</h4>
-                  <p class="list-desc">데이터 전송 모니터링 및 알고리즘 구현</p>
-                  <div class="tech-badges">
-                    <span>Jupyter</span>
-                    <span>PostgreSQL</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          
-          <!-- BLOG -->
-          <div class="nav-item-container">
-            <div class="book-icon-wrapper">
-              <i class="closed-book uil uil-mobile-android"></i>
-            </div>
-            <div class="menu-link">blog</div>
-            
-            <div class="mega-dropdown horizontal-mode" style="right: -200px;">
-              <div class="list-item">
-                <div class="list-content">
-                  <h4 class="list-title">Embedded System</h4>
-                  <p class="list-desc">MCU 펌웨어 및 무선 프로토콜 개발 일지</p>
-                  <div class="tech-badges">
-                    <span>BLE</span>
-                    <span>SPP</span>
-                  </div>
-                </div>
-              </div>
-              <div class="list-item">
-                <div class="list-content">
-                  <h4 class="list-title">Study Notes</h4>
-                  <p class="list-desc">자료구조, 알고리즘 및 CS 학습 요약</p>
-                  <div class="tech-badges">
-                    <span>C++</span>
-                    <span>CS</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          
+    </div>
+  </div>
+
+  <!-- Right Side: 3D Interactive Cybernetic Arena -->
+  <div class="right-panel">
+    
+    <!-- 1. PROJECTS Mode Topology Map -->
+    <div class="topology-arena" id="projects-arena">
+      <!-- Background holographic sweep rings -->
+      <div class="holo-ring-arena"></div>
+
+      <!-- Network Circuit Connection Lines (SVG) -->
+      <svg class="circuit-lines-svg" viewBox="0 0 600 600" preserveAspectRatio="xMidYMid meet">
+        <line x1="300" y1="300" x2="150" y2="180" class="topology-line" id="line-safe" />
+        <line x1="300" y1="300" x2="450" y2="420" class="topology-line" id="line-mart" />
+        <line x1="300" y1="300" x2="450" y2="180" class="topology-line" id="line-guide" />
+      </svg>
+
+      <!-- Central MASTER HUB Cube -->
+      <div class="master-cube-container" id="projects-master-node">
+        <div class="cube master-cube">
+          <div class="face front">PROJECTS</div>
+          <div class="face back">PROJECTS</div>
+          <div class="face right">PROJECTS</div>
+          <div class="face left">PROJECTS</div>
+          <div class="face top"></div>
+          <div class="face bottom"></div>
+        </div>
+        <div class="node-label">MASTER_HUB</div>
+      </div>
+
+      <!-- SYS_SAFE Subnode -->
+      <div class="subnode-cube-container" id="node-sys-safe" style="--x: -150px; --y: -120px; --color: #00f2fe; --glow: rgba(0, 242, 254, 0.4);">
+        <div class="cube sub-cube" style="--color: #00f2fe; --glow: rgba(0, 242, 254, 0.45);">
+          <div class="face front">SYS_SAFE</div>
+          <div class="face back">SYS_SAFE</div>
+          <div class="face right">SYS_SAFE</div>
+          <div class="face left">SYS_SAFE</div>
+          <div class="face top"></div>
+          <div class="face bottom"></div>
+        </div>
+        <div class="node-label">SYS_SAFE</div>
+      </div>
+
+      <!-- MART_MGMT Subnode -->
+      <div class="subnode-cube-container" id="node-mart-mgmt" style="--x: 150px; --y: 120px; --color: #ff007f; --glow: rgba(255, 0, 127, 0.4);">
+        <div class="cube sub-cube" style="--color: #ff007f; --glow: rgba(255, 0, 127, 0.45);">
+          <div class="face front">MART_MGMT</div>
+          <div class="face back">MART_MGMT</div>
+          <div class="face right">MART_MGMT</div>
+          <div class="face left">MART_MGMT</div>
+          <div class="face top"></div>
+          <div class="face bottom"></div>
+        </div>
+        <div class="node-label">MART_MGMT</div>
+      </div>
+
+      <!-- EXIT_GUIDE Subnode -->
+      <div class="subnode-cube-container" id="node-exit-guide" style="--x: 150px; --y: -120px; --color: #00f2fe; --glow: rgba(0, 242, 254, 0.4);">
+        <div class="cube sub-cube" style="--color: #00f2fe; --glow: rgba(0, 242, 254, 0.45);">
+          <div class="face front">EXIT_GUIDE</div>
+          <div class="face back">EXIT_GUIDE</div>
+          <div class="face right">EXIT_GUIDE</div>
+          <div class="face left">EXIT_GUIDE</div>
+          <div class="face top"></div>
+          <div class="face bottom"></div>
+        </div>
+        <div class="node-label">EXIT_GUIDE</div>
+      </div>
+
+    </div>
+
+    <!-- 2. TECH Mode Stack Monitor -->
+    <div class="tech-arena" id="tech-arena" style="display: none; height: 100%; width: 100%;">
+      <div class="tech-stack-container">
+        <div class="tech-card" style="--card-color: #00f2fe; --rgb: 0, 242, 254;">
+          <h4 class="tech-card-title">C / C++</h4>
+          <p class="tech-card-desc">STM32 / ESP32 펌웨어 최적 제어, 메모리 포인터 세부 튜닝 및 하드웨어 가속 인터페이스 설계.</p>
+          <div class="tech-card-tag">[FIRMWARE_CORE]</div>
+        </div>
+        <div class="tech-card" style="--card-color: #ff007f; --rgb: 255, 0, 127;">
+          <h4 class="tech-card-title">C# .NET</h4>
+          <p class="tech-card-desc">OOP 설계 표준 준수, WinForms 비동기 트랜잭션 처리 UI 및 마트 플랫폼 시스템 연동.</p>
+          <div class="tech-card-tag">[SYSTEM_PLATFORM]</div>
+        </div>
+        <div class="tech-card" style="--card-color: #00f2fe; --rgb: 0, 242, 254;">
+          <h4 class="tech-card-title">Python</h4>
+          <p class="tech-card-desc">이동 평균 알고리즘 모의 모델 설계, 센서 수신 무선 프로토콜 시뮬레이션 및 데이터 시각화.</p>
+          <div class="tech-card-tag">[DATA_SIMULATOR]</div>
+        </div>
+        <div class="tech-card" style="--card-color: #ff007f; --rgb: 255, 0, 127;">
+          <h4 class="tech-card-title">PostgreSQL</h4>
+          <p class="tech-card-desc">고가용성 DB 인덱싱 최적화, 대량 트랜잭션 관리 설계 및 이중화 백업 파이프라인 수립.</p>
+          <div class="tech-card-tag">[RELATIONAL_DB]</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. BLOG Mode Catalog -->
+    <div class="blog-arena" id="blog-arena" style="display: none; height: 100%; width: 100%;">
+      <div class="blog-list-container">
+        <div class="blog-file-item" data-file="ble_spp_protocol.cfg">
+          <span class="file-icon">[CFG]</span>
+          <span class="file-name">ble_spp_protocol.cfg</span>
+        </div>
+        <div class="blog-file-item" data-file="filter_moving_average.cpp">
+          <span class="file-icon">[SRC]</span>
+          <span class="file-name">filter_moving_average.cpp</span>
+        </div>
+        <div class="blog-file-item" data-file="mcu_firmware_boot.log">
+          <span class="file-icon">[LOG]</span>
+          <span class="file-name">mcu_firmware_boot.log</span>
         </div>
       </div>
       
+      <div class="blog-console-view">
+        <div class="console-hdr">
+          <span class="console-blink-dot"></span>
+          <span class="console-title" id="blog-console-title">SYSTEM_READ_OUTPUT</span>
+        </div>
+        <div class="console-body" id="blog-console-content">// 로그 파일을 선택하시면 분석 원본 데이터 스트림이 이곳에 표시됩니다.</div>
+      </div>
     </div>
 
+    <!-- Holographic Floating Tech Report Overlay -->
+    <div class="hologram-panel" id="tech-report-panel">
+      <div class="panel-header">
+        <span class="panel-tag" id="panel-report-tag">// DETAILED_REPORT: DEPLOY_STREAM</span>
+        <button class="close-panel-btn" id="close-report-btn">[CLOSE_PANEL]</button>
+      </div>
+      <div class="panel-body" id="report-text-content">
+        <!-- Interactive technical report gets printed here -->
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+<!-- Cyber Bottom Footer -->
+<div class="cyber-footer">
+  <div class="footer-status">// SECURE_TUNNEL: SYS_PASS // PORT: 8080</div>
+  <div class="footer-links">
+    <a href="https://github.com/eunji021" target="_blank" class="footer-btn">[GITHUB]</a>
+    <a href="mailto:gwun012@naver.com" class="footer-btn">[EMAIL]</a>
+    <a href="{{ site.url }}{{ site.baseurl }}/" class="footer-btn">[RETURN TO HOME]</a>
   </div>
 </div>
 
 <script>
-  // Simple page load animations or core transitions if required
+  // Technical report data models
+  const reportData = {
+    sys_safe: `<h2 class="report-title"><span class="hl-pink">🛠️ 공사장 안전장비 실시간 착용여부 관제 시스템</span> (IoT Safety Gateway)</h2>
+<h3 class="report-sec">// 1. Overview</h3>
+<ul class="report-list">
+  <li><strong>My Role:</strong> <span class="hl-cyan">SYSTEM & EMBEDDED ARCHITECT</span> (권은지)</li>
+  <li><strong>Core:</strong> <span class="hl-cyan">ESP32</span> 마스터 중계기 게이트웨이 파이프라인 설계, 데이터 패킹/파싱 프로토콜 구현, 앱 인벤터 모바일 앱 개발.</li>
+  <li><strong>Tech Stack:</strong> C/C++ (Arduino), <span class="hl-cyan">ESP32</span>, BLE 4.2 / SPP, MPU6050, FSR Sensor</li>
+</ul>
+<h3 class="report-sec">// 2. System Architecture (핵심 기여)</h3>
+<ul class="report-list">
+  <li><strong>문제 정의:</strong> 앱 인벤터 특성상 다중 BLE 노드 동시 연결 시 데이터 병목 및 끊김 발생.</li>
+  <li><strong>해결 방안:</strong> <span class="hl-cyan">ESP32</span> 1대를 '마스터 게이트웨이(Gateway)'로 중간에 배치하여 네트워크 홉(Hop) 분리. 센서 데이터를 중계기가 실시간 취합·패킹하여 앱과 단일 SPP 채널로 안정적 통신 성공. (2인 데이터 완벽 관제)</li>
+  <li><strong>프로토콜:</strong> <span class="hl-pink">[Worker_ID],[Helmet_Status],[Vest_Status],[Gyro_Data]\\n</span> 스트림 설계.</li>
+</ul>
+<h3 class="report-sec">// 3. Troubleshooting & Engineering Feats</h3>
+<ul class="report-list">
+  <li><strong>Issue 1 (RSSI 신호 튐 및 오작동):</strong> 현장 장애물 노이즈로 기기 착용 중에도 부저가 울리는 버그 발생.
+  <br>&nbsp;&nbsp;&rarr; <strong>해결책:</strong> 연속 RSSI 데이터 10개를 처리하는 <span class="hl-pink">[이동 평균(Moving Average) 필터 알고리즘]</span>을 C++ 코드로 직접 구현하여 신뢰도 95% 이상 확보.</li>
+  <li><strong>Issue 2 (현장 신호 혼선 예방):</strong> 다중 작업자 환경 고려, 고유 MAC 주소 기반의 <span class="hl-cyan">[화이트리스트 2차 필터링 사설망]</span> 구조 설계로 혼선 원천 차단.</li>
+</ul>`,
+
+    mart_mgmt: `<h2 class="report-title"><span class="hl-pink">🛒 C# 기반 마트 관리 시스템</span> (Mart Management Platform)</h2>
+<h3 class="report-sec">// 1. Overview</h3>
+<ul class="report-list">
+  <li><strong>My Role:</strong> <span class="hl-cyan">SOFTWARE ENGINEER</span> (권은지)</li>
+  <li><strong>Core:</strong> 객체 지향 설계(OOP) 기반의 안정적인 UI/UX 구축 및 MSSQL 데이터베이스 연동 파이프라인 설계.</li>
+  <li><strong>Tech Stack:</strong> C#, .NET Framework, WinForms, MSSQL</li>
+</ul>
+<h3 class="report-sec">// 2. Key Architecture</h3>
+<ul class="report-list">
+  <li><strong>디자인 패턴:</strong> MVC(Model-View-Controller) 아키텍처를 도입하여 비즈니스 로직과 화면 UI 간의 결합도를 완벽 차단, 높은 유지보수성 확보.</li>
+  <li><strong>데이터 트랜잭션:</strong> 실시간 상품 재고 증감 및 바코드 리더 인터페이스 통신을 위한 안정적인 비동기 쿼리 스레드 모델 구축.</li>
+</ul>`,
+
+    exit_guide: `<h2 class="report-title"><span class="hl-pink">🔥 스마트 화재 대피 유도 시스템</span> (Smart Evacuation Guide)</h2>
+<h3 class="report-sec">// 1. Overview</h3>
+<ul class="report-list">
+  <li><strong>My Role:</strong> <span class="hl-cyan">SYSTEM ARCHITECT</span> (권은지)</li>
+  <li><strong>Core:</strong> 실시간 화재 센서 데이터 수집 게이트웨이 및 가중치 다익스트라(Dijkstra) 알고리즘 설계.</li>
+  <li><strong>Tech Stack:</strong> C/C++, <span class="hl-cyan">ESP32</span>, Fire Sensors, LED Guide Modules</li>
+</ul>
+<h3 class="report-sec">// 2. Algorithmic Innovation</h3>
+<ul class="report-list">
+  <li><strong>최적 대피 경로 계산:</strong> 화재 발생 노드 센서값에 실시간 가중치를 부여하여 유해 가스 구역을 자동 우회하는 동적 네비게이션 설계.</li>
+  <li><strong>LED 제어 파이프라인:</strong> 물리 비상등 LED 패널 방향을 ESP32 직렬 제어로 실시간 동기화하여 화재 현장 가시성 확보.</li>
+</ul>`
+  };
+
+  const blogFileData = {
+    'ble_spp_protocol.cfg': `# BLE Serial Port Profile (SPP) Custom Protocol Definitions
+DEVICE_NAME = "IoT_Safety_Gateway"
+PROTOCOL_HEADER = 0xAA
+PROTOCOL_FOOTER = 0x0A
+
+STREAM_FORMAT = [Worker_ID],[Helmet_Status],[Vest_Status],[Gyro_Data]
+TRANSMIT_INTERVAL = 50ms  # Ultra-low latency transmission
+WHITELIST_FILTER_ENABLED = TRUE`,
+
+    'filter_moving_average.cpp': `#include <Arduino.h>
+
+// RSSI Moving Average Filter for Noise Reduction
+float calculateMovingAverage(int newRssi, int* buffer, int size) {
+    long sum = 0;
+    for (int i = 0; i < size - 1; i++) {
+        buffer[i] = buffer[i + 1]; // Shift registers
+        sum += buffer[i];
+    }
+    buffer[size - 1] = newRssi;
+    sum += newRssi;
+    return (float)sum / size;
+}`,
+
+    'mcu_firmware_boot.log': `[BOOT] Init ESP32 Core... OK
+[BOOT] Frequency Set: 240MHz
+[INIT] BLE Stack 4.2 Initialized.
+[INIT] SPP over BLE Virtual Serial Port: Bound to channel 1.
+[NETW] Secure Local Server Listening on ESP32_AP...
+[PASS] System status diagnostics check: PASS.`
+  };
+
+  const profileLogText = "하드웨어 제어와 시스템 소프트웨어의 경계를 허무는 엔지니어입니다. 신뢰성 높은 아키텍처와 최적화된 로직 구현에 집중합니다.";
+
+  let activeTypewriterTimeout = null;
+
+  // Safe typewriter function supporting nested HTML nodes
+  function typeWriterHTML(element, htmlContent, speed, callback) {
+    if (activeTypewriterTimeout) {
+      clearTimeout(activeTypewriterTimeout);
+    }
+    element.innerHTML = "";
+    let i = 0;
+    let currentHTML = "";
+
+    function step() {
+      if (i < htmlContent.length) {
+        if (htmlContent[i] === "<") {
+          let tagEnd = htmlContent.indexOf(">", i);
+          if (tagEnd !== -1) {
+            currentHTML += htmlContent.substring(i, tagEnd + 1);
+            i = tagEnd + 1;
+          } else {
+            currentHTML += htmlContent[i];
+            i++;
+          }
+        } else {
+          currentHTML += htmlContent[i];
+          i++;
+        }
+        element.innerHTML = currentHTML;
+        element.scrollTop = element.scrollHeight;
+        activeTypewriterTimeout = setTimeout(step, speed);
+      } else {
+        if (callback) callback();
+      }
+    }
+    step();
+  }
+
+  // Print left telemetry profile log
+  function printProfileLog() {
+    const consoleBody = document.getElementById("console-log-text");
+    const consoleHdr = document.getElementById("console-hdr-title");
+    consoleHdr.innerText = "FIRMWARE.LOG // CORE_INDEX";
+    
+    let formattedText = profileLogText
+      .replace("하드웨어 제어", '<span class="highlight-cyan">하드웨어 제어</span>')
+      .replace("시스템 소프트웨어", '<span class="highlight-cyan">시스템 소프트웨어</span>');
+
+    typeWriterHTML(consoleBody, formattedText, 25);
+  }
+
+  // Switch between Projects, Tech, and Blog modes
+  function switchMode(mode) {
+    // Switch active navigation highlighting
+    document.querySelectorAll('.menu-btn').forEach(btn => btn.classList.remove('active'));
+    document.getElementById(`btn-${mode.toLowerCase()}`).classList.add('active');
+
+    // Trigger visual cyber glitch flash
+    const rightPanel = document.querySelector('.right-panel');
+    rightPanel.classList.remove('glitch-shake');
+    void rightPanel.offsetWidth; // Reflow to re-trigger CSS keyframe
+    rightPanel.classList.add('glitch-shake');
+
+    // Hide all mode arenas
+    document.getElementById('projects-arena').style.display = 'none';
+    document.getElementById('tech-arena').style.display = 'none';
+    document.getElementById('blog-arena').style.display = 'none';
+
+    // Reset report panel and node tree states
+    closeTechReport();
+
+    // Show selected arena
+    const activeArena = document.getElementById(`${mode.toLowerCase()}-arena`);
+    activeArena.style.display = 'block';
+
+    if (mode === 'PROJECTS') {
+      resetTopologyTree();
+    }
+  }
+
+  // Close holographic report popups
+  function closeTechReport() {
+    const reportPanel = document.getElementById('tech-report-panel');
+    const topologyArena = document.getElementById('projects-arena');
+    
+    reportPanel.classList.remove('active');
+    topologyArena.classList.remove('zoomed');
+
+    document.querySelectorAll('.subnode-cube-container').forEach(node => {
+      node.classList.remove('selected');
+    });
+
+    if (activeTypewriterTimeout) {
+      clearTimeout(activeTypewriterTimeout);
+    }
+  }
+
+  // Reset topology nodes to default folded state
+  function resetTopologyTree() {
+    const arena = document.getElementById('projects-arena');
+    arena.classList.remove('active');
+    arena.classList.remove('zoomed');
+    document.querySelectorAll('.subnode-cube-container').forEach(node => {
+      node.classList.remove('selected');
+    });
+  }
+
   document.addEventListener("DOMContentLoaded", () => {
-    // Fade in effect
-    document.body.style.transition = "opacity 0.5s ease";
-    document.body.style.opacity = "1";
+    // Init default profile print out
+    printProfileLog();
+
+    // Reset/Left Profile Triggers
+    document.getElementById('title-trigger').addEventListener('click', () => {
+      printProfileLog();
+      switchMode('PROJECTS');
+    });
+    
+    document.getElementById('logo-trigger').addEventListener('click', () => {
+      printProfileLog();
+      switchMode('PROJECTS');
+    });
+
+    // Top Navigation switches
+    document.getElementById('btn-projects').addEventListener('click', (e) => {
+      e.preventDefault();
+      switchMode('PROJECTS');
+    });
+    document.getElementById('btn-tech').addEventListener('click', (e) => {
+      e.preventDefault();
+      switchMode('TECH');
+    });
+    document.getElementById('btn-blog').addEventListener('click', (e) => {
+      e.preventDefault();
+      switchMode('BLOG');
+    });
+
+    // PROJECTS EVENT: Clicking Master Hub folds/unfolds subnode tree
+    const masterHub = document.getElementById('projects-master-node');
+    const projectsArena = document.getElementById('projects-arena');
+
+    masterHub.addEventListener('click', () => {
+      if (!projectsArena.classList.contains('active')) {
+        // Trigger glitch vibration
+        projectsArena.classList.add('glitch-shake');
+        setTimeout(() => projectsArena.classList.remove('glitch-shake'), 400);
+
+        projectsArena.classList.add('active');
+      } else {
+        resetTopologyTree();
+      }
+    });
+
+    // PROJECTS EVENT: Clicking Subnodes triggers zoom-in and Technical Report typewriter
+    const subnodes = document.querySelectorAll('.subnode-cube-container');
+    const reportPanel = document.getElementById('tech-report-panel');
+    const reportBody = document.getElementById('report-text-content');
+    const reportTag = document.getElementById('panel-report-tag');
+
+    subnodes.forEach(node => {
+      node.addEventListener('click', () => {
+        const nodeId = node.id;
+        const projectKey = nodeId.replace('node-', '').replace('-', '_');
+
+        // Flag as selected subnode
+        subnodes.forEach(n => n.classList.remove('selected'));
+        node.classList.add('selected');
+
+        // Zoom-in topology arena
+        projectsArena.classList.add('zoomed');
+
+        // Load technical report
+        const reportContent = reportData[projectKey];
+        if (reportContent) {
+          reportTag.innerText = `// DETAILED_REPORT: ${projectKey.toUpperCase()}`;
+          reportPanel.classList.add('active');
+          typeWriterHTML(reportBody, reportContent, 8);
+          
+          // Print action details on left telemetry logs
+          const consoleBody = document.getElementById("console-log-text");
+          const consoleHdr = document.getElementById("console-hdr-title");
+          consoleHdr.innerText = "FIRMWARE.LOG // SYS_EVENT_LOG";
+          consoleBody.innerHTML = `[EVENT] Connected node: <span class="highlight-cyan">${projectKey.toUpperCase()}</span>.<br>[EVENT] Executed technical report streaming pipeline.<br>[STATUS] Buffer loading... <span class="highlight-cyan">OK</span>`;
+        }
+      });
+    });
+
+    // Report Panel Closer
+    document.getElementById('close-report-btn').addEventListener('click', () => {
+      closeTechReport();
+    });
+
+    // BLOG EVENT: Clicking catalog items types out source outputs in blog console
+    const blogItems = document.querySelectorAll('.blog-file-item');
+    const blogConsoleContent = document.getElementById('blog-console-content');
+    const blogConsoleTitle = document.getElementById('blog-console-title');
+
+    blogItems.forEach(item => {
+      item.addEventListener('click', () => {
+        blogItems.forEach(i => i.classList.remove('active'));
+        item.classList.add('active');
+
+        const fileName = item.getAttribute('data-file');
+        const fileContent = blogFileData[fileName];
+
+        if (fileContent) {
+          blogConsoleTitle.innerText = `SYSTEM_READ_OUTPUT // ${fileName.toUpperCase()}`;
+          typeWriterHTML(blogConsoleContent, fileContent, 5);
+        }
+      });
+    });
+
+    // Continuous 3D rotation loops for Master Hub & Subnode Cubes
+    const cubes = document.querySelectorAll('.cube');
+    let angleX = 0;
+    let angleY = 0;
+
+    function spinCubes() {
+      angleX += 0.4;
+      angleY += 0.6;
+      
+      cubes.forEach(cube => {
+        // If parent topology is zoomed and this node is selected, hold rotation slightly for clarity
+        const parentNode = cube.closest('.subnode-cube-container');
+        if (parentNode && parentNode.classList.contains('selected')) {
+          cube.style.transform = `rotateX(15deg) rotateY(${angleY * 0.3}deg)`;
+        } else {
+          cube.style.transform = `rotateX(${angleX}deg) rotateY(${angleY}deg)`;
+        }
+      });
+      requestAnimationFrame(spinCubes);
+    }
+    requestAnimationFrame(spinCubes);
+
+    // Viewport-wide 3D cursor tracking tilt mechanics
+    const viewport = document.querySelector('.viewport-container');
+    const globalBody = document.body;
+
+    if (viewport && globalBody) {
+      globalBody.addEventListener('mousemove', (e) => {
+        const rect = globalBody.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+
+        const centerX = rect.width / 2;
+        const centerY = rect.height / 2;
+
+        const rotateX = 8 + ((y - centerY) / centerY) * -8; // Balanced 8deg swing
+        const rotateY = -10 + ((x - centerX) / centerX) * 8;
+
+        viewport.style.transform = `perspective(1500px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+      });
+
+      globalBody.addEventListener('mouseleave', () => {
+        viewport.style.transition = 'transform 0.8s cubic-bezier(0.25, 0.8, 0.25, 1)';
+        viewport.style.transform = 'perspective(1500px) rotateX(8deg) rotateY(-10deg)';
+      });
+
+      globalBody.addEventListener('mouseenter', () => {
+        viewport.style.transition = 'transform 0.1s ease-out';
+      });
+    }
+
+    // 3D Tilt Card transitions on TECH Grid
+    const cards = document.querySelectorAll('.tech-card');
+    cards.forEach(card => {
+      card.addEventListener('mouseenter', () => {
+        card.style.transition = 'transform 0.1s ease-out, border-color 0.3s, box-shadow 0.3s';
+      });
+
+      card.addEventListener('mousemove', (e) => {
+        const rect = card.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+
+        const centerX = rect.width / 2;
+        const centerY = rect.height / 2;
+
+        const tiltX = ((y - centerY) / centerY) * -10;
+        const tiltY = ((x - centerX) / centerX) * 10;
+
+        card.style.transform = `perspective(800px) rotateX(${tiltX}deg) rotateY(${tiltY}deg) translate3d(0, -5px, 20px)`;
+      });
+
+      card.addEventListener('mouseleave', () => {
+        card.style.transition = 'transform 0.5s cubic-bezier(0.25, 0.8, 0.25, 1), border-color 0.3s, box-shadow 0.3s';
+        card.style.transform = 'perspective(800px) rotateX(0deg) rotateY(0deg) translate3d(0, 0, 0)';
+      });
+    });
+
   });
 </script>
