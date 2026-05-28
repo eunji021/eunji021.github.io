@@ -9,44 +9,14 @@ title: Home
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Share+Tech+Mono&display=swap');
 
-  /* Global Scrollbar Reset for Cyberpunk Theme */
-  ::-webkit-scrollbar {
-    width: 6px;
-    height: 6px;
-  }
-  ::-webkit-scrollbar-track {
-    background: #020308;
-  }
-  ::-webkit-scrollbar-thumb {
-    background: rgba(0, 242, 254, 0.4);
-    border-radius: 3px;
-    box-shadow: 0 0 8px rgba(0, 242, 254, 0.6);
-  }
-
-  /* Strict Cyberpunk Dark Grid Theme Overrides */
-  html, body {
-    background-color: #0b111e !important;
-    background-image: 
-      radial-gradient(circle at 50% 50%, rgba(15, 23, 42, 0.6) 0%, #0b111e 100%),
-      linear-gradient(rgba(0, 242, 254, 0.05) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(0, 242, 254, 0.05) 1px, transparent 1px) !important;
-    background-size: 100% 100%, 30px 30px, 30px 30px !important;
+  /* Absolute Flat Dark Portfolio Theme */
+  body {
+    background-color: #060814 !important;
+    background: radial-gradient(circle at 50% 50%, #0c0f1d 0%, #060814 100%) !important;
     color: #94a3b8 !important;
-    font-family: 'Share Tech Mono', 'Pretendard', sans-serif !important;
-    min-height: 100vh !important;
-    overflow-x: hidden !important;
-    margin: 0 !important;
-    padding: 0 !important;
-  }
-
-  /* Noise Overlay */
-  .noise-overlay {
-    position: fixed;
-    top: 0; left: 0; width: 100vw; height: 100vh;
-    pointer-events: none;
-    z-index: 1;
-    opacity: 0.05;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+    font-family: 'Share Tech Mono', 'Pretendard', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
   }
 
   /* Layout Structure */
@@ -55,299 +25,55 @@ title: Home
     grid-template-columns: 46% 54%;
     gap: 40px;
     align-items: center;
-    min-height: 75vh;
-    margin-top: 40px;
-    transform-style: preserve-3d;
-    perspective: 1500px;
-    transform: rotateX(8deg) rotateY(-10deg);
-    transition: transform 0.1s ease-out;
+    min-height: 72vh;
+    margin-top: 60px;
   }
-  
+
   /* Left Main Profile Area */
   .left-intro-area {
     padding-right: 30px;
-    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
     animation: fadeSlideUp 0.8s cubic-bezier(0.25, 0.8, 0.25, 1) forwards;
-    transform-style: preserve-3d;
-    transform: translateZ(50px);
   }
 
-  /* 3D Hologram Cube Container */
-  .hologram-cube-container {
-    position: relative;
-    width: 140px;
-    height: 140px;
-    margin: 0 auto 30px auto;
-    perspective: 800px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 5;
-    transform: translateZ(30px);
-  }
-
-  .cube {
-    width: 60px;
-    height: 60px;
-    position: relative;
-    transform-style: preserve-3d;
-    transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg);
-  }
-
-  .cube .face {
-    position: absolute;
-    width: 60px;
-    height: 60px;
-    border: 1px solid rgba(0, 242, 254, 0.6);
-    background: rgba(0, 242, 254, 0.03);
-    box-shadow: 0 0 15px rgba(0, 242, 254, 0.3), inset 0 0 10px rgba(0, 242, 254, 0.1);
-    backdrop-filter: blur(1px);
-    -webkit-backdrop-filter: blur(1px);
-  }
-
-  .cube .face::after {
-    content: '';
-    position: absolute;
-    top: 50%; left: 50%;
-    width: 6px; height: 6px;
-    background: #ff007f;
-    border-radius: 50%;
-    transform: translate(-50%, -50%);
-    box-shadow: 0 0 10px #ff007f;
-  }
-
-  /* 3D transforms for faces */
-  .cube .front  { transform: rotateY(  0deg) translateZ(30px); }
-  .cube .back   { transform: rotateY(180deg) translateZ(30px); }
-  .cube .right  { transform: rotateY( 90deg) translateZ(30px); }
-  .cube .left   { transform: rotateY(-90deg) translateZ(30px); }
-  .cube .top    { transform: rotateX( 90deg) translateZ(30px); }
-  .cube .bottom { transform: rotateX(-90deg) translateZ(30px); }
-
-  /* Holographic projector beam */
-  .holo-beam {
-    position: absolute;
-    bottom: -15px;
-    width: 80px;
-    height: 90px;
-    background: linear-gradient(to top, rgba(0, 242, 254, 0.15) 0%, transparent 80%);
-    clip-path: polygon(25% 100%, 75% 100%, 100% 0%, 0% 0%);
-    transform: rotateX(180deg);
-    pointer-events: none;
-  }
-
-  .holo-rings {
-    position: absolute;
-    width: 150px;
-    height: 150px;
-    transform-style: preserve-3d;
-    transform: rotateX(75deg);
-    pointer-events: none;
-  }
-
-  .holo-rings .ring {
-    position: absolute;
-    top: 0; left: 0; width: 100%; height: 100%;
-    border: 1px solid rgba(0, 242, 254, 0.3);
-    border-radius: 50%;
-    box-shadow: 0 0 10px rgba(0, 242, 254, 0.2);
-  }
-
-  .holo-rings .ring-1 {
-    animation: ring-pulse-1 3s ease-out infinite;
-  }
-  .holo-rings .ring-2 {
-    animation: ring-pulse-2 3s ease-out infinite;
-    animation-delay: 1.5s;
-  }
-
-  @keyframes ring-pulse-1 {
-    0% { transform: scale(0.3); opacity: 1; }
-    100% { transform: scale(1.2); opacity: 0; }
-  }
-  @keyframes ring-pulse-2 {
-    0% { transform: scale(0.3); opacity: 1; }
-    100% { transform: scale(1.2); opacity: 0; }
-  }
-
-  /* Background Radar System */
-  .radar-bg {
-    position: absolute;
-    top: 25%;
-    left: 50%;
-    transform: translate(-50%, -50%) rotateX(70deg) rotateZ(0deg) translateZ(-60px);
-    transform-style: preserve-3d;
-    width: 440px;
-    height: 440px;
-    pointer-events: none;
-    z-index: -1;
-    opacity: 0.15;
-    filter: drop-shadow(0 0 12px rgba(0, 242, 254, 0.2));
-  }
-
-  .radar-circle {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    border: 1px solid rgba(0, 242, 254, 0.15);
-    border-radius: 50%;
-    transform: translate(-50%, -50%);
-  }
-  .circle-1 { width: 120px; height: 120px; }
-  .circle-2 { width: 260px; height: 260px; border-style: dashed; }
-  .circle-3 { width: 400px; height: 400px; }
-
-  .radar-sweep {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    border-radius: 50%;
-    background: conic-gradient(from 0deg, rgba(0, 242, 254, 0.1) 0deg, transparent 120deg, transparent 360deg);
-    animation: radar-sweep-animation 10s linear infinite;
-  }
-
-  @keyframes radar-sweep-animation {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
-  }
-
-  /* HUD Branding Typography */
-  .about-me-label-3d {
-    font-family: 'Share Tech Mono', monospace;
-    font-size: 0.85rem;
-    letter-spacing: 4px;
-    color: #ff007f;
-    text-shadow: 0 0 8px rgba(255, 0, 127, 0.4);
-    margin-bottom: 15px;
-    display: inline-block;
-  }
-
-  .profile-name-3d {
+  .about-me-label {
     font-family: 'Orbitron', sans-serif;
-    font-size: clamp(2.4rem, 4.5vw, 3.8rem);
-    font-weight: 900;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin: 15px 0 10px 0;
-    letter-spacing: 2px;
-  }
-
-  .name-kwon-eun {
-    background-color: #004cff;
-    color: #ffffff;
-    padding: 6px 18px;
-    box-shadow: 0 0 20px rgba(0, 76, 255, 0.7);
-    border-radius: 2px;
-    display: inline-block;
-  }
-
-  .name-ji {
-    color: #00f2fe;
-    border: 2px solid #00f2fe;
-    padding: 4px 18px;
-    box-shadow: 0 0 20px rgba(0, 242, 254, 0.7), inset 0 0 10px rgba(0, 242, 254, 0.4);
-    border-radius: 2px;
-    display: inline-block;
-    text-shadow: 0 0 8px rgba(0, 242, 254, 0.8);
-  }
-
-  .profile-job-3d {
-    font-family: 'Orbitron', sans-serif;
-    font-size: 1.05rem;
+    font-size: 0.95rem;
     font-weight: 700;
-    color: #ff007f;
-    letter-spacing: 4px;
-    text-shadow: 0 0 8px rgba(255, 0, 127, 0.6);
-    margin-top: 12px;
-    margin-bottom: 25px;
+    color: #818cf8;
+    letter-spacing: 3px;
     text-transform: uppercase;
   }
 
-  /* Glassmorphism Telemetry Console */
-  .tech-console-box {
-    background: rgba(6, 12, 29, 0.6) !important;
-    backdrop-filter: blur(14px) !important;
-    -webkit-backdrop-filter: blur(14px) !important;
-    border: 1px solid rgba(0, 242, 254, 0.25) !important;
-    border-radius: 10px;
-    padding: 24px;
-    box-shadow: 0 15px 35px rgba(0,0,0,0.6), inset 0 0 20px rgba(0, 242, 254, 0.05);
-    position: relative;
-    overflow: hidden;
-    margin-top: 10px;
-    transform: translateZ(40px);
+  .profile-name {
+    font-family: 'Pretendard', sans-serif;
+    font-size: clamp(3.2rem, 5.5vw, 4.4rem);
+    font-weight: 900;
+    color: #ffffff;
+    margin: 12px 0 6px 0;
+    letter-spacing: -1px;
+    line-height: 1.1;
   }
 
-  .tech-console-box::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; width: 100%; height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(0, 242, 254, 0.6), transparent);
-    animation: scan-line 4s linear infinite;
+  .profile-job {
+    font-family: 'Orbitron', sans-serif;
+    font-size: clamp(1.6rem, 2.8vw, 2.2rem);
+    font-weight: 700;
+    color: #818cf8;
+    margin: 0 0 24px 0;
+    letter-spacing: 1px;
   }
 
-  @keyframes scan-line {
-    0% { transform: translateY(0); opacity: 0.2; }
-    50% { opacity: 0.8; }
-    100% { transform: translateY(180px); opacity: 0.2; }
-  }
-
-  .console-hdr {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    border-bottom: 1px solid rgba(0, 242, 254, 0.15);
-    padding-bottom: 10px;
-    margin-bottom: 15px;
-  }
-
-  .console-blink-dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background-color: #00f2fe;
-    box-shadow: 0 0 8px #00f2fe;
-    animation: blink 2s ease-in-out infinite;
-  }
-
-  .console-title {
-    font-family: 'Share Tech Mono', monospace;
-    font-size: 0.8rem;
-    color: #8fa0dd;
-    letter-spacing: 3px;
-    flex-grow: 1;
-  }
-
-  .console-stats {
-    font-family: 'Share Tech Mono', monospace;
-    font-size: 0.75rem;
-    color: #ff007f;
-    border: 1px solid rgba(255, 0, 127, 0.4);
-    padding: 1px 6px;
-    border-radius: 3px;
-    text-shadow: 0 0 5px rgba(255, 0, 127, 0.5);
-  }
-
-  .console-desc {
-    font-family: 'Share Tech Mono', 'Pretendard', monospace;
-    font-size: 1.05rem;
-    color: #8fa0dd;
+  .profile-desc {
+    font-family: 'Pretendard', sans-serif;
+    font-size: 1.08rem;
+    color: #849ca8;
     line-height: 1.8;
+    max-width: 520px;
     margin: 0;
     text-align: justify;
-    word-break: keep-all;
-  }
-
-  .highlight-cyan {
-    color: #00f2fe;
-    font-weight: bold;
-    text-shadow: 0 0 6px rgba(0, 242, 254, 0.4);
-  }
-
-  @keyframes blink {
-    0%, 100% { opacity: 0.4; }
-    50% { opacity: 1; }
   }
 
   /* Right Sidebar Menu Styles */
@@ -355,8 +81,6 @@ title: Home
     display: flex;
     justify-content: flex-end;
     width: 100%;
-    transform-style: preserve-3d;
-    transform: translateZ(30px);
   }
 
   .top-nav-bar {
@@ -374,88 +98,49 @@ title: Home
     cursor: pointer;
   }
   
-  /* CSS-drawn Glowing Custom Device Outline Icon */
-  .menu-icon-box {
-    width: 24px;
-    height: 38px;
-    border: 2px solid #00f2fe;
-    border-radius: 4px;
-    position: relative;
-    box-shadow: 0 0 10px rgba(0, 242, 254, 0.6), inset 0 0 6px rgba(0, 242, 254, 0.3);
-    margin-bottom: 12px;
+  .book-icon-wrapper {
+    font-size: 2.3rem;
+    color: #cbd5e1;
+    width: 48px;
+    height: 48px;
     display: flex;
     justify-content: center;
     align-items: center;
-    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-  }
-
-  .menu-icon-box::before {
-    content: '';
-    position: absolute;
-    top: 4px;
-    width: 8px;
-    height: 2px;
-    background-color: #00f2fe;
-    border-radius: 1px;
-    box-shadow: 0 0 5px rgba(0, 242, 254, 0.8);
+    margin-bottom: 10px;
     transition: all 0.3s ease;
   }
 
-  .menu-icon-box::after {
-    content: '';
-    position: absolute;
-    bottom: 4px;
-    width: 6px;
-    height: 6px;
-    border: 1px solid #00f2fe;
-    border-radius: 1px;
-    box-shadow: 0 0 5px rgba(0, 242, 254, 0.8);
-    transition: all 0.3s ease;
+  .nav-item-container:hover .book-icon-wrapper {
+    color: #818cf8;
+    transform: translateY(-3px);
   }
-
-  .nav-item-container:hover .menu-icon-box {
-    border-color: #ff007f;
-    box-shadow: 0 0 15px rgba(255, 0, 127, 0.8), inset 0 0 8px rgba(255, 0, 127, 0.4);
-    transform: translateY(-3px) scale(1.08);
-  }
-
-  .nav-item-container:hover .menu-icon-box::before {
-    background-color: #ff007f;
-    box-shadow: 0 0 8px rgba(255, 0, 127, 0.8);
-  }
-
-  .nav-item-container:hover .menu-icon-box::after {
-    border-color: #ff007f;
-    box-shadow: 0 0 8px rgba(255, 0, 127, 0.8);
-  }
-
-  .menu-link-3d {
+  
+  .menu-link {
     font-family: 'Orbitron', sans-serif;
-    font-size: 1.2rem;
+    font-size: 1.1rem;
     font-weight: 700;
-    color: #8fa0dd;
+    color: #849ca8;
     text-decoration: none !important;
     text-transform: uppercase;
-    letter-spacing: 3px;
-    transition: all 0.3s ease;
-    text-shadow: 0 0 5px rgba(143, 160, 221, 0.2);
+    letter-spacing: 2px;
+    transition: all 0.3s;
+    text-shadow: 0 0 5px rgba(132, 156, 168, 0.2);
   }
 
-  .nav-item-container:hover .menu-link-3d {
-    color: #ffffff;
-    text-shadow: 0 0 10px rgba(0, 242, 254, 0.8), 0 0 20px rgba(0, 242, 254, 0.4);
+  .nav-item-container:hover .menu-link {
+    color: #818cf8;
+    text-shadow: 0 0 10px rgba(129, 140, 248, 0.6);
   }
 
-  /* Mega Menu Dropdown overlay centered beautifully */
+  /* Flat Mega Menu Dropdown */
   .mega-dropdown {
     position: absolute;
     top: 90px;
-    left: 50%;
-    transform: translateX(-50%) translateY(-20px) scale(0.98);
     opacity: 0;
+    transform: translateY(-15px);
     visibility: hidden;
-    transition: all 0.5s cubic-bezier(0.25, 1, 0.5, 1);
-    z-index: 1000;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    z-index: 100;
     pointer-events: none;
     transform-origin: top center;
   }
@@ -466,46 +151,36 @@ title: Home
     flex-direction: row;
     justify-content: flex-start;
     gap: 20px;
-    padding: 15px 15px 25px 15px; /* Margin to ensure 3D card tilt scale doesn't clip */
+    padding: 10px 0;
   }
 
   .nav-item-container:hover .mega-dropdown {
     opacity: 1;
-    transform: translateX(-50%) translateY(0) scale(1);
+    transform: translateY(0);
     visibility: visible;
     pointer-events: auto;
   }
-
-  /* 3D Glassmorphism Cards in Dropdown */
+  
   .mega-dropdown .list-item {
-    width: 300px;
-    flex-shrink: 0;
-    position: relative;
-    overflow: hidden;
-    transform-style: preserve-3d;
-    will-change: transform;
-    background: rgba(6, 12, 29, 0.65) !important;
-    backdrop-filter: blur(20px) !important;
-    -webkit-backdrop-filter: blur(20px) !important;
-    border: 1px solid rgba(0, 242, 254, 0.2) !important;
-    border-radius: 12px !important;
-    box-shadow: 0 15px 35px rgba(0,0,0,0.6), inset 0 0 15px rgba(0, 242, 254, 0.05) !important;
-    transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1) !important;
+    width: 290px;
+    background: rgba(15, 23, 42, 0.5) !important;
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.06) !important;
+    border-radius: 10px !important;
     padding: 24px !important;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.5) !important;
+    transition: all 0.3s ease !important;
     text-decoration: none !important;
     display: block !important;
     text-align: left !important;
   }
 
-  .mega-dropdown .list-item .list-content {
-    transform: translateZ(25px);
-    pointer-events: none;
-  }
-
   .mega-dropdown .list-item:hover {
-    background: rgba(6, 12, 29, 0.85) !important;
-    border-color: rgba(0, 242, 254, 0.75) !important;
-    box-shadow: 0 20px 40px rgba(0,0,0,0.7), 0 0 25px rgba(0, 242, 254, 0.4), inset 0 0 15px rgba(0, 242, 254, 0.1) !important;
+    border-color: rgba(129, 140, 248, 0.4) !important;
+    background: rgba(15, 23, 42, 0.8) !important;
+    transform: translateY(-4px) !important;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.6), 0 0 15px rgba(129, 140, 248, 0.15) !important;
   }
 
   .mega-dropdown .list-title {
@@ -533,9 +208,9 @@ title: Home
   }
 
   .mega-dropdown .tech-badges span {
-    background: rgba(0, 242, 254, 0.12) !important;
-    color: #00f2fe !important;
-    border: 1px solid rgba(0, 242, 254, 0.3) !important;
+    background: rgba(129, 140, 248, 0.12) !important;
+    color: #a5b4fc !important;
+    border: 1px solid rgba(129, 140, 248, 0.25) !important;
     border-radius: 20px !important;
     font-family: 'Share Tech Mono', monospace !important;
     font-size: 0.72rem !important;
@@ -566,77 +241,28 @@ title: Home
     }
     .mega-dropdown {
       left: 50%;
-      transform: translateX(-50%) translateY(-20px) scale(0.95);
+      transform: translateX(-50%) translateY(-15px);
     }
     .nav-item-container:hover .mega-dropdown {
-      transform: translateX(-50%) translateY(0) scale(1);
-    }
-    .radar-bg {
-      width: 320px;
-      height: 320px;
+      transform: translateX(-50%) translateY(0);
     }
   }
 </style>
 
-<div class="noise-overlay"></div>
 <div class="container-full" style="padding-bottom: 80px; min-height: calc(100vh - 80px); display: flex; align-items: center; position: relative;">
   
   <div class="container" style="max-width: 1200px !important; width: 95% !important; position: relative; z-index: 2;">
     
     <div class="abstract-layout">
       
-      <!-- Left Main Profile Area with 3D Hologram Radar -->
+      <!-- Left Profile Description Area -->
       <div class="left-intro-area">
-        <!-- Background Radar concentric rings -->
-        <div class="radar-bg">
-          <div class="radar-sweep"></div>
-          <div class="radar-circle circle-1"></div>
-          <div class="radar-circle circle-2"></div>
-          <div class="radar-circle circle-3"></div>
-        </div>
-
-        <!-- 3D Spinning Hologram Cube -->
-        <div class="hologram-cube-container">
-          <div class="cube">
-            <div class="face front"></div>
-            <div class="face back"></div>
-            <div class="face right"></div>
-            <div class="face left"></div>
-            <div class="face top"></div>
-            <div class="face bottom"></div>
-          </div>
-          <div class="holo-beam"></div>
-          <div class="holo-rings">
-            <div class="ring ring-1"></div>
-            <div class="ring ring-2"></div>
-          </div>
-        </div>
-
-        <!-- Active Protocol tag -->
-        <span class="about-me-label-3d">[ SYSTEM PROTOCOL: ACTIVE ]</span>
-
-        <!-- Brand Name Logo -->
-        <h1 class="profile-name-3d">
-          <span class="name-kwon-eun">KWON EUN</span>
-          <span class="name-ji">JI</span>
-        </h1>
-
-        <!-- High-tech Subtitle -->
-        <h2 class="profile-job-3d">System & Embedded Architect</h2>
-
-        <!-- Telemetry Translucent Console Log -->
-        <div class="tech-console-box">
-          <div class="console-hdr">
-            <span class="console-blink-dot"></span>
-            <span class="console-title">FIRMWARE.LOG // CORE_INDEX</span>
-            <span class="console-stats">SYS_OK</span>
-          </div>
-          <div class="console-body">
-            <p class="console-desc">
-              <span class="highlight-cyan">하드웨어 제어</span>와 <span class="highlight-cyan">시스템 소프트웨어</span>의 경계를 허무는 엔지니어입니다. 신뢰성 높은 아키텍처와 최적화된 로직 구현에 집중합니다.
-            </p>
-          </div>
-        </div>
+        <span class="about-me-label">ABOUT ME</span>
+        <h1 class="profile-name">권은지</h1>
+        <h2 class="profile-job">System & Embedded</h2>
+        <p class="profile-desc">
+          하드웨어 제어와 시스템 소프트웨어의 경계를 허무는 엔지니어입니다. 신뢰성 높은 아키텍처와 최적화된 로직 구현에 집중합니다.
+        </p>
       </div>
       
       <!-- Right Side Node Navigation -->
@@ -645,11 +271,12 @@ title: Home
           
           <!-- PROJECTS -->
           <div class="nav-item-container">
-            <!-- Custom CSS-drawn device icon -->
-            <div class="menu-icon-box"></div>
-            <div class="menu-link-3d">projects</div>
+            <div class="book-icon-wrapper">
+              <i class="closed-book uil uil-book-open"></i>
+            </div>
+            <div class="menu-link">projects</div>
             
-            <div class="mega-dropdown horizontal-mode">
+            <div class="mega-dropdown horizontal-mode" style="right: 0;">
               <a href="{{ site.baseurl }}/safety-equipment-system" class="list-item">
                 <div class="list-content">
                   <h4 class="list-title">스마트 화재 대피 유도 시스템</h4>
@@ -675,11 +302,12 @@ title: Home
           
           <!-- TECH -->
           <div class="nav-item-container">
-            <!-- Custom CSS-drawn device icon -->
-            <div class="menu-icon-box"></div>
-            <div class="menu-link-3d">tech</div>
+            <div class="book-icon-wrapper">
+              <i class="closed-book uil uil-mobile-android"></i>
+            </div>
+            <div class="menu-link">tech</div>
             
-            <div class="mega-dropdown horizontal-mode">
+            <div class="mega-dropdown horizontal-mode" style="right: -100px;">
               <div class="list-item">
                 <div class="list-content">
                   <h4 class="list-title">C / C++</h4>
@@ -705,11 +333,12 @@ title: Home
           
           <!-- BLOG -->
           <div class="nav-item-container">
-            <!-- Custom CSS-drawn device icon -->
-            <div class="menu-icon-box"></div>
-            <div class="menu-link-3d">blog</div>
+            <div class="book-icon-wrapper">
+              <i class="closed-book uil uil-mobile-android"></i>
+            </div>
+            <div class="menu-link">blog</div>
             
-            <div class="mega-dropdown horizontal-mode">
+            <div class="mega-dropdown horizontal-mode" style="right: -200px;">
               <div class="list-item">
                 <div class="list-content">
                   <h4 class="list-title">Embedded System</h4>
@@ -742,113 +371,10 @@ title: Home
 </div>
 
 <script>
+  // Simple page load animations or core transitions if required
   document.addEventListener("DOMContentLoaded", () => {
-    // 3D Cube continuous rotation with micro-jitter
-    const cube = document.querySelector('.cube');
-    let rx = 0;
-    let ry = 0;
-    let rz = 0;
-    let targetRx = 0;
-    let targetRy = 0;
-    let hoverState = false;
-
-    function animateCube() {
-      if (!hoverState) {
-        rx += 0.4;
-        ry += 0.6;
-        rz += 0.2;
-      } else {
-        // Smoothly interpolate to hover locking angles
-        rx += (targetRx - rx) * 0.08;
-        ry += (targetRy - ry) * 0.08;
-        rz += (0 - rz) * 0.08;
-      }
-
-      if (cube) {
-        cube.style.transform = `rotateX(${rx}deg) rotateY(${ry}deg) rotateZ(${rz}deg)`;
-      }
-      requestAnimationFrame(animateCube);
-    }
-    requestAnimationFrame(animateCube);
-
-    // Dynamic Cube state change on menu item hover
-    const navItems = document.querySelectorAll('.nav-item-container');
-    navItems.forEach((item, index) => {
-      item.addEventListener('mouseenter', () => {
-        hoverState = true;
-        // Lock cube to specific isometric sensor monitoring angles based on index
-        if (index === 0) { // Projects
-          targetRx = 45;
-          targetRy = 45;
-        } else if (index === 1) { // Tech
-          targetRx = -45;
-          targetRy = 45;
-        } else { // Blog
-          targetRx = 0;
-          targetRy = 90;
-        }
-      });
-
-      item.addEventListener('mouseleave', () => {
-        hoverState = false;
-      });
-    });
-
-    // Entire Page 3D Layout Tilt
-    const layout = document.querySelector('.abstract-layout');
-    const container = document.querySelector('.container-full');
-    
-    if (layout && container) {
-      container.addEventListener('mousemove', (e) => {
-        const rect = container.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-        
-        const centerX = rect.width / 2;
-        const centerY = rect.height / 2;
-        
-        // Tilt relative to base offset rotateX(8deg) rotateY(-10deg)
-        const rotateX = 8 + ((y - centerY) / centerY) * -10; // Max 10deg swing
-        const rotateY = -10 + ((x - centerX) / centerX) * 10;
-        
-        layout.style.transform = `perspective(1500px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
-      });
-      
-      container.addEventListener('mouseleave', () => {
-        layout.style.transition = 'transform 0.8s cubic-bezier(0.25, 0.8, 0.25, 1)';
-        layout.style.transform = 'perspective(1500px) rotateX(8deg) rotateY(-10deg)';
-      });
-      
-      container.addEventListener('mouseenter', () => {
-        layout.style.transition = 'transform 0.1s ease-out';
-      });
-    }
-
-    // 3D Tilt Effect for dropdown list-items
-    const cards = document.querySelectorAll('.list-item');
-    cards.forEach(card => {
-      card.addEventListener('mouseenter', () => {
-        card.style.transition = 'transform 0.1s ease-out, background 0.3s, border-color 0.3s, box-shadow 0.3s';
-      });
-
-      card.addEventListener('mousemove', (e) => {
-        const rect = card.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-        
-        const centerX = rect.width / 2;
-        const centerY = rect.height / 2;
-        
-        const rotateX = ((y - centerY) / centerY) * -8;
-        const rotateY = ((x - centerX) / centerX) * 8;
-        
-        card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.03, 1.03, 1.03)`;
-      });
-      
-      card.addEventListener('mouseleave', () => {
-        card.style.transition = 'transform 0.5s cubic-bezier(0.25, 0.8, 0.25, 1), background 0.3s, border-color 0.3s, box-shadow 0.3s';
-        card.style.transform = `perspective(1000px) rotateX(0) rotateY(0) scale3d(1, 1, 1)`;
-      });
-    });
+    // Fade in effect
+    document.body.style.transition = "opacity 0.5s ease";
+    document.body.style.opacity = "1";
   });
 </script>
