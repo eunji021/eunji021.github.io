@@ -9,6 +9,16 @@ title: Home
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Share+Tech+Mono&display=swap');
 
+  /* Force Midnight Dark Grid Theme bypassing compile fallbacks */
+  body {
+    background-color: #0b111e !important;
+    background: radial-gradient(circle at 50% 50%, #0b111e 0%, #070b14 100%) !important;
+    background-image: linear-gradient(rgba(0, 242, 254, 0.05) 1px, transparent 1px),
+                      linear-gradient(90deg, rgba(0, 242, 254, 0.05) 1px, transparent 1px) !important;
+    background-size: 30px 30px !important;
+    color: #849ca8 !important;
+  }
+
   /* Global Scrollbar Reset for Cyberpunk Theme */
   ::-webkit-scrollbar {
     width: 6px;
