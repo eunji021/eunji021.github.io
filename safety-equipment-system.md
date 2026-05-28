@@ -4,125 +4,699 @@ title: "중계기 기반 실시간 공사장 안전장비 제어 시스템"
 category: embedded-hardware-projects
 ---
 
-<div class="container" style="max-width: 950px; padding: 60px 20px;">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800;900&family=Share+Tech+Mono&display=swap');
 
-  <a href="{{ site.baseurl }}/" style="color: #00f2fe; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; margin-bottom: 32px; font-weight: 600; font-family: 'Share Tech Mono', monospace; transition: all 0.3s; text-shadow: 0 0 5px rgba(0, 242, 254, 0.4);">
+  /* Technical Cockpit Console Wrapper */
+  .cockpit-container {
+    max-width: 1400px;
+    width: 95%;
+    margin: 40px auto;
+    padding: 30px;
+    background: rgba(11, 17, 32, 0.85);
+    border: 1px solid rgba(0, 242, 254, 0.25);
+    border-radius: 12px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.8), inset 0 0 30px rgba(0, 242, 254, 0.03);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    position: relative;
+    overflow: hidden;
+    font-family: 'Share Tech Mono', 'Pretendard', sans-serif;
+    color: #cbd5e1;
+  }
+
+  .cockpit-container::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background-image: 
+      linear-gradient(rgba(0, 242, 254, 0.015) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0, 242, 254, 0.015) 1px, transparent 1px);
+    background-size: 20px 20px;
+    pointer-events: none;
+  }
+
+  /* Return dashboard link */
+  .cmd-return-btn {
+    color: #00f2fe;
+    text-decoration: none !important;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 24px;
+    font-weight: 600;
+    transition: all 0.3s;
+    text-shadow: 0 0 8px rgba(0, 242, 254, 0.5);
+    border: 1px dashed rgba(0, 242, 254, 0.3);
+    padding: 6px 14px;
+    border-radius: 4px;
+    background: rgba(0, 242, 254, 0.03);
+  }
+  .cmd-return-btn:hover {
+    color: #ffffff;
+    background: rgba(0, 242, 254, 0.15);
+    border-color: #00f2fe;
+    box-shadow: 0 0 15px rgba(0, 242, 254, 0.4);
+    transform: translateX(-3px);
+  }
+
+  /* Control Tower Header */
+  .control-tower-header {
+    border: 1px solid rgba(0, 242, 254, 0.4);
+    border-top: 4px solid #00f2fe;
+    background: rgba(6, 10, 23, 0.9);
+    padding: 16px 24px;
+    border-radius: 6px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+    flex-wrap: wrap;
+    gap: 15px;
+  }
+
+  .gateway-status-panel {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .pulse-led {
+    width: 10px;
+    height: 10px;
+    background-color: #10b981;
+    border-radius: 50%;
+    box-shadow: 0 0 10px #10b981, 0 0 20px rgba(16, 185, 129, 0.5);
+    animation: led-blink 1.8s ease-in-out infinite;
+  }
+
+  .gateway-label {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.9rem;
+    color: #10b981;
+    letter-spacing: 2px;
+    text-shadow: 0 0 8px rgba(16, 185, 129, 0.4);
+    font-weight: bold;
+  }
+
+  .project-master-title {
+    font-family: 'Orbitron', sans-serif;
+    font-size: clamp(1.2rem, 2.5vw, 1.8rem);
+    font-weight: 800;
+    color: #ffffff;
+    margin: 0;
+    letter-spacing: 1px;
+    text-shadow: 0 0 12px rgba(0, 242, 254, 0.4);
+    text-transform: uppercase;
+  }
+
+  /* 3D Hardware Topology Graph Block */
+  .topology-card {
+    background: rgba(6, 12, 29, 0.6);
+    border: 1px solid rgba(0, 242, 254, 0.2);
+    border-radius: 10px;
+    padding: 24px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+    position: relative;
+    height: 100%;
+    min-height: 480px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .panel-title {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #00f2fe;
+    letter-spacing: 2px;
+    margin-bottom: 20px;
+    text-shadow: 0 0 8px rgba(0, 242, 254, 0.3);
+    border-bottom: 1px dashed rgba(0, 242, 254, 0.15);
+    padding-bottom: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .panel-title span {
+    color: #ff007f;
+    font-size: 0.8rem;
+  }
+
+  /* SVG Topology Mapping & Flow Nodes */
+  .topology-view {
+    position: relative;
+    flex-grow: 1;
+    display: grid;
+    grid-template-columns: 28% 44% 28%;
+    align-items: center;
+    justify-content: space-between;
+    height: 380px;
+    z-index: 5;
+  }
+
+  .topology-svg-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .nodes-col {
+    display: flex;
+    flex-direction: column;
+    gap: 50px;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    z-index: 2;
+  }
+
+  .topo-node {
+    background: rgba(13, 22, 43, 0.75);
+    border: 1px solid rgba(0, 242, 254, 0.35);
+    border-radius: 8px;
+    padding: 14px 18px;
+    width: 100%;
+    max-width: 180px;
+    box-shadow: 0 0 15px rgba(0, 242, 254, 0.1), inset 0 0 10px rgba(0, 242, 254, 0.05);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    transition: all 0.3s ease;
+    text-align: left;
+  }
+
+  .topo-node:hover {
+    border-color: #00f2fe;
+    box-shadow: 0 0 20px rgba(0, 242, 254, 0.4), inset 0 0 12px rgba(0, 242, 254, 0.15);
+    transform: translateY(-3px);
+  }
+
+  .node-tag {
+    font-size: 0.65rem;
+    color: #ff007f;
+    text-shadow: 0 0 5px rgba(255,0,127,0.3);
+    font-weight: bold;
+    display: block;
+    margin-bottom: 4px;
+    letter-spacing: 1px;
+  }
+
+  .node-name {
+    font-size: 0.82rem;
+    color: #ffffff;
+    font-weight: bold;
+    margin-bottom: 4px;
+  }
+
+  .node-sensor {
+    font-size: 0.72rem;
+    color: #8fa0dd;
+  }
+
+  /* Node customization for Central Master Gateway & Client App */
+  .topo-node.master-gateway {
+    border-color: rgba(255, 0, 127, 0.5);
+    box-shadow: 0 0 20px rgba(255, 0, 127, 0.15), inset 0 0 12px rgba(255, 0, 127, 0.05);
+    max-width: 220px;
+  }
+  .topo-node.master-gateway:hover {
+    border-color: #ff007f;
+    box-shadow: 0 0 25px rgba(255, 0, 127, 0.4), inset 0 0 15px rgba(255, 0, 127, 0.15);
+  }
+
+  .topo-node.client-app {
+    border-color: rgba(16, 185, 129, 0.4);
+    box-shadow: 0 0 15px rgba(16, 185, 129, 0.1), inset 0 0 10px rgba(16, 185, 129, 0.03);
+  }
+  .topo-node.client-app:hover {
+    border-color: #10b981;
+    box-shadow: 0 0 20px rgba(16, 185, 129, 0.4), inset 0 0 15px rgba(16, 185, 129, 0.15);
+  }
+
+  /* Moving Data Packets flow paths styling */
+  .flow-line {
+    fill: none;
+    stroke: rgba(0, 242, 254, 0.2);
+    stroke-width: 2;
+    stroke-dasharray: 6 4;
+  }
+
+  .flow-pulse {
+    fill: none;
+    stroke: #00f2fe;
+    stroke-width: 3;
+    stroke-linecap: round;
+    stroke-dasharray: 10 90;
+    stroke-dashoffset: 100;
+    animation: flow-run 3.5s linear infinite;
+  }
+  .flow-pulse.pulse-alt {
+    stroke: #ff007f;
+    animation-delay: 1.75s;
+  }
+
+  .flow-line-main {
+    fill: none;
+    stroke: rgba(255, 0, 127, 0.25);
+    stroke-width: 2.5;
+  }
+  .flow-pulse-main {
+    fill: none;
+    stroke: #ff007f;
+    stroke-width: 3.5;
+    stroke-linecap: round;
+    stroke-dasharray: 15 150;
+    stroke-dashoffset: 165;
+    animation: flow-run 2.8s linear infinite;
+  }
+
+  /* Control Console styling */
+  .console-card {
+    background: rgba(2, 4, 10, 0.85);
+    border: 1px solid rgba(255, 0, 127, 0.3);
+    border-radius: 10px;
+    padding: 24px;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.7), inset 0 0 20px rgba(255, 0, 127, 0.04);
+    font-family: 'Share Tech Mono', monospace;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+
+  .terminal-box {
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(255, 0, 127, 0.15);
+    border-radius: 6px;
+    padding: 16px;
+    flex-grow: 1;
+    overflow-y: auto;
+    font-size: 0.8rem;
+    color: #e2e8f0;
+    max-height: 380px;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 0, 127, 0.3) rgba(0, 0, 0, 0.2);
+  }
+
+  .terminal-box::-webkit-scrollbar {
+    width: 4px;
+  }
+  .terminal-box::-webkit-scrollbar-thumb {
+    background: rgba(255, 0, 127, 0.4);
+    border-radius: 2px;
+  }
+
+  .cmd-line {
+    color: #ff007f;
+    margin-bottom: 6px;
+  }
+  .cmd-resp {
+    color: #8fa0dd;
+    margin-bottom: 12px;
+    line-height: 1.5;
+    text-align: justify;
+  }
+
+  .highlight-terminal {
+    color: #00f2fe;
+    text-shadow: 0 0 5px rgba(0,242,254,0.3);
+  }
+
+  /* Code view inside console */
+  .code-viewer {
+    background: #020308;
+    border: 1px solid rgba(0, 242, 254, 0.2);
+    border-radius: 4px;
+    padding: 12px;
+    margin: 10px 0;
+    overflow-x: auto;
+    font-size: 0.72rem;
+    color: #a5b4fc;
+    line-height: 1.4;
+  }
+
+  /* Bottom Telemetry Gauges section */
+  .telemetry-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 30px;
+    margin-top: 30px;
+  }
+
+  .telemetry-card {
+    background: rgba(6, 12, 29, 0.6);
+    border: 1px solid rgba(0, 242, 254, 0.2);
+    border-radius: 10px;
+    padding: 24px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    min-height: 240px;
+  }
+
+  /* Circular Neon Gauge */
+  .gauge-wrapper {
+    position: relative;
+    width: 120px;
+    height: 120px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 15px;
+  }
+
+  .gauge-svg {
+    transform: rotate(-90deg);
+    width: 100%;
+    height: 100%;
+  }
+
+  .gauge-bg-circle {
+    fill: none;
+    stroke: rgba(0, 242, 254, 0.1);
+    stroke-width: 8;
+  }
+
+  .gauge-fill-circle {
+    fill: none;
+    stroke: #00f2fe;
+    stroke-width: 8;
+    stroke-dasharray: 314;
+    stroke-dashoffset: 314;
+    stroke-linecap: round;
+    box-shadow: 0 0 10px #00f2fe;
+    animation: gauge-draw 2s cubic-bezier(0.1, 0.8, 0.25, 1) forwards;
+  }
+
+  .gauge-value {
+    position: absolute;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1.6rem;
+    font-weight: 900;
+    color: #ffffff;
+    text-shadow: 0 0 10px rgba(0, 242, 254, 0.8);
+  }
+
+  .metric-label {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #cbd5e1;
+    letter-spacing: 2px;
+    margin-bottom: 6px;
+    text-transform: uppercase;
+  }
+
+  .metric-subtitle {
+    font-size: 0.75rem;
+    color: #8fa0dd;
+    margin: 0;
+  }
+
+  /* Alert Level Bar Meter */
+  .bar-meter-container {
+    width: 100%;
+    max-width: 220px;
+    height: 14px;
+    background: rgba(0,0,0,0.4);
+    border: 1px solid rgba(255, 0, 127, 0.2);
+    border-radius: 4px;
+    overflow: hidden;
+    position: relative;
+    margin-bottom: 15px;
+    box-shadow: inset 0 0 6px rgba(0,0,0,0.5);
+  }
+
+  .bar-meter-fill {
+    width: 2%; /* extremely low packet loss */
+    height: 100%;
+    background: linear-gradient(90deg, #10b981, #ffcc00);
+    box-shadow: 0 0 8px rgba(16, 185, 129, 0.8);
+    border-radius: 3px;
+    animation: bar-scale 1.8s ease-out forwards;
+  }
+
+  .bar-meter-val {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1.8rem;
+    font-weight: 900;
+    color: #ff007f;
+    margin-bottom: 5px;
+    text-shadow: 0 0 12px rgba(255, 0, 127, 0.6);
+  }
+
+  /* Info Board Style */
+  .status-board-container {
+    width: 100%;
+    background: rgba(0,0,0,0.3);
+    border: 1px dashed rgba(0, 242, 254, 0.3);
+    padding: 12px;
+    border-radius: 6px;
+    margin-bottom: 12px;
+    position: relative;
+  }
+
+  .status-board-pill {
+    position: absolute;
+    top: -10px;
+    right: 15px;
+    font-size: 0.6rem;
+    background: #ff007f;
+    color: #ffffff;
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-weight: bold;
+    text-shadow: 0 0 4px rgba(255,255,255,0.4);
+    box-shadow: 0 0 8px rgba(255,0,127,0.5);
+  }
+
+  .status-desc-text {
+    font-size: 0.82rem;
+    color: #ffffff;
+    line-height: 1.4;
+    text-shadow: 0 0 4px rgba(0, 242, 254, 0.3);
+  }
+
+  /* Keyframe Animations */
+  @keyframes led-blink {
+    0%, 100% { opacity: 0.5; transform: scale(0.95); }
+    50% { opacity: 1; transform: scale(1.05); filter: brightness(1.2); }
+  }
+
+  @keyframes flow-run {
+    to { stroke-dashoffset: 0; }
+  }
+
+  @keyframes gauge-draw {
+    to { stroke-dashoffset: 6.28; } /* 314 * (1 - 0.98) ~ 6.28 */
+  }
+
+  @keyframes bar-scale {
+    from { width: 0%; }
+    to { width: 2%; }
+  }
+
+  @media (max-width: 992px) {
+    .abstract-split-grid {
+      grid-template-columns: 1fr !important;
+    }
+  }
+</style>
+
+<div class="cockpit-container">
+  
+  <a href="{{ site.baseurl }}/" class="cmd-return-btn">
     <i class="uil uil-arrow-left"></i> [CMD: RETURN_TO_DASHBOARD]
   </a>
 
-  # 중계기 기반 실시간 공사장 안전장비 제어 시스템
-  **센서 퓨전 및 다중 홉 블루투스 게이트웨이를 활용한 안전 관제 플랫폼**
+  <!-- Control Tower Header -->
+  <div class="control-tower-header">
+    <div class="gateway-status-panel">
+      <div class="pulse-led"></div>
+      <span class="gateway-label">[GATEWAY: ONLINE]</span>
+    </div>
+    <h1 class="project-master-title">안전장비 실시간 무선 관제 센터</h1>
+  </div>
 
-  ---
+  <!-- Central Split Grid -->
+  <div class="abstract-split-grid" style="display: grid; grid-template-columns: 55% 45%; gap: 30px; margin-bottom: 30px;">
+    
+    <!-- Left Topology View -->
+    <div>
+      <div class="topology-card">
+        <div class="panel-title">
+          📡 HARDWARE TOPOLOGY GRAPHIC
+          <span>NODE LEVEL SYSTEM</span>
+        </div>
+        
+        <div class="topology-view">
+          
+          <!-- Column 1: TX Nodes -->
+          <div class="nodes-col">
+            <!-- Node A -->
+            <div class="topo-node">
+              <span class="node-tag">TX NODE 01</span>
+              <div class="node-name">안전모 모듈</div>
+              <div class="node-sensor">RA12P FSR 밀착 센서</div>
+            </div>
+            <!-- Node B -->
+            <div class="topo-node">
+              <span class="node-tag">TX NODE 02</span>
+              <div class="node-name">안전조끼 모듈</div>
+              <div class="node-sensor">MPU6050 자이로 센서</div>
+            </div>
+          </div>
+          
+          <!-- Column 2: Central Master Gateway -->
+          <div class="nodes-col">
+            <div class="topo-node master-gateway">
+              <span class="node-tag" style="color: #ff007f; text-shadow: 0 0 5px rgba(255,0,127,0.4);">CENTRAL MASTER</span>
+              <div class="node-name" style="color: #ff007f;">ESP32 게이트웨이</div>
+              <div class="node-sensor" style="color: #8fa0dd;">BLE 수신 & Classic SPP 전송</div>
+              <div class="node-sensor" style="font-size: 0.65rem; margin-top: 5px; color: #ff99cc;">• Ring Buffer Stack</div>
+            </div>
+          </div>
+          
+          <!-- Column 3: RX Client -->
+          <div class="nodes-col">
+            <div class="topo-node client-app">
+              <span class="node-tag" style="color: #10b981; text-shadow: 0 0 5px rgba(16,185,129,0.4);">RX TERMINAL</span>
+              <div class="node-name" style="color: #10b981;">모바일 관제 앱</div>
+              <div class="node-sensor">Android App Inventor</div>
+              <div class="node-sensor" style="font-size: 0.65rem; margin-top: 5px; color: #a3e635;">• SPP Parsers 115200bps</div>
+            </div>
+          </div>
 
-  ## 📊 프로젝트 명세 및 권은지 주요 기여도
+          <!-- SVG Flow Lines Overlay -->
+          <svg class="topology-svg-overlay">
+            <defs>
+              <!-- Arrow marker -->
+              <marker id="arrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                <path d="M 0 2 L 10 5 L 0 8 z" fill="rgba(0, 242, 254, 0.4)" />
+              </marker>
+              <marker id="arrow-pink" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                <path d="M 0 2 L 10 5 L 0 8 z" fill="rgba(255, 0, 127, 0.4)" />
+              </marker>
+            </defs>
 
-  | 항목 | 상세 정보 |
-  | :--- | :--- |
-  | **수행 기간** | 2024.01 - 2024.06 |
-  | **주요 역할** | **Lead System & Firmware Developer (권은지 본인 기여 100% 주도)**<br>• ESP32 컨트롤러 기반 실시간 임베디드 펌웨어 아키텍처 설계<br>• App Inventor 환경의 단일 커넥션 한계를 돌파한 **중계기(Gateway) 다중 홉 구조** 설계<br>• 펌웨어 레벨 **10회 이동 평균 필터 알고리즘** 및 **MAC 주소 사설망 필터링** 구현<br>• 모바일 관제 모니터링 Android 앱 풀스택 개발 및 블루투스 SPP 데이터 파서 구축 |
-  | **팀원 구성** | 권은지(Lead), 최성용(하드웨어 코딩), 구민서(케이스 디자인 및 납땜), 이명은(앱 테스트 및 디버깅) |
-  | **하드웨어 사양** | ESP32-WROOM-32E (3대), RA12P 감압 센서, MPU6050 자이로 센서, TP4056 충전 모듈, MT3608 승압 컨버터 |
-  | **통신 스택** | Bluetooth Low Energy (BLE), Bluetooth Classic Serial (SPP Profile) |
+            <!-- TX Node 01 to Gateway -->
+            <path class="flow-line" d="M 180,95 L 290,155" marker-end="url(#arrow)" />
+            <path class="flow-pulse" d="M 180,95 L 290,155" />
+            
+            <!-- TX Node 02 to Gateway -->
+            <path class="flow-line" d="M 180,285 L 290,225" marker-end="url(#arrow)" />
+            <path class="flow-pulse pulse-alt" d="M 180,285 L 290,225" />
 
-  ---
+            <!-- Gateway to Mobile App Client -->
+            <path class="flow-line-main" d="M 505,190 L 590,190" marker-end="url(#arrow-pink)" style="stroke: rgba(255, 0, 127, 0.25); stroke-width: 2;" />
+            <path class="flow-pulse-main" d="M 505,190 L 590,190" />
+          </svg>
+          
+        </div>
+      </div>
+    </div>
+    
+    <!-- Right Firmware Control Console -->
+    <div>
+      <div class="console-card">
+        <div class="panel-title" style="color: #ff007f; text-shadow: 0 0 8px rgba(255, 0, 127, 0.3); border-bottom-color: rgba(255, 0, 127, 0.15);">
+          📟 FIRMWARE_CONSOLES // DEPLOY_LOGS
+          <span style="color: #00f2fe;">SYS_MONITOR: ACTIVE</span>
+        </div>
+        
+        <div class="terminal-box">
+          <div class="cmd-line">> init --network-topology</div>
+          <div class="cmd-resp">
+            단일 칩 스마트폰 관제 환경(<span class="highlight-terminal">App Inventor Client</span>)에서의 다중 하드웨어 주변 기기 실시간 동시 BLE 연결 실패 드라이버 오류 현상을 감지했습니다.
+            이 병목을 우회하기 위해 개별 작업자의 센서 송신 기기들과 무선 허브 역할을 수행할 독창적인 <span class="highlight-terminal">중계기(ESP32 Gateway)</span> 아키텍처(2-Hop 통신 기법)를 제안, 적용했습니다.
+            개별 송신 노드는 저전력 BLE로 게이트웨이에 데이터를 고속 주입하고, 게이트웨이 내부에 <span class="highlight-terminal">임베디드 링 버퍼(Ring Buffer)</span> 큐를 설계하여 데이터 병목을 소거한 뒤,
+            안정적인 <span class="highlight-terminal">Bluetooth Classic SPP 프로파일(115200bps)</span> 단일 데이터 파이프라인 채널로 스마트폰 관제 앱에 데이터 스트림을 안정적으로 직렬화 전송하여 채널 혼선을 원천적으로 해결했습니다.
+          </div>
+          
+          <div class="cmd-line">> load --algorithm "RSSI Moving Average Filter"</div>
+          <div class="cmd-resp">
+            공사현장의 비설 구조물에 의한 신호 감쇄 및 다중 경로 반사(Multipath Fading) 요인으로 무선 수신 RSSI 강도가 출렁여, 정상 거리임에도 오동작 부저 알람이 심각하게 활성화되는 현상을 분석했습니다.
+            펌웨어 레벨에 <span class="highlight-terminal">10회 원형 버퍼 기반 이동 평균 필터(10-Point Moving Average Filter)</span> 알고리즘을 설계/수립하여 RSSI 감도의 노이즈 대역을 평활화(Smoothing)했습니다.
+          </div>
+          
+          <div class="code-viewer">
+// 10-Point Moving Average Filter (Kwon Eun Ji Architect)
+#define FILTER_SIZE 10
+int rssiHistory[FILTER_SIZE];
+int writeIndex = 0;
 
-  ## 1. 프로젝트 개요 (Overview)
+int getFilteredRSSI(int newRawValue) {
+    rssiHistory[writeIndex] = newRawValue;
+    writeIndex = (writeIndex + 1) % FILTER_SIZE;
+    int accumulatedSum = 0;
+    for(int i = 0; i < FILTER_SIZE; i++) {
+        accumulatedSum += rssiHistory[i];
+    }
+    return accumulatedSum / FILTER_SIZE;
+}</div>
+          <div class="cmd-resp">
+            필터 알고리즘 도입 결과, 신호 진동 대역을 <span class="highlight-terminal">±2.5dBm</span> 이내로 대폭 압축하여 무선 신호 급락에 의한 오작동 위험률을 완벽히 제거했습니다.
+          </div>
+        </div>
+      </div>
+    </div>
+    
+  </div>
 
-  - **배경 (Background)**:
-    기존 공사 현장의 작업자 안전 점검은 관리자의 육안 점검 및 고정식 CCTV에 의존하여, 작업자의 무착용 상태나 낙상 발생 등의 돌발적인 산업 재해 상황을 실시간으로 감지하고 구조 골든타임을 확보하는 데 구조적인 한계가 있었습니다.
-  
-  - **목적 (Objective)**:
-    작업자의 헬멧 내 가해지는 압력(RA12P)과 신체 기울기 및 낙상 가속도(MPU6050) 데이터를 실시간으로 수집하고, 독립된 **ESP32 마스터 중계기(Master Gateway)**를 매개로 블루투스 사설망을 구축함으로써 다수의 작업자 착용 유무와 안전 정보를 모바일 앱 화면에서 실시간으로 끊김 없이 관제하는 지능형 IoT 안전망을 구축합니다.
+  <!-- Bottom Telemetry Meters -->
+  <div class="telemetry-row">
+    
+    <!-- Accuracy Circular Meter -->
+    <div class="telemetry-card">
+      <div class="gauge-wrapper">
+        <svg class="gauge-svg" viewBox="0 0 120 120">
+          <circle class="gauge-bg-circle" cx="60" cy="60" r="50"></circle>
+          <!-- C = 2 * PI * r = 2 * 3.14 * 50 = 314 -->
+          <!-- 98% filled: dashoffset = 314 * (1 - 0.98) = 6.28 -->
+          <circle class="gauge-fill-circle" cx="60" cy="60" r="50" style="stroke-dashoffset: 6.28;"></circle>
+        </svg>
+        <span class="gauge-value">98%</span>
+      </div>
+      <h3 class="metric-label">SENSOR ACCURACY</h3>
+      <p class="metric-subtitle">FSR 감압 & MPU6050 모션 센서 퓨전 착용 판정 정확도</p>
+    </div>
 
-  ---
+    <!-- Packet Loss Bar Meter -->
+    <div class="telemetry-card">
+      <span class="bar-meter-val">0.2%</span>
+      <div class="bar-meter-container">
+        <div class="bar-meter-fill"></div>
+      </div>
+      <h3 class="metric-label">PACKET LOSS RATE</h3>
+      <p class="metric-subtitle">ESP32 2-Hop 게이트웨이 무선 전송 채널 유실 계측률 (최저 수준)</p>
+    </div>
 
-  ## 2. 시스템 및 네트워크 아키텍처 (Architecture)
-  
-  ### 📡 2-1. 시스템 구성 요약
-  - **센서 송신 노드 (안전모 & 안전조끼)**: 
-    헬멧 장착형 FSR 압력 센서로 실제 머리가 밀착되었는지 감지하고, MPU6050 센서로 상시 움직임을 계측하여 낙상 상황을 인지합니다.
-  - **마스터 게이트웨이 (Master Gateway)**: 
-    송신부 노드들로부터 블루투스 데이터를 수집하여 패킷의 무결성을 검증하고, 모바일 관제 애플리케이션으로 전송할 하나의 직렬 패킷 스트림으로 변환 및 버퍼링을 수행합니다.
-  - **모바일 관제 센터 (Android App)**: 
-    마스터 게이트웨이와 1:1 블루투스 통신(SPP)을 맺고 유입되는 고속 바이트 스트림을 역직렬화(Deserialization)하여 개별 작업자(Worker A, Worker B)의 안전 상태를 대시보드 UI에 시각화합니다.
+    <!-- Security Information System -->
+    <div class="telemetry-card" style="align-items: stretch; text-align: left;">
+      <h3 class="metric-label" style="text-align: center; border-bottom: 1px dashed rgba(0, 242, 254, 0.15); padding-bottom: 8px; margin-bottom: 18px;">SECURITY SYSTEM</h3>
+      <div class="status-board-container">
+        <span class="status-board-pill">SECURE</span>
+        <div class="status-desc-text">
+          <strong>고유 MAC 주소 기반 사설망 필터링 시스템</strong><br>
+          <span style="font-size: 0.72rem; color: #8fa0dd; display: block; margin-top: 6px; line-height: 1.4;">
+            타 장비 노드의 패킷이 수신될 시 게이트웨이 EEPROM 페어링 헤더 정보 유효 검사 단계를 거쳐 즉각 버퍼에서 소거 및 폐기 처리하여 혼선을 방지합니다.
+          </span>
+        </div>
+      </div>
+      <div style="font-size: 0.72rem; color: #10b981; font-weight: bold; text-align: center; letter-spacing: 1px;">
+        ● SECURE FILTER : OPERATIONAL
+      </div>
+    </div>
 
-  ### 🔗 2-2. 중계기(Gateway) 기반 2-Hop 통신 구조
-  스마트폰 앱 개발 환경인 **App Inventor(Android)**의 블루투스 클라이언트 모듈은 다수의 BLE 주변기기(Peripheral)들과 동시에 안정적인 멀티 커넥션(Multi-connection) 상태를 유지하는 데 심각한 커널 레벨 드라이버 제약이 있었습니다. 단일 스마트폰이 여러 개의 하드웨어 모듈과 각각 통신할 경우 채널 간 혼선과 병목 현상으로 데이터 유실률이 치솟는 심각한 문제가 존재했습니다.
-
-  이를 해결하기 위해 **마스터 게이트웨이(마스터 중계기) 홉을 분리하는 구조**를 독창적으로 적용했습니다.
-
-  ```
-  [안전모 송신 노드: ESP32] ---+
-                               | (BLE Wireless)
-                               v
-  [안전조끼 송신 노드: ESP32] --> [마스터 중계기: ESP32] ===> [스마트폰 앱]
-                                 (Data Buffer & Hop)    (Classic SPP 115200bps)
-  ```
-
-  1. 각 작업자의 개별 노드들은 전력 소모가 적은 **BLE 통신**으로 데이터를 중계기에 상시 밀어 넣습니다.
-  2. 중간의 **마스터 중계기**가 이 데이터들을 임베디드 링 버퍼(Ring Buffer)에 임시 적재(Queue)하여 통신 병목을 예방합니다.
-  3. 마스터 중계기는 대역폭이 넓고 패킷 처리 신뢰성이 우수한 **Bluetooth Classic SPP 프로필**을 통해 스마트폰 관제 앱과 단 1개의 채널로 고속 통신을 맺고 통합된 데이터 스트림을 안정적으로 전송합니다.
-  4. 이 2-Hop 구조를 도입함으로써, 다중 BLE 기기 연결 제약을 원천적으로 해결하고 다수 작업자 모니터링 환경으로의 확장성을 확보했습니다.
-
-  ---
-
-  ## 3. 핵심 문제 해결 및 기술 검증 (Troubleshooting)
-
-  ### ⚠️ 3-1. BLE RSSI 수신 신호 강도 노이즈 필터링 (권은지 구현)
-  - **현상 (Problem)**: 
-    철근 콘크리트 및 비계가 난무하는 공사 현장의 철제 구조물에 의한 신호 감쇄 및 다중 경로 반사(Multipath Fading) 요인으로 수신되는 RSSI 강도가 극심하게 출렁였습니다. 이로 인해 작업자가 정상 거리에 있음에도 신호 강도 급락으로 헬멧 이탈 판정을 내려 능동 부저가 시끄럽게 오작동하는 크리티컬한 문제가 발생했습니다.
-  - **해결책 (Solution)**: 
-    펌웨어 레벨에 **10회 원형 버퍼 기반 이동 평균 필터(10-Point Moving Average Filter)** 알고리즘을 설계 및 삽입하여 신호의 급작스러운 노이즈 성분을 평활화(Smoothing)했습니다.
-
-  ```cpp
-  // ESP32 Firmware RSSI Moving Average Filter (권은지 자체 설계 및 구현)
-  #define FILTER_SIZE 10
-
-  int rssiHistory[FILTER_SIZE];
-  int writeIndex = 0;
-
-  // 필터 초기화: 디폴트 최저 신호 세기로 주입
-  void initRSSIFilter() {
-      for(int i = 0; i < FILTER_SIZE; i++) {
-          rssiHistory[i] = -100; 
-      }
-  }
-
-  // 매 루프마다 계측된 Raw RSSI 값을 인자로 주어 이동 평균값을 도출
-  int getFilteredRSSI(int newRawValue) {
-      // 1. 최신 데이터 입력 및 인덱스 로테이션
-      rssiHistory[writeIndex] = newRawValue;
-      writeIndex = (writeIndex + 1) % FILTER_SIZE;
-
-      // 2. 버퍼 내 전체 데이터 합산
-      int accumulatedSum = 0;
-      for(int i = 0; i < FILTER_SIZE; i++) {
-          accumulatedSum += rssiHistory[i];
-      }
-
-      // 3. 10회 평균 도출 (Fading 신호 평활화)
-      return accumulatedSum / FILTER_SIZE;
-  }
-  ```
-  이 10회 이동 평균 알고리즘을 도입한 결과, 신호 진동 한계 범위를 ±2.5dBm 이내로 압축시켜 급격한 RSSI 페이딩에 의한 오동작 알람 발생률을 완벽히 소거했습니다.
-
-  ### ⚠️ 3-2. 다중 장치 무선 혼선 예방 (MAC 주소 기반 사설망 필터링)
-  - **현상 (Problem)**: 
-    동일 현장에서 여러 작업자가 동시에 시스템을 착용할 경우, 타인 장비의 센서 신호와 섞여 대시보드 화면상 데이터가 크로스 오버되어 계측되는 치명적인 무선 혼선 우려가 상존했습니다.
-  - **해결책 (Solution)**: 
-    송신 모듈의 **고유 하드웨어 MAC 주소**를 마스터 중계기의 EEPROM 영역에 페어링 리스트로 정적 매핑해 두는 **MAC 주소 기반 사설망 필터링 프로토콜**을 독창적으로 설계했습니다. 지정된 인가 리스트에 해당하지 않는 타 송신 노드의 패킷이 수신되면 헤더 파싱 단계에서 즉각 폐기(Discard)하여 철저한 전용 패킷 무결성을 확보했습니다.
-
-  ### ⚠️ 3-3. 현장 특성을 반영한 하드웨어 내구성 강화
-  - 일반 PLA 소재는 현장의 높은 지열과 하절기 헬멧 표면 온도(60°C 이상)에 노출 시 케이스 뒤틀림 및 실장 기판 파손이 발생할 우려가 컸습니다. 
-  - 이를 방지하기 위해 내열성 및 내충격 강도가 탁월한 **PETG 필라멘트** 소재를 도입하여 3D 프린팅 기구물을 설계 및 성형하였으며, 실장 기판 부위를 수밀 씰링 처리하여 내습 내습 환경 적응성을 보완했습니다.
-
-  ---
-
-  ## 4. 최종 결과 분석 및 기대 효과
-
-  - **정확성 향상**: RA12P 감압 센서와 MPU6050 동작 데이터 및 RSSI 이동 평균 필터의 센서 퓨전을 통해 실제 **작업자 장비 착용 판정 정확도 98%**의 높은 완성도를 입증했습니다.
-  - **안정적인 데이터 전송**: 홉 분리 게이트웨이 아키텍처를 도입하여 고밀도 작업 환경에서도 무선 **패킷 유실률을 0.2% 미만**으로 하락시켜 완벽한 데이터 스트리밍 신뢰도를 획득했습니다.
-  - **네트워크 확장성**: 향후 작업 인원이 늘어나 모듈 수가 증설되더라도 모바일 앱 소스코드는 수정할 필요 없이 마스터 중계기의 BLE 스캔 대상 배열만을 확장할 수 있는 유연한 유지보수 파이프라인을 구축하여 교수님 및 평가위원들로부터 우수한 확장성을 인정받았습니다.
+  </div>
 
 </div>
