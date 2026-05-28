@@ -265,11 +265,39 @@ title: Home
   }
 
   /* Hover effects for mega dropdown items */
+  .mega-dropdown .list-item {
+    width: 320px;
+    flex-shrink: 0;
+    position: relative;
+    overflow: hidden;
+    transform-style: preserve-3d;
+    will-change: transform;
+    /* The inline transition will be overridden by JS on hover for smooth 3D */
+  }
+
+  .mega-dropdown .list-item .list-content {
+    transform: translateZ(30px);
+    pointer-events: none; /* Let the card handle all mouse events */
+  }
+
+  .glare {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    border-radius: inherit;
+    z-index: 10;
+    mix-blend-mode: overlay;
+  }
+
   .mega-dropdown .list-item:hover {
     background: rgba(30, 41, 59, 0.8) !important;
     border-color: rgba(129, 140, 248, 0.3) !important;
-    transform: translateY(-3px);
-    box-shadow: 0 6px 15px rgba(0,0,0,0.3);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.4), 0 0 20px rgba(129, 140, 248, 0.2) !important;
   }
 
   @media (max-width: 768px) {
@@ -448,5 +476,45 @@ title: Home
         }, 400);
       });
     }
+
+    // 3D Tilt Effect for cards
+    const cards = document.querySelectorAll('.list-item');
+    
+    cards.forEach(card => {
+      // Create glare element
+      const glare = document.createElement('div');
+      glare.classList.add('glare');
+      card.appendChild(glare);
+
+      card.addEventListener('mouseenter', () => {
+        card.style.transition = 'transform 0.1s ease-out, background 0.3s, box-shadow 0.3s';
+      });
+
+      card.addEventListener('mousemove', (e) => {
+        const rect = card.getBoundingClientRect();
+        const x = e.clientX - rect.left; // x position within the element.
+        const y = e.clientY - rect.top;  // y position within the element.
+        
+        const centerX = rect.width / 2;
+        const centerY = rect.height / 2;
+        
+        const rotateX = ((y - centerY) / centerY) * -12; // Max rotation 12deg
+        const rotateY = ((x - centerX) / centerX) * 12;
+        
+        card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.05, 1.05, 1.05)`;
+        
+        // Glare effect calculation
+        const glareX = (x / rect.width) * 100;
+        const glareY = (y / rect.height) * 100;
+        glare.style.background = `radial-gradient(circle at ${glareX}% ${glareY}%, rgba(255,255,255,0.3) 0%, transparent 60%)`;
+        glare.style.opacity = '1';
+      });
+      
+      card.addEventListener('mouseleave', () => {
+        card.style.transition = 'transform 0.5s cubic-bezier(0.25, 0.8, 0.25, 1), background 0.3s, box-shadow 0.3s';
+        card.style.transform = `perspective(1000px) rotateX(0) rotateY(0) scale3d(1, 1, 1)`;
+        glare.style.opacity = '0';
+      });
+    });
   });
 </script>
