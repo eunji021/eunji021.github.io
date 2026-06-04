@@ -15,29 +15,33 @@ title: Home
     height: 6px;
   }
   ::-webkit-scrollbar-track {
-    background: #060814;
+    background: #080b11;
   }
   ::-webkit-scrollbar-thumb {
     background: rgba(129, 140, 248, 0.3);
     border-radius: 3px;
   }
 
-  /* Force premium flat dark portfolio theme */
+  /* Force premium dark radial theme with custom subtle glows */
   body {
-    background-color: #060814 !important;
-    background: radial-gradient(circle at 50% 50%, #0c0f1d 0%, #060814 100%) !important;
-    color: #94a3b8 !important;
-    font-family: 'Share Tech Mono', 'Pretendard', sans-serif;
+    background-color: #080b11 !important;
+    background: radial-gradient(circle at top right, rgba(99, 102, 241, 0.1) 0%, transparent 450px),
+                radial-gradient(circle at bottom left, rgba(59, 130, 246, 0.05) 0%, transparent 450px),
+                #080b11 !important;
+    color: #cbd5e1 !important;
+    font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
     min-height: 100vh;
-    overflow-x: hidden;
+    margin: 0;
+    padding: 0;
+    scroll-behavior: smooth;
   }
 
-  /* Hide default footer to align with original portfolio design */
+  /* Hide default footer to allow custom centered footer */
   .footer {
     display: none !important;
   }
 
-  /* Navigation overrides to restore clean default theme styling */
+  /* Custom Navbar Overrides to match the clean design in the screenshot */
   .navbar-custom {
     padding: 30px 40px !important;
     display: flex;
@@ -66,19 +70,19 @@ title: Home
   .main-nav-custom {
     display: flex;
     align-items: center;
-    gap: 30px;
+    gap: 20px;
     list-style: none;
     margin: 0;
     padding: 0;
   }
   
   .nav-links-custom {
-    font-family: 'Pretendard', sans-serif !important;
-    font-size: 0.95rem !important;
-    font-weight: 500 !important;
+    font-family: 'Orbitron', sans-serif !important;
+    font-size: 0.85rem !important;
+    font-weight: 700 !important;
     color: #94a3b8 !important;
-    text-transform: none !important;
-    letter-spacing: normal !important;
+    text-transform: uppercase !important;
+    letter-spacing: 1px !important;
     transition: color 0.2s ease !important;
     text-decoration: none !important;
   }
@@ -111,217 +115,177 @@ title: Home
     box-shadow: none !important;
   }
 
-  /* Two Column Flat Layout Grid */
-  .abstract-layout {
-    display: grid;
-    grid-template-columns: 46% 54%;
-    gap: 40px;
-    align-items: center;
-    min-height: 72vh;
-    margin-top: 60px;
-    max-width: 1200px;
-    margin-left: auto;
-    margin-right: auto;
-    padding: 0 40px;
-    box-sizing: border-box;
+  /* Main Title Styling */
+  .hero-section-custom {
+    text-align: center;
+    margin-top: 80px;
+    margin-bottom: 60px;
+    animation: fadeUp 0.8s cubic-bezier(0.25, 0.8, 0.25, 1) forwards;
   }
 
-  /* Left Description Column */
-  .left-intro-area {
-    padding-right: 30px;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    animation: fadeSlideUp 0.8s cubic-bezier(0.25, 0.8, 0.25, 1) forwards;
+  .hero-title-custom {
+    font-family: 'Pretendard', sans-serif !important;
+    font-size: clamp(2.4rem, 5vw, 3.4rem) !important;
+    font-weight: 800 !important;
+    color: #ffffff !important;
+    text-shadow: none !important;
+    margin-bottom: 12px;
+    letter-spacing: -0.8px;
   }
 
-  .about-me-label {
-    font-family: 'Orbitron', sans-serif;
-    font-size: 0.95rem;
-    font-weight: 700;
-    color: #818cf8;
+  .hero-subtitle-custom {
+    font-family: 'Pretendard', sans-serif !important;
+    font-size: 1.05rem !important;
+    color: #818cf8 !important;
+    font-weight: 700 !important;
+    margin: 0;
     letter-spacing: 3px;
     text-transform: uppercase;
   }
 
-  .profile-name {
-    font-family: 'Pretendard', sans-serif;
-    font-size: clamp(3.2rem, 5.5vw, 4.4rem);
-    font-weight: 900;
-    color: #ffffff;
-    margin: 12px 0 6px 0;
-    letter-spacing: -1px;
-    line-height: 1.1;
+  /* Layout Container */
+  .layout-wrapper {
+    max-width: 1200px;
+    margin: 0 auto 100px;
+    padding: 0 40px;
+    box-sizing: border-box;
   }
 
-  .profile-job {
-    font-family: 'Orbitron', sans-serif;
-    font-size: clamp(1.6rem, 2.8vw, 2.2rem);
-    font-weight: 700;
-    color: #818cf8;
-    margin: 0 0 24px 0;
-    letter-spacing: 1px;
-  }
-
-  .profile-desc {
-    font-family: 'Pretendard', sans-serif;
-    font-size: 1.08rem;
-    color: #849ca8;
-    line-height: 1.8;
-    max-width: 520px;
-    margin: 0;
-    text-align: justify;
-    word-break: keep-all;
-  }
-
-  /* Right Side Navigation Hover Nodes */
-  .right-nav-area {
+  /* Section Title */
+  .section-hdr {
     display: flex;
-    justify-content: flex-end;
-    width: 100%;
-  }
-
-  .top-nav-bar {
-    display: flex;
-    gap: 50px;
-    position: relative;
-    z-index: 10;
-  }
-
-  .nav-item-container {
-    position: relative;
-    display: flex;
-    flex-direction: column;
     align-items: center;
-    cursor: pointer;
-    padding-bottom: 20px;
+    gap: 12px;
+    font-family: 'Pretendard', sans-serif !important;
+    font-size: 1.6rem !important;
+    font-weight: 800 !important;
+    color: #ffffff !important;
+    margin-top: 50px;
+    margin-bottom: 30px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    padding-bottom: 15px;
   }
 
-  .menu-icon-wrapper {
-    font-size: 2.3rem;
-    color: #cbd5e1;
-    width: 48px;
-    height: 48px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-bottom: 10px;
-    transition: all 0.3s ease;
-  }
-
-  .nav-item-container:hover .menu-icon-wrapper {
+  .section-hdr i {
     color: #818cf8;
-    transform: translateY(-3px);
+    font-size: 1.7rem;
   }
 
-  .menu-link {
-    font-family: 'Orbitron', sans-serif;
-    font-size: 1.1rem;
-    font-weight: 700;
-    color: #849ca8;
-    text-decoration: none !important;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    transition: all 0.3s;
-    text-shadow: 0 0 5px rgba(132, 156, 168, 0.2);
-  }
-
-  .nav-item-container:hover .menu-link {
-    color: #818cf8;
-    text-shadow: 0 0 10px rgba(129, 140, 248, 0.6);
-  }
-
-  /* Flat Mega Menu Dropdown Centered Alignment */
-  .mega-dropdown {
-    position: absolute;
-    top: 95px;
-    left: 50%;
-    transform: translateX(-50%) translateY(-15px) scale(0.98);
-    opacity: 0;
-    visibility: hidden;
-    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-    z-index: 100;
-    pointer-events: none;
-    transform-origin: top center;
-  }
-
-  .mega-dropdown.horizontal-mode {
-    width: max-content;
+  /* Grid Layout */
+  .card-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 20px;
-    padding: 15px;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 30px;
+    margin-bottom: 60px;
   }
 
-  .nav-item-container:hover .mega-dropdown {
-    opacity: 1;
-    transform: translateX(-50%) translateY(0) scale(1);
-    visibility: visible;
-    pointer-events: auto;
-  }
-
-  /* Glassmorphism Cards */
-  .mega-dropdown .list-item {
-    width: 290px;
-    background: rgba(15, 23, 42, 0.6) !important;
+  /* Grid Module Cards */
+  .grid-card {
+    background: rgba(13, 19, 31, 0.4) !important;
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
-    border: 1px solid rgba(255, 255, 255, 0.05) !important;
-    border-radius: 12px !important;
-    padding: 24px !important;
-    box-shadow: 0 15px 35px rgba(0,0,0,0.4) !important;
-    transition: all 0.3s ease !important;
+    border: 1px solid rgba(255, 255, 255, 0.04) !important;
+    border-radius: 16px !important;
+    padding: 30px !important;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2) !important;
+    transition: all 0.35s cubic-bezier(0.25, 0.8, 0.25, 1);
+    display: flex;
+    flex-direction: column;
     text-decoration: none !important;
-    display: block !important;
-    text-align: left !important;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
   }
 
-  .mega-dropdown .list-item:hover {
-    border-color: rgba(129, 140, 248, 0.4) !important;
-    background: rgba(15, 23, 42, 0.85) !important;
-    transform: translateY(-4px) !important;
-    box-shadow: 0 20px 40px rgba(0,0,0,0.5), 0 0 15px rgba(129, 140, 248, 0.12) !important;
+  .grid-card:hover {
+    border-color: rgba(129, 140, 248, 0.35) !important;
+    transform: translateY(-5px) !important;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.35), 0 0 20px rgba(129, 140, 248, 0.05) !important;
   }
 
-  .mega-dropdown .list-title {
-    font-family: 'Pretendard', 'Orbitron', sans-serif !important;
-    color: #ffffff !important;
-    font-weight: 700 !important;
-    font-size: 1.1rem !important;
-    margin: 0 0 8px 0 !important;
-    letter-spacing: -0.5px !important;
-    text-shadow: none !important;
-  }
-
-  .mega-dropdown .list-desc {
+  .card-title {
     font-family: 'Pretendard', sans-serif !important;
-    color: #849ca8 !important;
-    font-size: 0.88rem !important;
-    line-height: 1.5 !important;
-    margin: 0 0 16px 0 !important;
+    font-size: 1.25rem !important;
+    font-weight: 700 !important;
+    color: #ffffff !important;
+    text-shadow: none !important;
+    margin: 0 0 10px 0;
   }
 
-  .mega-dropdown .tech-badges {
+  .grid-card:hover .card-title {
+    color: #818cf8 !important;
+  }
+
+  .card-desc {
+    font-family: 'Pretendard', sans-serif !important;
+    font-size: 0.92rem !important;
+    color: #94a3b8 !important;
+    line-height: 1.6;
+    margin: 0 0 20px 0;
+    flex-grow: 1;
+    text-align: justify;
+  }
+
+  .card-badges {
     display: flex;
     gap: 8px;
     flex-wrap: wrap;
+    margin-bottom: 20px;
   }
 
-  .mega-dropdown .tech-badges span {
-    background: rgba(129, 140, 248, 0.15) !important;
+  .badge-tag {
+    background: rgba(99, 102, 241, 0.15) !important;
     color: #a5b4fc !important;
-    border: 1px solid rgba(129, 140, 248, 0.25) !important;
+    border: 1px solid rgba(99, 102, 241, 0.25) !important;
     border-radius: 20px !important;
     font-family: 'Share Tech Mono', monospace !important;
-    font-size: 0.72rem !important;
+    font-size: 0.74rem !important;
     padding: 3px 10px !important;
     font-weight: 600 !important;
   }
 
-  /* Centered custom footer signature */
+  .card-footer-action {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid rgba(255, 255, 255, 0.04);
+    padding-top: 15px;
+    margin-top: auto;
+  }
+
+  .card-action-btn {
+    font-family: 'Pretendard', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: #818cf8;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: color 0.2s;
+  }
+
+  .card-action-btn:hover {
+    color: #ffffff;
+  }
+
+  .card-link-arrow {
+    color: #475569;
+    font-size: 1.2rem;
+    transition: all 0.3s ease;
+  }
+
+  .grid-card:hover .card-link-arrow {
+    color: #818cf8;
+    transform: translateX(4px);
+  }
+
+  /* Centered Custom Footer */
   .custom-footer {
     text-align: center;
-    padding: 60px 0 40px;
+    padding: 40px 0 60px;
     font-family: 'Pretendard', sans-serif !important;
     font-size: 1.1rem !important;
     font-weight: 800;
@@ -334,7 +298,7 @@ title: Home
     margin-left: 4px;
   }
 
-  /* Floating Custom Toast Message Alert */
+  /* Custom Floating Toast Alert */
   .custom-toast {
     position: fixed;
     bottom: 40px;
@@ -359,249 +323,583 @@ title: Home
     transform: translateX(-50%) translateY(0);
   }
 
-  @keyframes fadeSlideUp {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
+  /* High-tech Template Modal Overlay */
+  .modal-overlay {
+    position: fixed;
+    top: 0; left: 0; width: 100vw; height: 100vh;
+    background: rgba(8, 11, 17, 0.7);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    z-index: 10000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.4s ease;
   }
 
-  @media (max-width: 992px) {
-    .abstract-layout {
-      grid-template-columns: 1fr;
-      text-align: center;
-      gap: 50px;
-      margin-top: 40px;
-    }
-    .left-intro-area {
-      align-items: center;
-      padding-right: 0;
-    }
-    .right-nav-area {
-      justify-content: center;
-    }
-    .top-nav-bar {
-      gap: 30px;
-    }
-    .mega-dropdown {
-      left: 50%;
-      transform: translateX(-50%) translateY(-15px) scale(0.95);
-    }
-    .mega-dropdown.horizontal-mode {
-      grid-template-columns: 1fr;
-    }
-    .nav-item-container:hover .mega-dropdown {
-      transform: translateX(-50%) translateY(0) scale(1);
-    }
+  .modal-overlay.active {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .modal-window {
+    background: rgba(13, 19, 31, 0.95);
+    border: 2px solid #818cf8;
+    border-radius: 16px;
+    width: 90%;
+    max-width: 750px;
+    max-height: 80vh;
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5), 0 0 30px rgba(129, 140, 248, 0.15);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    transform: translateY(20px) scale(0.95);
+    transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+  }
+
+  .modal-overlay.active .modal-window {
+    transform: translateY(0) scale(1);
+  }
+
+  .modal-hdr {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 24px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .modal-title {
+    font-family: 'Pretendard', sans-serif;
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: #ffffff;
+  }
+
+  .modal-close-btn {
+    background: transparent;
+    border: none;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.9rem;
+    color: #ff007f;
+    cursor: pointer;
+    text-shadow: 0 0 5px rgba(255,0,127,0.5);
+    transition: all 0.2s;
+  }
+
+  .modal-close-btn:hover {
+    color: #ffffff;
+    text-shadow: 0 0 10px #ffffff;
+  }
+
+  .modal-body {
+    padding: 24px;
+    overflow-y: auto;
+    flex-grow: 1;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.88rem;
+    color: #cbd5e1;
+    line-height: 1.6;
+    text-align: left;
+  }
+
+  .modal-body pre {
+    background: rgba(6, 9, 15, 0.9);
+    border: 1px solid rgba(129, 140, 248, 0.2);
+    border-radius: 8px;
+    padding: 16px;
+    overflow-x: auto;
+    margin: 0;
+  }
+
+  .modal-body code {
+    color: #a5b4fc;
+  }
+
+  .copy-btn {
+    background: rgba(129, 140, 248, 0.15);
+    border: 1px solid rgba(129, 140, 248, 0.3);
+    color: #a5b4fc;
+    padding: 6px 14px;
+    border-radius: 6px;
+    font-family: 'Pretendard', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .copy-btn:hover {
+    background: #818cf8;
+    color: #ffffff;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(15px); }
+    to { opacity: 1; transform: translateY(0); }
   }
 </style>
 
-<div class="container-full" style="padding-bottom: 80px; min-height: calc(100vh - 80px); display: flex; align-items: center; position: relative;">
-  
-  <div class="container" style="max-width: 1200px !important; width: 95% !important; position: relative; z-index: 2;">
-    
-    <div class="abstract-layout">
-      
-      <!-- Left Profile Description Area -->
-      <div class="left-intro-area">
-        <span class="about-me-label">ABOUT ME</span>
-        <h1 class="profile-name">권은지</h1>
-        <h2 class="profile-job">System & Embedded</h2>
-        <p class="profile-desc">
-          하드웨어 제어와 시스템 소프트웨어의 경계를 허무는 엔지니어입니다. 신뢰성 높은 아키텍처와 최적화된 로직 구현에 집중합니다.
-        </p>
-      </div>
-      
-      <!-- Right Side Node Navigation Dropdowns -->
-      <div class="right-nav-area">
-        <div class="top-nav-bar">
-          
-          <!-- PROJECTS -->
-          <div class="nav-item-container">
-            <div class="menu-icon-wrapper">
-              <i class="uil uil-book-open"></i>
-            </div>
-            <div class="menu-link">projects</div>
-            
-            <div class="mega-dropdown horizontal-mode">
-              <!-- AI 유적지 가이드 앱 (Placeholder with Toast) -->
-              <a href="#" class="list-item placeholder-link" data-msg="상세 프로젝트 정보 및 레포트를 구성하는 중입니다.">
-                <div class="list-content">
-                  <h4 class="list-title">AI 유적지 가이드 앱</h4>
-                  <p class="list-desc">딥러닝 기반 객체 인식 모델 및 실시간 유적 안내 플랫폼</p>
-                  <div class="tech-badges">
-                    <span>Python</span>
-                    <span>TensorFlow</span>
-                  </div>
-                </div>
-              </a>
-
-              <!-- 실시간 요리 가이드 (Placeholder with Toast) -->
-              <a href="#" class="list-item placeholder-link" data-msg="상세 프로젝트 정보 및 레포트를 구성하는 중입니다.">
-                <div class="list-content">
-                  <h4 class="list-title">실시간 요리 가이드</h4>
-                  <p class="list-desc">카메라 영상 식재료 분석 및 실시간 레시피 안내 내비게이션</p>
-                  <div class="tech-badges">
-                    <span>Python</span>
-                    <span>OpenCV</span>
-                  </div>
-                </div>
-              </a>
-
-              <!-- 실시간 안전 장비 착용 여부 시스템 (Real Link) -->
-              <a href="{{ site.baseurl }}/safety-equipment-system" class="list-item">
-                <div class="list-content">
-                  <h4 class="list-title">실시간 안전 장비 착용 여부 시스템</h4>
-                  <p class="list-desc">ESP32 중계기 기반 작업자 안전 상태 실시간 관제 게이트웨이</p>
-                  <div class="tech-badges">
-                    <span>ESP32</span>
-                    <span>BLE/SPP</span>
-                  </div>
-                </div>
-              </a>
-
-              <!-- 실시간 화재 대피 유도 시스템 (Real Link) -->
-              <a href="{{ site.baseurl }}/safety-equipment-system" class="list-item">
-                <div class="list-content">
-                  <h4 class="list-title">실시간 화재 대피 유도 시스템</h4>
-                  <p class="list-desc">실시간 센서 감지 및 다익스트라 경로 기반 대피 유도 모듈</p>
-                  <div class="tech-badges">
-                    <span>C/C++</span>
-                    <span>ESP32</span>
-                  </div>
-                </div>
-              </a>
-            </div>
-          </div>
-          
-          <!-- TECH -->
-          <div class="nav-item-container">
-            <div class="menu-icon-wrapper">
-              <i class="uil uil-layer-group"></i>
-            </div>
-            <div class="menu-link">tech</div>
-            
-            <div class="mega-dropdown horizontal-mode">
-              <!-- 개발 언어 파트 (Real Link to Python/ej) -->
-              <a href="{{ site.baseurl }}/ej" class="list-item">
-                <div class="list-content">
-                  <h4 class="list-title">개발 언어 파트</h4>
-                  <p class="list-desc">C언어, C#, Python, Java 통합 핵심 문법 실습 로그</p>
-                </div>
-              </a>
-
-              <!-- 장비 제어 파트 (Placeholder with Toast) -->
-              <a href="#" class="list-item placeholder-link" data-msg="학습 로그 및 실제 프로젝트 융합 사례 정리 중입니다.">
-                <div class="list-content">
-                  <h4 class="list-title">장비 제어 파트</h4>
-                  <p class="list-desc">MCU 레지스터 직접 제어 및 디바이스 인터랙션 설계</p>
-                </div>
-              </a>
-
-              <!-- 데이터 분석 파트 (Placeholder with Toast) -->
-              <a href="#" class="list-item placeholder-link" data-msg="SQL 데이터 추출 및 Pandas 분석 시각화 로그 준비 중입니다.">
-                <div class="list-content">
-                  <h4 class="list-title">데이터 분석 파트</h4>
-                  <p class="list-desc">SQL 복합 데이터 패칭 및 Python 활용 시각화 분석</p>
-                </div>
-              </a>
-
-              <!-- 머신러닝 프로그래밍 기초 파트 (Placeholder with Toast) -->
-              <a href="#" class="list-item placeholder-link" data-msg="머신러닝 알고리즘 및 예측 모델 훈련 회고 작성 중입니다.">
-                <div class="list-content">
-                  <h4 class="list-title">머신러닝 프로그래밍 기초 파트</h4>
-                  <p class="list-desc">머신러닝 기초 알고리즘 및 Scikit-Learn 활용 훈련 실습</p>
-                </div>
-              </a>
-            </div>
-          </div>
-          
-          <!-- BLOG -->
-          <div class="nav-item-container">
-            <div class="menu-icon-wrapper">
-              <i class="uil uil-notes"></i>
-            </div>
-            <div class="menu-link">blog</div>
-            
-            <div class="mega-dropdown horizontal-mode">
-              <!-- ble_spp_protocol.cfg (Placeholder with Toast) -->
-              <a href="#" class="list-item placeholder-link" data-msg="해당 블로그 학습 내용 요약을 정리 중입니다.">
-                <div class="list-content">
-                  <h4 class="list-title">ble_spp_protocol.cfg</h4>
-                  <p class="list-desc">BLE SPP 통신 프로토콜 가이드 및 패킹 구조 정의</p>
-                </div>
-              </a>
-
-              <!-- filter_moving_average.cpp (Placeholder with Toast) -->
-              <a href="#" class="list-item placeholder-link" data-msg="해당 블로그 학습 내용 요약을 정리 중입니다.">
-                <div class="list-content">
-                  <h4 class="list-title">filter_moving_average.cpp</h4>
-                  <p class="list-desc">RSSI 데이터 평활화를 위한 이동 평균 필터 실습 코드</p>
-                </div>
-              </a>
-
-              <!-- mcu_firmware_boot.log (Placeholder with Toast) -->
-              <a href="#" class="list-item placeholder-link" data-msg="해당 블로그 학습 내용 요약을 정리 중입니다.">
-                <div class="list-content">
-                  <h4 class="list-title">mcu_firmware_boot.log</h4>
-                  <p class="list-desc">ESP32 Core 부팅 단계 레지스터 진단 및 통신 로그</p>
-                </div>
-              </a>
-
-              <!-- oop_design_pattern.txt (Placeholder with Toast) -->
-              <a href="#" class="list-item placeholder-link" data-msg="해당 블로그 학습 내용 요약을 정리 중입니다.">
-                <div class="list-content">
-                  <h4 class="list-title">oop_design_pattern.txt</h4>
-                  <p class="list-desc">유지보수가 용이한 C# 소프트웨어 설계 및 클래스 구조</p>
-                </div>
-              </a>
-            </div>
-          </div>
-          
-        </div>
-      </div>
-      
-    </div>
-
-  </div>
+<!-- Main Header & Hero Section -->
+<div class="hero-section-custom">
+  <h1 class="hero-title-custom">소프트웨어 엔지니어 권은지</h1>
+  <p class="hero-subtitle-custom">하이테크 포트폴리오</p>
 </div>
 
-<!-- Center custom footer signature -->
+<!-- Layout Wrapper -->
+<div class="layout-wrapper">
+
+  <!-- 🛠️ PROJECTS Section -->
+  <div class="section-hdr" id="projects-section">
+    <i class="uil uil-apps"></i> Projects (프로젝트)
+  </div>
+
+  <div class="card-grid">
+    <!-- AI 유적지 가이드 앱 -->
+    <div class="grid-card placeholder-link" data-msg="상세 프로젝트 정보 및 레포트를 구성하는 중입니다.">
+      <h4 class="card-title">AI 유적지 가이드 앱</h4>
+      <p class="card-desc">딥러닝 기반 객체 인식 모델을 모바일 장치에 내장하여 주변 유적지를 실시간으로 탐지하고 안내하는 플랫폼</p>
+      <div class="card-badges">
+        <span class="badge-tag">Python</span>
+        <span class="badge-tag">TensorFlow</span>
+        <span class="badge-tag">Flutter</span>
+      </div>
+      <div class="card-footer-action">
+        <button class="card-action-btn view-template-btn" data-template="projects" data-title="AI 유적지 가이드 앱">
+          <i class="uil uil-file-alt"></i> 템플릿 보기
+        </button>
+        <span class="card-link-arrow"><i class="uil uil-arrow-right"></i></span>
+      </div>
+    </div>
+
+    <!-- 실시간 요리 가이드 -->
+    <div class="grid-card placeholder-link" data-msg="상세 프로젝트 정보 및 레포트를 구성하는 중입니다.">
+      <h4 class="card-title">실시간 요리 가이드</h4>
+      <p class="card-desc">웹캠 카메라 분석을 통해 재배치된 식재료를 탐지하고 조리 순서에 맞춰 조리법을 오버레이해주는 내비게이션</p>
+      <div class="card-badges">
+        <span class="badge-tag">Python</span>
+        <span class="badge-tag">OpenCV</span>
+      </div>
+      <div class="card-footer-action">
+        <button class="card-action-btn view-template-btn" data-template="projects" data-title="실시간 요리 가이드">
+          <i class="uil uil-file-alt"></i> 템플릿 보기
+        </button>
+        <span class="card-link-arrow"><i class="uil uil-arrow-right"></i></span>
+      </div>
+    </div>
+
+    <!-- 실시간 안전 장비 착용 여부 시스템 -->
+    <div class="grid-card real-link" data-url="{{ site.baseurl }}/safety-equipment-system">
+      <h4 class="card-title">실시간 안전 장비 착용 여부 시스템</h4>
+      <p class="card-desc">ESP32 게이트웨이를 이용해 작업자 안전모와 조끼의 수집 센서 상태를 블루투스로 패킹 취합하는 관제 아키텍처</p>
+      <div class="card-badges">
+        <span class="badge-tag">ESP32</span>
+        <span class="badge-tag">BLE/SPP</span>
+        <span class="badge-tag">C/C++</span>
+      </div>
+      <div class="card-footer-action">
+        <button class="card-action-btn view-template-btn" data-template="projects" data-title="실시간 안전 장비 착용 여부 시스템">
+          <i class="uil uil-file-alt"></i> 템플릿 보기
+        </button>
+        <span class="card-link-arrow"><i class="uil uil-arrow-right"></i></span>
+      </div>
+    </div>
+
+    <!-- 실시간 화재 대피 유도 시스템 -->
+    <div class="grid-card real-link" data-url="{{ site.baseurl }}/safety-equipment-system">
+      <h4 class="card-title">실시간 화재 대피 유도 시스템</h4>
+      <p class="card-desc">다중 지점 화재 센서 로그 가중치 다익스트라를 계산하여 LED 방향성을 실시간 제어하는 동적 대피 유도계</p>
+      <div class="card-badges">
+        <span class="badge-tag">C/C++</span>
+        <span class="badge-tag">ESP32</span>
+      </div>
+      <div class="card-footer-action">
+        <button class="card-action-btn view-template-btn" data-template="projects" data-title="실시간 화재 대피 유도 시스템">
+          <i class="uil uil-file-alt"></i> 템플릿 보기
+        </button>
+        <span class="card-link-arrow"><i class="uil uil-arrow-right"></i></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 📡 HIGH-TECH COURSE Section -->
+  <div class="section-hdr" id="hightech-section">
+    <i class="uil uil-book-open"></i> High-Tech Course (하이테크 과정)
+  </div>
+
+  <div class="card-grid">
+    <!-- 개발 언어 파트 -->
+    <div class="grid-card real-link" data-url="{{ site.baseurl }}/ej" id="card-languages">
+      <h4 class="card-title">개발 언어 파트</h4>
+      <p class="card-desc">C언어 메모리 관리, C# 객체지향 설계, Python 실시간 필터 구조 및 Java 연동 개념 통합 수록</p>
+      <div class="card-footer-action">
+        <button class="card-action-btn view-template-btn" data-template="languages" data-title="개발 언어 파트">
+          <i class="uil uil-file-alt"></i> 템플릿 보기
+        </button>
+        <span class="card-link-arrow"><i class="uil uil-arrow-right"></i></span>
+      </div>
+    </div>
+
+    <!-- 장비 제어 파트 -->
+    <div class="grid-card placeholder-link" data-msg="학습 로그 및 실제 프로젝트 융합 사례 정리 중입니다." id="card-device-control">
+      <h4 class="card-title">장비 제어 파트</h4>
+      <p class="card-desc">MCU 레지스터 제어 인터페이스 설계 및 직접 작성한 UART/I2C/SPI 통신 센서 구동 실습 로그</p>
+      <div class="card-footer-action">
+        <button class="card-action-btn view-template-btn" data-template="device-control" data-title="장비 제어 파트">
+          <i class="uil uil-file-alt"></i> 템플릿 보기
+        </button>
+        <span class="card-link-arrow"><i class="uil uil-arrow-right"></i></span>
+      </div>
+    </div>
+
+    <!-- 데이터 분석 파트 -->
+    <div class="grid-card placeholder-link" data-msg="SQL 데이터 추출 및 Pandas 분석 시각화 로그 준비 중입니다." id="card-data-analysis">
+      <h4 class="card-title">데이터 분석 파트</h4>
+      <p class="card-desc">SQL 복합 데이터 조인, 집계 및 Pandas/Matplotlib 라이브러리를 활용한 정밀 이상치 검출 전처리</p>
+      <div class="card-footer-action">
+        <button class="card-action-btn view-template-btn" data-template="data-analysis" data-title="데이터 분석 파트">
+          <i class="uil uil-file-alt"></i> 템플릿 보기
+        </button>
+        <span class="card-link-arrow"><i class="uil uil-arrow-right"></i></span>
+      </div>
+    </div>
+
+    <!-- 머신러닝 프로그래밍 기초 파트 -->
+    <div class="grid-card placeholder-link" data-msg="머신러닝 알고리즘 및 예측 모델 훈련 회고 작성 중입니다." id="card-machine-learning">
+      <h4 class="card-title">머신러닝 프로그래밍 기초 파트</h4>
+      <p class="card-desc">의사결정나무 및 임베디드 분류 훈련, Scikit-Learn 활용 튜닝 학습 데이터 분류 모델 실습</p>
+      <div class="card-footer-action">
+        <button class="card-action-btn view-template-btn" data-template="machine-learning" data-title="머신러닝 프로그래밍 기초 파트">
+          <i class="uil uil-file-alt"></i> 템플릿 보기
+        </button>
+        <span class="card-link-arrow"><i class="uil uil-arrow-right"></i></span>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Centered Footer -->
 <div class="custom-footer">
   Kwon <span>Eun Ji</span>
 </div>
 
+<!-- Dynamic Overlay Modal for Templates -->
+<div class="modal-overlay" id="template-modal">
+  <div class="modal-window">
+    <div class="modal-hdr">
+      <span class="modal-title" id="modal-title-text">글쓰기 템플릿 정의</span>
+      <button class="modal-close-btn" id="close-modal-btn">[CLOSE]</button>
+    </div>
+    <div class="modal-body">
+      <div style="display:flex; justify-content:flex-end; margin-bottom:12px;">
+        <button class="copy-btn" id="copy-template-btn">클립보드 복사</button>
+      </div>
+      <pre><code id="modal-code-text"></code></pre>
+    </div>
+  </div>
+</div>
+
 <script>
+  // Post markdown writing templates data structure
+  const writingTemplates = {
+    projects: `---
+layout: post
+title: "[프로젝트명] - 한 줄 요약"
+category: projects
+tags: [핵심기술1, 핵심기술2]
+---
+
+# 🛠️ [프로젝트명]
+
+## 1. 프로젝트 개요 (Overview)
+* **진행 기간:** YYYY.MM ~ YYYY.MM (개인 / 팀 N명)
+* **기획 배경:** 기존 시스템의 어떤 문제점이나 한계로 인해 프로젝트를 기획했는지 기술합니다.
+* **프로젝트 목적:** 프로젝트를 통해 해결하고자 하는 궁극적인 목표와 성과를 요약합니다.
+
+## 2. 사용 기술 및 개발 환경 (Tech Stack & Environment)
+* **Core Languages:** Language 1, Language 2
+* **Hardware & Modules:** MCU명, 센서명, 통신 모듈명
+* **Software & Toolchain:** IDE명, OS명, 라이브러리/프레임워크 버전
+* **Collaboration & DevOps:** Git, GitHub, Slack
+
+## 3. 핵심 기능 및 구현 내용 (Core Features)
+* **핵심 기능 1 (예: 실시간 센서 수신 파이프라인):**
+  - [상세 설명] 하드웨어 레벨에서 데이터를 수집하고 전송하는 흐름을 작성합니다.
+  - [구현 방식] 인터럽트, 타이머 큐, 비동기 스레드 등을 어떻게 적용했는지 상세화합니다.
+* **핵심 기능 2 (예: 사용자 인터페이스 및 제어 화면):**
+  - [상세 설명] 사용자가 모니터링하는 화면 및 제어 로직을 작성합니다.
+
+## 4. 트러블 슈팅 및 해결 과정 (Troubleshooting)
+### ⚠️ Issue 1: [문제 상황 한 줄 요약]
+* **현상:** 오동작이나 컴파일 에러 등의 구체적인 동작 이상 상태를 기재합니다.
+* **원인 분석:** 오실로스코프 측정, 로그 분석, 메모리 덤프 등을 통해 발견한 근본 원인을 적습니다.
+* **해결책:** 필터 알고리즘 도입, 하드웨어 회로 보강, 프로토콜 수정 등 해결책 및 코드 스펙을 적습니다.
+
+## 5. 프로젝트 결과 및 느낀 점 (Conclusion & Retrospective)
+* **최종 성과:** 동작 테스트 성공률, 데이터 처리 속도 향상치 등 정량적 성과를 요약합니다.
+* **배운 점:** 프로젝트를 진행하며 기술적으로 성숙해진 점을 정리합니다.
+* **아쉬운 점 & 향후 개선 계획:** 차후 보완하고 싶은 예외 처리나 하드웨어 확장 계획을 기재합니다.`,
+
+    languages: `---
+layout: post
+title: "개발 언어 핵심 개념 및 종합 정리 (C / C# / Python / Java)"
+category: tech-fundamentals
+---
+
+# 💻 개발 언어 통합 학습 로그
+
+## 1. 학습한 언어 종류 및 목적 (Language Stack Overview)
+* C언어: 하드웨어 가속, 임베디드 저수준 메모리 수동 제어(포인터) 학습
+* C# (.NET): 객체지향 기반의 윈도우 데스크톱 관리 애플리케이션 및 GUI 프레임워크 구축
+* Python: 센서 데이터 파싱 시뮬레이터, 이동 평균 필터 모델 검증 및 알고리즘 구현
+* Java: 객체지향 프로그래밍 개념 기초(클래스, 인터페이스, 예외 처리) 학습
+
+## 2. 핵심 문법 및 개념 정리 (Key Concepts)
+* 개념 1: 캡슐화, 상속, 다형성 등 객체지향 특징 정리
+* 개념 2: 포인터 및 메모리 구조(Stack, Heap) 등 수동 제어 영역 분석
+
+## 3. 주요 실습 코드 예제 및 주석 (Code Snippet & Annotation)
+\`\`\`cpp
+// C언어 메모리 수동 할당 및 안전한 해제 구조 예제 코드
+#include <stdio.h>
+#include <stdlib.h>
+
+int main() {
+    int *ptr = (int*)malloc(sizeof(int) * 5); // 힙 영역 메모리 할당
+    if (ptr == NULL) {
+        printf("Memory allocation failed.\\n");
+        return 1;
+    }
+    
+    // 메모리 해제 및 댕글링 포인터 방지
+    free(ptr);
+    ptr = NULL;
+    return 0;
+}
+\`\`\``,
+
+    'device-control': `---
+layout: post
+title: "장비 제어 기술 요약 및 MCU 디바이스 제어 설계"
+category: tech-fundamentals
+---
+
+# ⚙️ 장비 제어 및 MCU 센서 제어 시스템
+
+## 1. 장비 제어 이론 및 하드웨어 개념 (Theory & Spec)
+* UART, I2C, SPI 통신 프로토콜 이론 정리
+* MCU GPIO 핀 제어, 타이머 및 레지스터 인터럽트 처리 메커니즘 분석
+* ADC(아날로그-디지털 변환) 센서 감도 계량 및 부저 모터 PWM 제어 이론
+
+## 2. 직접 작성한 제어 실습 코드 (Embedded C/C++ Code)
+\`\`\`cpp
+// I2C 통신을 이용한 MPU6050 자이로 센서 데이터 초기화 실습 코드
+#include <Wire.h>
+const int MPU_addr = 0x68;
+
+void setup() {
+  Wire.begin();
+  Wire.beginTransmission(MPU_addr);
+  Wire.write(0x6B); // Power Management Register
+  Wire.write(0);    // MPU6050 활성화
+  Wire.endTransmission(true);
+  Serial.begin(9600);
+}
+\`\`\`
+
+## 3. 배운 내용을 실제 프로젝트에 적용한 사례 (Application Case)
+* 센서 원시 데이터를 가공하여 마스터 게이트웨이에 홉 분리 전송 성공사례 정리
+* 실제 프로젝트에 적용된 통신 네트워크 구조 및 하드웨어 융합 부분 기술`,
+
+    'data-analysis': `---
+layout: post
+title: "SQL & Python 활용 정밀 데이터 분석 기법 및 시각화 실습"
+category: tech-fundamentals
+---
+
+# 📊 데이터 분석 및 SQL / Python 활용 실습
+
+## 1. 데이터 분석 핵심 이론 및 SQL/Python 활용법 (Methodology)
+* SQL 데이터 핸들링: JOIN, GROUP BY, Window Function을 활용한 데이터 집계
+* Python 라이브러리: Pandas, NumPy를 활용한 데이터 클렌징(결측치, 이상치 처리)
+
+## 2. 데이터 분석 실습 과정 및 시각화 결과 (Data visualization)
+* 시각화 라이브러리: Matplotlib 및 Seaborn 활용 데이터 경향성 차트 플로팅
+\`\`\`python
+# Pandas DataFrame 생성 및 분포 시각화 예시
+import pandas as pd
+import matplotlib.pyplot as plt
+
+data = {'Sensor_ID': [1, 2, 3, 4], 'RSSI': [-45, -60, -78, -50]}
+df = pd.DataFrame(data)
+df.plot(kind='bar', x='Sensor_ID', y='RSSI')
+plt.show()
+\`\`\`
+
+## 3. 하이테크 과정 내 데이터 분석 프로젝트 결과물 (Deliverables)
+* 센서 원시 데이터 가공 분석 요약 및 이상치 검출 전처리 성과 요약`,
+
+    'machine-learning': `---
+layout: post
+title: "머신러닝 프로그래밍 기초 알고리즘 설계 및 분류 모델 구현"
+category: tech-fundamentals
+---
+
+# 🤖 머신러닝 프로그래밍 기초 실습
+
+## 1. 머신러닝 기초 개념 및 알고리즘 정리 (Core Algorithms)
+* 선형 회귀, 로지스틱 회귀 등 지도학습 기초 요약
+* KNN, 결정 트리(Decision Tree), 랜덤 포레스트 분류 알고리즘 분석
+* 오차행렬, 정확도(Accuracy), F1-Score 평가 지표 학습
+
+## 2. 코드 실습 및 모델 구현 내용 (Model Implementation)
+\`\`\`python
+# Scikit-Learn을 사용한 의사결정나무 센서 이상치 검출 모델 훈련 예시
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score
+
+X_train, X_test, y_train, y_test = train_test_split(features, labels, test_size=0.2)
+model = DecisionTreeClassifier(max_depth=5)
+model.fit(X_train, y_train)
+predictions = model.predict(X_test)
+\`\`\`
+
+## 3. 과정 내 머신러닝 프로젝트 결과 및 회고 (Project Review)
+* 센서 복합 가속도 패턴 분석기 구축 사례 및 정확도 분석
+* 훈련 모델 과적합 차단 노하우 및 머신러닝을 활용한 임베디드 확장 계획`
+  };
+
   document.addEventListener("DOMContentLoaded", () => {
-    // Custom Toast Alert System
+    // Custom Toast System
     function showToast(message) {
-      // Remove any existing toast
       const existingToast = document.querySelector('.custom-toast');
       if (existingToast) {
         existingToast.remove();
       }
-
       const toast = document.createElement('div');
       toast.className = 'custom-toast';
       toast.innerText = message;
       document.body.appendChild(toast);
-      
-      // Trigger animation
       setTimeout(() => toast.classList.add('visible'), 10);
-      
-      // Auto dismiss after 2.5s
       setTimeout(() => {
         toast.classList.remove('visible');
         setTimeout(() => toast.remove(), 400);
       }, 2500);
     }
 
-    // Attach click events to placeholder links
-    const placeholders = document.querySelectorAll('.placeholder-link');
-    placeholders.forEach(link => {
-      link.addEventListener('click', (e) => {
-        e.preventDefault();
-        const msg = link.getAttribute('data-msg');
-        showToast(msg);
+    // Attach link click dynamics to grid cards
+    const gridCards = document.querySelectorAll('.grid-card');
+    gridCards.forEach(card => {
+      card.addEventListener('click', (e) => {
+        // Prevent trigger if clicking on the view-template button specifically
+        if (e.target.closest('.view-template-btn')) {
+          return;
+        }
+
+        if (card.classList.contains('placeholder-link')) {
+          const msg = card.getAttribute('data-msg');
+          showToast(msg);
+        } else if (card.classList.contains('real-link')) {
+          const url = card.getAttribute('data-url');
+          if (url) {
+            window.location.href = url;
+          }
+        }
       });
     });
+
+    // Custom Modal System
+    const modal = document.getElementById('template-modal');
+    const modalTitle = document.getElementById('modal-title-text');
+    const modalCode = document.getElementById('modal-code-text');
+
+    const templateBtns = document.querySelectorAll('.view-template-btn');
+    templateBtns.forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation(); // Stop click propagation to parent card link
+        const templateKey = btn.getAttribute('data-template');
+        const cardTitle = btn.getAttribute('data-title');
+        const templateContent = writingTemplates[templateKey];
+
+        if (templateContent) {
+          modalTitle.innerText = `📝 [${cardTitle}] 글쓰기 템플릿 코드`;
+          modalCode.innerText = templateContent;
+          modal.classList.add('active');
+        }
+      });
+    });
+
+    // Close Modal handler
+    document.getElementById('close-modal-btn').addEventListener('click', () => {
+      modal.classList.remove('active');
+    });
+
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) {
+        modal.classList.remove('active');
+      }
+    });
+
+    // Copy to Clipboard mechanism
+    document.getElementById('copy-template-btn').addEventListener('click', () => {
+      navigator.clipboard.writeText(modalCode.innerText).then(() => {
+        showToast("템플릿 코드가 클립보드에 복사되었습니다!");
+      }).catch(err => {
+        showToast("복사 실패. 브라우저 보안 설정을 확인하세요.");
+      });
+    });
+
+    // Navbar anchor smooth scroll overrides
+    const menuLinks = document.querySelectorAll('.nav-links-custom');
+    menuLinks.forEach(link => {
+      link.addEventListener('click', (e) => {
+        const href = link.getAttribute('href');
+        if (href.startsWith('#')) {
+          e.preventDefault();
+          const targetSection = document.querySelector(href);
+          if (targetSection) {
+            targetSection.scrollIntoView({ behavior: 'smooth' });
+            
+            // Brief neon pulse effect on the section title
+            targetSection.style.transition = 'text-shadow 0.3s ease';
+            targetSection.style.textShadow = '0 0 20px #818cf8, 0 0 30px #818cf8';
+            setTimeout(() => {
+              targetSection.style.textShadow = 'none';
+            }, 600);
+          }
+        }
+      });
+    });
+
+    // 3D Grid Card Hover Tilt Mechanics
+    gridCards.forEach(card => {
+      card.addEventListener('mouseenter', () => {
+        card.style.transition = 'transform 0.1s ease-out, border-color 0.35s, box-shadow 0.35s';
+      });
+
+      card.addEventListener('mousemove', (e) => {
+        const rect = card.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+
+        const centerX = rect.width / 2;
+        const centerY = rect.height / 2;
+
+        const rotateX = ((y - centerY) / centerY) * -5;
+        const rotateY = ((x - centerX) / centerX) * 5;
+
+        card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-5px)`;
+      });
+
+      card.addEventListener('mouseleave', () => {
+        card.style.transition = 'transform 0.5s cubic-bezier(0.25, 0.8, 0.25, 1), border-color 0.35s, box-shadow 0.35s';
+        card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) translateY(0)';
+      });
+    });
+
   });
 </script>
