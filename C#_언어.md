@@ -1,67 +1,3 @@
----
-layout: post
-title: "개발 언어 기초 (Languages)"
-category: tech-fundamentals
-author: eunji
-short-description: "C언어, C#, Python, Java 통합 핵심 이론 문법 및 예제 실습 로그"
----
-
-# 💻 개발 언어 기초 (Languages)
-
-<details open>
-  <summary>1. 학습한 언어 종류 및 목적 (Language Stack Overview)</summary>
-  <div class="details-content" markdown="1">
-* **C언어:** 하드웨어 가속, 임베디드 저수준 메모리 수동 제어(포인터 및 주소 참조) 학습
-* **C# (.NET):** 객체지향 기반의 윈도우 데스크톱 마트 관리 애플리케이션 및 비동기 GUI 구현
-* **Python:** 센서 데이터 전처리 시뮬레이터, 이동 평균 필터 알고리즘 모델링 및 검증
-* **Java:** JVM 가상 머신 기반 플랫폼 독립 프로그래밍 및 클래스, 인터페이스 설계
-  </div>
-</details>
-
-<details>
-  <summary>2. C언어 기초 내용</summary>
-  <div class="details-content" markdown="1">
-### 📌 C/C++ 포인터와 메모리 관리
-- 스택(Stack) 영역과 힙(Heap) 영역의 물리적 메모리 구분 구조.
-- 포인터 변수 참조(`*`, `&`) 및 수동 동적 할당(`malloc`/`free`)의 안정적 제어.
-
-```cpp
-// C언어 메모리 수동 할당 및 안전한 해제 구조 예제 코드
-#include <stdio.h>
-#include <stdlib.h>
-
-int main() {
-    int *ptr = (int*)malloc(sizeof(int) * 5); // 힙 영역 메모리 할당
-    if (ptr == NULL) {
-        printf("Memory allocation failed.\n");
-        return 1;
-    }
-    
-    // 할당 영역 사용 예시
-    for(int i = 0; i < 5; i++) {
-        ptr[i] = i * 10;
-    }
-    
-    // 메모리 누수 방지를 위한 해제 및 댕글링 포인터 차단
-    free(ptr);
-    ptr = NULL;
-    
-    return 0;
-}
-```
-  </div>
-</details>
-
-<details>
-  <summary>3. 파이썬 기초 내용</summary>
-  <div class="details-content" markdown="1">
-(파이썬 기초 내용은 추후 채워질 예정입니다.)
-  </div>
-</details>
-
-<details>
-  <summary>4. C# 내용</summary>
-  <div class="details-content" markdown="1">
 # [Tech Stacks] C# 언어
 > **C# 프로그래밍의 기초가 되는 핵심 용어, 데이터 처리, 그리고 흐름 제어(조건문)의 핵심 개념 요약**
 
@@ -186,5 +122,3 @@ int main() {
 ### 03. 클래스의 변수 (멤버 변수와 속성)
 * **인스턴스 변수(필드):** 클래스 내부 영역에 선언되어 객체가 가질 수 있는 고유한 데이터 상자들을 의미합니다. 
 * **상태의 유지:** 이 변수들은 메서드 내부의 지역 변수와 달리, 객체가 메모리에 살아있는 동안 유지되며 해당 객체의 현재 '상태(State)'를 대변하는 역할을 담당합니다.
-  </div>
-</details>
