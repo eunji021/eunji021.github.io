@@ -1,12 +1,12 @@
 ---
 layout: post
-title: "개발 언어 파트"
+title: "개발 언어 기초 (Languages)"
 category: tech-fundamentals
 author: eunji
 short-description: "C언어, C#, Python, Java 통합 핵심 이론 문법 및 예제 실습 로그"
 ---
 
-# 💻 개발 언어 파트 (Programming Languages Summary)
+# 💻 개발 언어 기초 (Languages)
 
 <details open>
   <summary>1. 학습한 언어 종류 및 목적 (Language Stack Overview)</summary>
