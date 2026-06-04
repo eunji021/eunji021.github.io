@@ -209,6 +209,83 @@ layout: default
     color: #cbd5e1;
   }
 
+  /* Premium Sci-Fi Details/Summary Accordion */
+  .post-article-card details {
+    background: rgba(13, 19, 31, 0.3) !important;
+    border: 1px solid rgba(255, 255, 255, 0.04) !important;
+    border-radius: 14px !important;
+    margin-bottom: 20px !important;
+    padding: 0 !important;
+    overflow: hidden;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  }
+
+  .post-article-card details[open] {
+    border-color: rgba(129, 140, 248, 0.3) !important;
+    background: rgba(13, 19, 31, 0.6) !important;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25), 0 0 15px rgba(129, 140, 248, 0.03);
+  }
+
+  .post-article-card details summary {
+    list-style: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 18px 24px !important;
+    font-family: 'Pretendard', sans-serif !important;
+    font-size: 1.15rem !important;
+    font-weight: 800 !important;
+    color: #ffffff !important;
+    cursor: pointer;
+    user-select: none;
+    outline: none;
+    transition: all 0.2s ease;
+  }
+
+  .post-article-card details summary::-webkit-details-marker,
+  .post-article-card details summary::marker {
+    display: none !important;
+  }
+
+  .post-article-card details summary:hover {
+    background: rgba(129, 140, 248, 0.06);
+    color: #818cf8 !important;
+  }
+
+  /* Custom indicator arrow */
+  .post-article-card details summary::after {
+    content: '▼';
+    font-size: 0.8rem;
+    color: #64748b;
+    transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    margin-left: 10px;
+  }
+
+  .post-article-card details[open] summary::after {
+    transform: rotate(180deg);
+    color: #818cf8;
+  }
+
+  .post-article-card details .details-content {
+    padding: 24px 24px !important;
+    border-top: 1px solid rgba(255, 255, 255, 0.04) !important;
+    background: rgba(6, 9, 15, 0.2) !important;
+  }
+
+  .post-article-card details .details-content > *:last-child {
+    margin-bottom: 0 !important;
+  }
+
+  @keyframes detailsFadeIn {
+    from { opacity: 0; transform: translateY(-8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .post-article-card details[open] .details-content {
+    animation: detailsFadeIn 0.35s cubic-bezier(0.25, 0.8, 0.25, 1) forwards;
+  }
+
   /* Centered custom footer signature */
   .custom-footer {
     text-align: center;
