@@ -6,58 +6,290 @@ layout: default
 
 {% assign page_category = site.data.category_list[page.category] %}
 
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800;900&family=Share+Tech+Mono&display=swap');
 
-<div class="container-full">
-    <div class="container grid-xl">
-      <div class="mt-12 show-md"></div>
-      <div class="mt-8"></div>
-      <div class="columns negative-m-xl">
-        <div class="column col-12">
-          <ul class="breadcrumb">
-            <li class="breadcrumb-item">
-              <a href="{{ site.url }}{{ site.baseurl }}">Help Center Home</a>
-            </li>
-            <li class="breadcrumb-item">
-              <a href="../{{ page.category }}">{{ page_category.name }}</a>
-            </li>
-            <li class="breadcrumb-item">
-              <a href="#">{{ page.title }}</a>
-            </li>
-          </ul>
-          <h2 class="text-light text-bold">{{ page.title }}</h2>
-          <p class="text-light mb-0">{{ page.short-description }}</p>
-        </div>
-        <div class="column col-12">
-          <div class="card">
-            <div class="card-body">
-                {% if site.use_authors == true %}
-                {% assign post_author = site.data.authors[page.author] %}
-                <div class="flex-vertical-center mb-4">
-                  <figure class="avatar d-inline-block" style="align-items: center;">
-                    <img  src="../assets/{{ post_author.image }}" alt="...">
-                  </figure>
-                  <div class="ml-2">
-                    <p class="text-dark text-small mb-0">Written by <span class="text-primary">{{ post_author.name }}</span></p>
-                    <p class="text-dark text-small text-italic mb-0">{% include reading-time.html %}</p>
-                  </div>
-                </div>
-                {% else %}
-                <div class="ml-2">
-                    <p class="m-0 text-small">Last updated:</p>
-                    <p class="text-dark text-small text-italic mb-0">{{ page.last_modified_at | date: '%B %d, %Y'  }} - {% include reading-time.html %}</p>
-                  </div>
-                {% endif %}
+  /* Force premium dark radial theme with custom subtle glows */
+  body {
+    background-color: #080b11 !important;
+    background: radial-gradient(circle at top right, rgba(99, 102, 241, 0.08) 0%, transparent 450px),
+                radial-gradient(circle at bottom left, rgba(59, 130, 246, 0.04) 0%, transparent 450px),
+                #080b11 !important;
+    color: #cbd5e1 !important;
+    font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+    min-height: 100vh;
+  }
 
-              {{ content }}
+  /* Hide default footer to align with homepage design */
+  .footer {
+    display: none !important;
+  }
 
-              
-            
+  /* Breadcrumbs Styling */
+  .breadcrumb {
+    margin-bottom: 25px !important;
+  }
 
+  .breadcrumb-item a {
+    color: #818cf8 !important;
+    text-decoration: none !important;
+    font-family: 'Pretendard', sans-serif;
+    font-weight: 500;
+    transition: color 0.2s;
+  }
 
-            </div>
-          </div>
-        </div>
-        {% include more-help.html %}
+  .breadcrumb-item a:hover {
+    color: #ffffff !important;
+  }
+
+  .breadcrumb-item + .breadcrumb-item::before {
+    color: #475569 !important;
+  }
+
+  /* Header Overrides */
+  .post-header-title {
+    font-family: 'Pretendard', sans-serif !important;
+    font-size: clamp(1.8rem, 4vw, 2.5rem) !important;
+    font-weight: 800 !important;
+    color: #ffffff !important;
+    text-shadow: none !important;
+    margin: 15px 0 10px 0;
+    letter-spacing: -0.5px;
+  }
+
+  .post-header-desc {
+    font-family: 'Pretendard', sans-serif !important;
+    font-size: 1.05rem !important;
+    color: #94a3b8 !important;
+    margin-bottom: 35px;
+    line-height: 1.6;
+  }
+
+  /* Author block styling */
+  .author-block-custom {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 30px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    padding-bottom: 20px;
+  }
+
+  .author-avatar {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: 2px solid #818cf8;
+    background: #1e293b;
+    overflow: hidden;
+  }
+
+  .author-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .author-info-text {
+    font-family: 'Pretendard', sans-serif;
+    font-size: 0.85rem;
+    color: #94a3b8;
+  }
+
+  .author-info-text span.author-name {
+    color: #ffffff;
+    font-weight: 600;
+  }
+
+  .author-info-text span.read-time {
+    font-family: 'Share Tech Mono', monospace;
+    color: #818cf8;
+    font-style: italic;
+  }
+
+  /* Premium Glassmorphic Article Card */
+  .post-article-card {
+    background: rgba(13, 19, 31, 0.4) !important;
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.04) !important;
+    border-radius: 20px !important;
+    padding: 40px !important;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.25) !important;
+    color: #e2e8f0;
+    line-height: 1.8;
+  }
+
+  /* Markdown Typography Overrides inside standard posts */
+  .post-article-card h1, .post-article-card h2 {
+    font-family: 'Pretendard', sans-serif !important;
+    color: #818cf8 !important;
+    font-size: 1.5rem !important;
+    font-weight: 700 !important;
+    margin-top: 40px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    padding-bottom: 12px;
+    text-shadow: none !important;
+  }
+
+  .post-article-card h2:first-of-type {
+    margin-top: 0;
+  }
+
+  .post-article-card h3 {
+    font-family: 'Pretendard', sans-serif !important;
+    color: #ffffff !important;
+    font-size: 1.2rem !important;
+    font-weight: 700 !important;
+    margin-top: 30px;
+    margin-bottom: 12px;
+    text-shadow: none !important;
+  }
+
+  .post-article-card p {
+    font-size: 0.98rem;
+    color: #94a3b8;
+    margin-bottom: 20px;
+    word-break: keep-all;
+  }
+
+  .post-article-card ul, .post-article-card ol {
+    margin-bottom: 25px;
+    padding-left: 20px;
+    color: #cbd5e1;
+  }
+
+  .post-article-card li {
+    margin-bottom: 8px;
+  }
+
+  /* Premium Code Blocks */
+  .post-article-card pre {
+    background: rgba(6, 9, 15, 0.85) !important;
+    border: 1px solid rgba(129, 140, 248, 0.2) !important;
+    border-radius: 12px !important;
+    padding: 20px !important;
+    margin-bottom: 30px !important;
+    overflow-x: auto;
+    box-shadow: inset 0 0 15px rgba(0,0,0,0.2);
+  }
+
+  .post-article-card code {
+    font-family: 'Share Tech Mono', monospace !important;
+    color: #4ade80 !important;
+    font-size: 0.9rem !important;
+    background: transparent !important;
+    padding: 0 !important;
+  }
+
+  /* Inline Code Tags */
+  .post-article-card p code, .post-article-card li code {
+    background: rgba(129, 140, 248, 0.1) !important;
+    color: #a5b4fc !important;
+    border: 1px solid rgba(129, 140, 248, 0.2) !important;
+    border-radius: 4px !important;
+    padding: 2px 6px !important;
+    font-family: 'Share Tech Mono', monospace !important;
+    font-size: 0.88rem !important;
+  }
+
+  /* Blockquote callouts */
+  .post-article-card blockquote {
+    background: rgba(129, 140, 248, 0.05);
+    border-left: 4px solid #818cf8;
+    border-radius: 4px;
+    padding: 15px 20px;
+    margin: 25px 0;
+    color: #cbd5e1;
+  }
+
+  .post-article-card blockquote p {
+    margin-bottom: 0;
+    color: #cbd5e1;
+  }
+
+  /* Centered custom footer signature */
+  .custom-footer {
+    text-align: center;
+    padding: 60px 0 40px;
+    font-family: 'Pretendard', sans-serif !important;
+    font-size: 1.1rem !important;
+    font-weight: 800;
+    color: #ffffff;
+    letter-spacing: -0.5px;
+  }
+
+  .custom-footer span {
+    color: #818cf8;
+    margin-left: 4px;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(15px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+</style>
+
+<div class="container-full" style="padding: 60px 0 100px;">
+  <div class="container grid-xl" style="max-width: 900px !important; width: 95% !important;">
+    <div class="columns">
+      
+      <!-- Breadcrumbs & Heading -->
+      <div class="column col-12" style="animation: fadeUp 0.6s ease forwards;">
+        <ul class="breadcrumb">
+          <li class="breadcrumb-item">
+            <a href="{{ site.baseurl }}/">Home</a>
+          </li>
+          <li class="breadcrumb-item">
+            <a href="{{ site.baseurl }}/{{ page.category }}">{{ page_category.name }}</a>
+          </li>
+          <li class="breadcrumb-item">
+            <a href="#">{{ page.title }}</a>
+          </li>
+        </ul>
+        <h2 class="post-header-title">{{ page.title }}</h2>
+        <p class="post-header-desc">{{ page.short-description }}</p>
       </div>
+
+      <!-- Post Main Card Body -->
+      <div class="column col-12" style="animation: fadeUp 0.8s ease forwards;">
+        <div class="post-article-card">
+          
+          <!-- Author Block -->
+          {% if site.use_authors == true %}
+            {% assign post_author = site.data.authors[page.author] %}
+            <div class="author-block-custom">
+              <div class="author-avatar">
+                <img src="{{ site.baseurl }}/assets/{{ post_author.image }}" alt="...">
+              </div>
+              <div class="author-info-text">
+                Written by <span class="author-name">{{ post_author.name }}</span>
+                <br>
+                <span class="read-time">{% include reading-time.html %}</span>
+              </div>
+            </div>
+          {% else %}
+            <div class="author-block-custom">
+              <div class="author-info-text">
+                Last updated: <span class="author-name">{{ page.last_modified_at | date: '%B %d, %Y' }}</span>
+                <br>
+                <span class="read-time">{% include reading-time.html %}</span>
+              </div>
+            </div>
+          {% endif %}
+
+          <!-- Main Article Output Content -->
+          {{ content }}
+
+        </div>
+      </div>
+
     </div>
   </div>
+</div>
+
+<!-- Center custom footer signature -->
+<div class="custom-footer">
+  Kwon <span>Eun Ji</span>
+</div>
