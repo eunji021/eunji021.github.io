@@ -333,28 +333,7 @@ layout: default
       <div class="column col-12" style="animation: fadeUp 0.8s ease forwards;">
         <div class="post-article-card">
           
-          <!-- Author Block -->
-          {% if site.use_authors == true %}
-            {% assign post_author = site.data.authors[page.author] %}
-            <div class="author-block-custom">
-              <div class="author-avatar">
-                <img src="{{ site.baseurl }}/assets/{{ post_author.image }}" alt="...">
-              </div>
-              <div class="author-info-text">
-                Written by <span class="author-name">{{ post_author.name }}</span>
-                <br>
-                <span class="read-time">{% include reading-time.html %}</span>
-              </div>
-            </div>
-          {% else %}
-            <div class="author-block-custom">
-              <div class="author-info-text">
-                Last updated: <span class="author-name">{{ page.last_modified_at | date: '%B %d, %Y' }}</span>
-                <br>
-                <span class="read-time">{% include reading-time.html %}</span>
-              </div>
-            </div>
-          {% endif %}
+          <!-- Author Block removed as per user request -->
 
           <!-- Main Article Output Content -->
           {{ content }}
