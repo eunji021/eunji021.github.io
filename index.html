@@ -599,9 +599,14 @@ title: Home
         <span class="badge-tag">Classification</span>
       </div>
       <div class="card-footer-action">
-        <button class="card-action-btn view-template-btn" data-template="machine-learning" data-title="머신러닝 프로그래밍 기초 (Machine Learning)">
-          <i class="uil uil-file-alt"></i> 템플릿 보기
-        </button>
+        <div style="display: flex; gap: 15px;">
+          <button class="card-action-btn view-template-btn" data-template="machine-learning-concept" data-title="머신러닝 프로그래밍 (개념)">
+            <i class="uil uil-file-alt"></i> 개념
+          </button>
+          <button class="card-action-btn view-template-btn" data-template="machine-learning-practice" data-title="머신러닝 프로그래밍 (실습)">
+            <i class="uil uil-file-alt"></i> 실습
+          </button>
+        </div>
         <span class="card-link-arrow"><i class="uil uil-arrow-right"></i></span>
       </div>
     </div>
@@ -770,20 +775,28 @@ plt.show()
 ## 3. 하이테크 과정 내 데이터 분석 프로젝트 결과물 (Deliverables)
 * 센서 원시 데이터 가공 분석 요약 및 이상치 검출 전처리 성과 요약`,
 
-    'machine-learning': `---
+    'machine-learning-concept': `---
 layout: post
-title: "머신러닝 프로그래밍 기초 알고리즘 설계 및 분류 모델 구현"
+title: "머신러닝 프로그래밍 개념 정리"
 category: tech-fundamentals
 ---
 
-# 🤖 머신러닝 프로그래밍 기초 실습
+# 🤖 머신러닝 프로그래밍 개념
 
 ## 1. 머신러닝 기초 개념 및 알고리즘 정리 (Core Algorithms)
 * 선형 회귀, 로지스틱 회귀 등 지도학습 기초 요약
 * KNN, 결정 트리(Decision Tree), 랜덤 포레스트 분류 알고리즘 분석
-* 오차행렬, 정확도(Accuracy), F1-Score 평가 지표 학습
+* 오차행렬, 정확도(Accuracy), F1-Score 평가 지표 학습`,
 
-## 2. 코드 실습 및 모델 구현 내용 (Model Implementation)
+    'machine-learning-practice': `---
+layout: post
+title: "머신러닝 프로그래밍 분류 모델 구현 실습"
+category: tech-fundamentals
+---
+
+# 🤖 머신러닝 프로그래밍 실습
+
+## 1. 코드 실습 및 모델 구현 내용 (Model Implementation)
 \`\`\`python
 # Scikit-Learn을 사용한 의사결정나무 센서 이상치 검출 모델 훈련 예시
 from sklearn.tree import DecisionTreeClassifier
@@ -796,7 +809,7 @@ model.fit(X_train, y_train)
 predictions = model.predict(X_test)
 \`\`\`
 
-## 3. 과정 내 머신러닝 프로젝트 결과 및 회고 (Project Review)
+## 2. 과정 내 머신러닝 프로젝트 결과 및 회고 (Project Review)
 * 센서 복합 가속도 패턴 분석기 구축 사례 및 정확도 분석
 * 훈련 모델 과적합 차단 노하우 및 머신러닝을 활용한 임베디드 확장 계획`
   };
