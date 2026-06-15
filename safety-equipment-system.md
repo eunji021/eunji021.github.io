@@ -107,22 +107,6 @@ short-description: "ESP32 게이트웨이를 이용해 작업자 안전모와 �
   }
   .carousel-btn.prev { left: 15px; }
   .carousel-btn.next { right: 15px; }
-  .carousel-indicator {
-    position: absolute;
-    bottom: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: rgba(0,0,0,0.8);
-    color: white;
-    padding: 6px 14px;
-    border-radius: 20px;
-    font-size: 0.95rem;
-    font-weight: 600;
-    font-family: 'Pretendard', sans-serif;
-    z-index: 10;
-    letter-spacing: 1px;
-    border: 1px solid rgba(16, 185, 129, 0.3);
-  }
 </style>
 
 <div class="project-tabs-container">
@@ -147,23 +131,33 @@ short-description: "ESP32 게이트웨이를 이용해 작업자 안전모와 �
       <!-- 컨트롤 버튼 -->
       <button class="carousel-btn prev" onclick="moveSlide(-1)">&#10094;</button>
       <button class="carousel-btn next" onclick="moveSlide(1)">&#10095;</button>
-      
-      <!-- 인디케이터 -->
-      <div class="carousel-indicator" id="slide-indicator">1 / 6</div>
     </div>
   </div>
 
   <script>
     let currentSlide = 0;
     const slides = document.querySelectorAll('.carousel-slide');
-    const indicator = document.getElementById('slide-indicator');
+    const prevBtn = document.querySelector('.carousel-btn.prev');
+    const nextBtn = document.querySelector('.carousel-btn.next');
+
+    function updateButtons() {
+      prevBtn.style.display = (currentSlide === 0) ? 'none' : 'block';
+      nextBtn.style.display = (currentSlide === slides.length - 1) ? 'none' : 'block';
+    }
 
     function moveSlide(direction) {
+      const newIndex = currentSlide + direction;
+      if (newIndex < 0 || newIndex >= slides.length) return;
+      
       slides[currentSlide].classList.remove('active');
-      currentSlide = (currentSlide + direction + slides.length) % slides.length;
+      currentSlide = newIndex;
       slides[currentSlide].classList.add('active');
-      indicator.innerText = (currentSlide + 1) + " / " + slides.length;
+      
+      updateButtons();
     }
+    
+    // Initialize buttons on load
+    updateButtons();
   </script>
 
   <!-- 2. 소개 탭 콘텐츠 -->
