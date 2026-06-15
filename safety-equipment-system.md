@@ -65,24 +65,106 @@ short-description: "ESP32 게이트웨이를 이용해 작업자 안전모와 �
     text-align: center;
     padding: 20px;
   }
+  /* 슬라이드 뷰어(Carousel) 스타일 */
+  .carousel-container {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    background: #111827;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+  }
+  .carousel-slide {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    opacity: 0;
+    transition: opacity 0.4s ease-in-out;
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+  .carousel-slide.active {
+    opacity: 1;
+    z-index: 1;
+  }
+  .carousel-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(16, 185, 129, 0.4);
+    color: white;
+    border: none;
+    font-size: 1.5rem;
+    padding: 15px 20px;
+    cursor: pointer;
+    z-index: 10;
+    border-radius: 8px;
+    transition: background 0.2s;
+  }
+  .carousel-btn:hover {
+    background: rgba(16, 185, 129, 0.9);
+  }
+  .carousel-btn.prev { left: 15px; }
+  .carousel-btn.next { right: 15px; }
+  .carousel-indicator {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0,0,0,0.8);
+    color: white;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    font-family: 'Pretendard', sans-serif;
+    z-index: 10;
+    letter-spacing: 1px;
+    border: 1px solid rgba(16, 185, 129, 0.3);
+  }
 </style>
 
 <div class="project-tabs-container">
   <!-- 상단 탭 메뉴 -->
   <div class="tabs-nav">
-    <button class="tab-btn active" data-target="tab-ppt">PPT</button>
+    <button class="tab-btn active" data-target="tab-ppt">한눈에 보기</button>
     <button class="tab-btn" data-target="tab-intro">소개</button>
     <button class="tab-btn" data-target="tab-code">코드</button>
   </div>
 
-  <!-- 1. PPT 탭 콘텐츠 -->
+    <!-- 1. 한눈에 보기 탭 콘텐츠 -->
   <div id="tab-ppt" class="tab-content active">
-    <div class="ppt-placeholder">
-      <div style="font-size: 4rem; margin-bottom: 20px;">📊</div>
-      <h3 style="color: #ffffff; margin-top: 0; margin-bottom: 10px; border-bottom: none; text-shadow: none;">프로젝트 발표 자료 (PPT)</h3>
-      <p style="color: #94a3b8; font-size: 1rem; margin-bottom: 0;">여기에 슬라이드 이미지 또는 iframe 코드를 삽입하여 발표 자료를 보여줄 수 있습니다.</p>
+    <div class="carousel-container" id="slide-carousel">
+      <!-- 슬라이드 이미지들 -->
+      <div class="carousel-slide active" style="background-image: url('{{ site.baseurl }}/assets/img/projects/safety_slides/slide_1.png');"></div>
+      <div class="carousel-slide" style="background-image: url('{{ site.baseurl }}/assets/img/projects/safety_slides/slide_2.png');"></div>
+      <div class="carousel-slide" style="background-image: url('{{ site.baseurl }}/assets/img/projects/safety_slides/slide_3.png');"></div>
+      <div class="carousel-slide" style="background-image: url('{{ site.baseurl }}/assets/img/projects/safety_slides/slide_4.png');"></div>
+      <div class="carousel-slide" style="background-image: url('{{ site.baseurl }}/assets/img/projects/safety_slides/slide_5.png');"></div>
+      <div class="carousel-slide" style="background-image: url('{{ site.baseurl }}/assets/img/projects/safety_slides/slide_6.png');"></div>
+      
+      <!-- 컨트롤 버튼 -->
+      <button class="carousel-btn prev" onclick="moveSlide(-1)">&#10094;</button>
+      <button class="carousel-btn next" onclick="moveSlide(1)">&#10095;</button>
+      
+      <!-- 인디케이터 -->
+      <div class="carousel-indicator" id="slide-indicator">1 / 6</div>
     </div>
   </div>
+
+  <script>
+    let currentSlide = 0;
+    const slides = document.querySelectorAll('.carousel-slide');
+    const indicator = document.getElementById('slide-indicator');
+
+    function moveSlide(direction) {
+      slides[currentSlide].classList.remove('active');
+      currentSlide = (currentSlide + direction + slides.length) % slides.length;
+      slides[currentSlide].classList.add('active');
+      indicator.innerText = (currentSlide + 1) + " / " + slides.length;
+    }
+  </script>
 
   <!-- 2. 소개 탭 콘텐츠 -->
   <div id="tab-intro" class="tab-content" markdown="1">
