@@ -409,6 +409,7 @@ void loop() {
   }
   delay(100);
 }
+{% endhighlight %}
 
 ### 3. BLE 거리 판정 및 이탈 감지 로직 코드 (BLE_Distance_Scanner.ino)
 * **핵심 로직 설명:** * 기준이 되는 비콘(targetMac)의 RSSI 무선 강도를 체크하여 -50dBm 이하로 떨어지면    작업자가 구역을 이탈한 것으로 보고 부저 경고 신호를 발생시킴.
@@ -474,12 +475,12 @@ void loop() {
     delay(2000); 
   }
 }
+{% endhighlight %}
 
 ### 4. MIT APP Inventor(앱 인벤터)
 
 
 <div class="app-inventor-viewer">
-  <!-- 이곳에 나중에 앱 인벤터 캡처 이미지가 들어갑니다 -->
   <i class="uil uil-image-v" style="font-size: 3rem; margin-bottom: 10px; color: rgba(16,185,129,0.5);"></i>
   <p style="margin:0; font-size: 1.1rem; color: #cbd5e1;">앱 인벤터 블록 코딩 시각 자료 (업데이트 예정)</p>
   <p style="margin:5px 0 0 0; font-size: 0.9rem; color: #64748b;">이미지가 깨지지 않도록 미리 확보된 렌더링 공간입니다.</p>
@@ -508,6 +509,7 @@ void loop() {
   // do nothing
 }
 
+{% endhighlight %}
 
 
   </div>
@@ -760,6 +762,7 @@ void loop() {
 
   delay(100); // 조금 쉬기
 }
+{% endhighlight %}
 
 
   </div>
@@ -768,7 +771,6 @@ void loop() {
 <details class="code-accordion">
   <summary>5-3 송신용 코드</summary>
   <div class="accordion-content" markdown="1">
-
 
 {% highlight cpp %}
 #include <BLEDevice.h>
@@ -799,6 +801,7 @@ void setup() {
 void loop() {
   delay(1000);
 }
+{% endhighlight %}
 
 
   </div>
@@ -918,6 +921,7 @@ void loop() {
   }
   delay(100);
 }
+{% endhighlight %}
 
 
   </div>
