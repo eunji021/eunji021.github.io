@@ -143,16 +143,6 @@ author: eunji
     box-shadow: 0 4px 15px rgba(0,0,0,0.4);
   }
   
-  /* Highlight matching search text */
-  .search-highlight {
-    background-color: rgba(16, 185, 129, 0.3);
-    color: #fff;
-    border-radius: 2px;
-    padding: 0 2px;
-  }
-  .hidden-section { display: none !important; }
-
-
   /* Search Results View */
   .search-results-header {
     font-size: 1.5rem;
@@ -192,6 +182,8 @@ author: eunji
     border-radius: 2px;
     font-weight: bold;
   }
+  
+  .hidden-section { display: none !important; }
 
   @media (max-width: 992px) {
     .gitbook-container { flex-direction: column; }
@@ -216,9 +208,6 @@ author: eunji
     </div>
     
     <ul class="sidebar-nav">
-      <li class="nav-category" id="cat-overview">
-        <div class="nav-category-title" onclick="openCategory('overview')">Overview</div>
-      </li>
       <li class="nav-category" id="cat-clang">
         <div class="nav-category-title" onclick="openCategory('clang')">C언어</div>
       </li>
@@ -239,11 +228,7 @@ author: eunji
   <!-- Main Content -->
   <main class="gitbook-content-area">
     
-    <div id="content-overview" class="content-section" markdown="1">
-
-    </div>
-    
-    <div id="content-clang" class="content-section" markdown="1">
+<div id="content-clang" class="content-section" markdown="1">
 ### 📌 C/C++ 포인터와 메모리 관리
 - 스택(Stack) 영역과 힙(Heap) 영역의 물리적 메모리 구분 구조.
 - 포인터 변수 참조(`*`, `&`) 및 수동 동적 할당(`malloc`/`free`)의 안정적 제어.
@@ -272,50 +257,9 @@ int main() {
     return 0;
 }
 ```
-    </div>
+</div>
     
-    <div id="content-python" class="content-section active" markdown="1">
-# 01장 Python Programming: 기초 및 자료형
-
-## 01-1 자료형
-
-### 변수(Variable)
-----------------------------------------
-
-값을 저장하는 메모리 공간  
-즉, 포스트잇(변수) = 포스트잇 안에 내용(저장된 데이터)    
-ex) a, b가 변수   
-   → a(변수명) = 15(저장된 데이터)  
-   
-
-- 변수 이름과 값을 할당하여 사용한다.  
-ex) a = 10
-- 프로그램 실행 중 값 변경이 가능하다.  
-ex) a = 10 -> a = 20
-- 변수 이름(식별자) 자체도 값처럼 다룰 수 있다.
-- 변수에 값을 넣으면 자료형으로 자동으로 정해준다.
-- type(): 변수에 저장된 자료형을 확인할 때 사용
-
-
-### 변수 규칙
-------------------------------------------
-
-- 영문자, 숫자, _ 사용 가능
-- 숫자로 시작할 수 없다.  
-ex) 1anme = '이름'
-- 예약어(이미 정해져 있는 변수) 사용을 못 한다.  
-ex)  if, else, while 등
-- 대소문자를 구분한다.
-  -> 변수 이름을 서로 다른 값으로 구별하기 때문이다.    
-
-### 변수명 작성 
------------------------------------------
-- 의미가 명확한 이름 사용    
-ex) score, name
-- 단어 사이에 _ 넣어서 사용    
-ex) name_student
-- 길이가 너무 짧거나 긴 이름은 사용하지 않는다.
-
+<div id="content-python" class="content-section active" markdown="1">
 {% highlight python %}
 print('안녕하세요')   # print('') '' 안에 문자열을 넣어 사용
 
@@ -2373,11 +2317,9 @@ def moring_routine():
 show_daily_quote()
 moring_routine()
 {% endhighlight %}
-
-
-    </div>
+</div>
     
-    <div id="content-csharp" class="content-section" markdown="1">
+<div id="content-csharp" class="content-section" markdown="1">
 # [Tech Stacks] C# 언어
 > **C# 프로그래밍의 기초가 되는 핵심 용어, 데이터 처리, 그리고 흐름 제어(조건문)의 핵심 개념 요약**
 
@@ -2508,8 +2450,13 @@ moring_routine()
     <div id="content-search-results" class="content-section">
       <div class="search-results-header" id="search-results-header"></div>
       <div id="search-results-list"></div>
-    </div>
+</div>
 
+<div id="content-search-results" class="content-section">
+  <div class="search-results-header" id="search-results-header"></div>
+  <div id="search-results-list"></div>
+</div>
+    
   </main>
 </div>
 
@@ -2613,7 +2560,7 @@ document.addEventListener("DOMContentLoaded", function() {
     if (query === "") {
       // Show TOC fully
       sections.forEach(sec => sec.tocElement.classList.remove("hidden-section"));
-      // Restore previous category (e.g. python)
+      // Restore previous category
       openCategory(previousCategory);
       return;
     }
