@@ -480,10 +480,8 @@ void loop() {
 ### 4. MIT APP Inventor(앱 인벤터)
 
 
-<div class="app-inventor-viewer">
-  <i class="uil uil-image-v" style="font-size: 3rem; margin-bottom: 10px; color: rgba(16,185,129,0.5);"></i>
-  <p style="margin:0; font-size: 1.1rem; color: #cbd5e1;">앱 인벤터 블록 코딩 시각 자료 (업데이트 예정)</p>
-  <p style="margin:5px 0 0 0; font-size: 0.9rem; color: #64748b;">이미지가 깨지지 않도록 미리 확보된 렌더링 공간입니다.</p>
+<div class="app-inventor-viewer" style="padding: 10px; border: none; background: transparent;">
+  <img src="{{ site.baseurl }}/assets/img/projects/app_inventor_blocks.png" alt="MIT App Inventor 블록 코딩" style="max-width: 100%; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.3);">
 </div>
 
 ###  5. 실시간 안전 장비 착용 여부 시스템 전체적인 코드
