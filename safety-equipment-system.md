@@ -265,7 +265,7 @@ short-description: "ESP32 게이트웨이를 이용해 작업자 안전모와 �
   .worker-wrapper { position: relative; width: 120px; height: 350px; display: flex; justify-content: center; align-items: flex-end; }
   
   .worker-body {
-    width: 80px; height: 140px; background: #334155; border-radius: 40px 40px 10px 10px; position: absolute; bottom: 80px; transition: transform 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55); z-index: 5;
+    width: 80px; height: 140px; background: #334155; border-radius: 40px 40px 10px 10px; position: absolute; bottom: 80px; transition: transform 0.15s ease-in; z-index: 5;
     display: flex; justify-content: center; cursor: pointer;
   }
   .worker-body.fallen { transform: rotate(90deg) translate(30px, 40px); }
@@ -310,9 +310,12 @@ short-description: "ESP32 게이트웨이를 이용해 작업자 안전모와 �
   @keyframes pulseRed { from { opacity: 0.7; transform: scale(1); } to { opacity: 1; transform: scale(1.1); } }
 
   /* 블루투스 신호 애니메이션 영역 */
+  
+  .drag-item.detached .ble-cloud { background: rgba(239, 68, 68, 0.4); border-color: #ef4444; color: #fecaca; box-shadow: 0 0 15px #ef4444; animation: errorShake 0.4s; }
+
   .ble-signal-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 15; }
   .ble-signal {
-    position: absolute; width: 60px; height: 3px; background: rgba(56, 189, 248, 0.8);
+    position: absolute; width: 60px; height: 3px; border-top: 4px dotted rgba(56, 189, 248, 0.9); background: transparent; height: 0;
     box-shadow: 0 0 10px #38bdf8; border-radius: 2px; opacity: 0;
   }
   @keyframes shootSignal {
@@ -434,7 +437,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const simArea = document.getElementById('sim-area');
   
   const worker1 = {
-    id: 1, state: 'STABLE', hOn: true, vOn: true, countdown: 3, timerInterval: null, timerWait: null,
+    id: 1, state: 'STABLE', hOn: true, vOn: true, countdown: 2, timerInterval: null, timerWait: null,
     body: document.getElementById('worker-body-1'),
     card: document.getElementById('card-1'),
     badge: document.getElementById('w1-badge'),
@@ -445,7 +448,7 @@ document.addEventListener('DOMContentLoaded', () => {
   };
   
   const worker2 = {
-    id: 2, state: 'STABLE', hOn: true, vOn: true, countdown: 3, timerInterval: null, timerWait: null,
+    id: 2, state: 'STABLE', hOn: true, vOn: true, countdown: 2, timerInterval: null, timerWait: null,
     body: document.getElementById('worker-body-2'),
     card: document.getElementById('card-2'),
     badge: document.getElementById('w2-badge'),
@@ -470,6 +473,7 @@ document.addEventListener('DOMContentLoaded', () => {
   setTimeout(initPos, 100);
 
   function snapGear(el, body, type) {
+    el.classList.remove('detached');
     const wrapper = body.parentElement;
     if(type === 'helmet') {
       el.style.left = (wrapper.offsetWidth/2 - 30) + 'px';
@@ -486,7 +490,7 @@ document.addEventListener('DOMContentLoaded', () => {
     clearInterval(w.timerInterval);
     clearTimeout(w.timerWait);
     w.tText.style.display = 'none';
-    w.countdown = 3;
+    w.countdown = 2;
     w.timerWait = setTimeout(() => startCountdown(w), 3000);
   }
 
@@ -518,7 +522,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if(w.state === 'EMERGENCY') {
         // Snap gear back
         Object.values(gearMap).forEach(g => {
-          if(g.w === w) { snapGear(g.el, w.body, g.type); if(g.type === 'helmet') w.hOn = true; else w.vOn = true; }
+          if(g.w === w) { snapGear(g.el, w.body, g.type); g.el.classList.remove('detached'); if(g.type === 'helmet') w.hOn = true; else w.vOn = true; }
         });
         w.state = 'STABLE';
         w.body.classList.remove('fallen');
@@ -682,8 +686,12 @@ document.addEventListener('DOMContentLoaded', () => {
         setTimeout(() => el.style.transition = 'transform 0.1s, border-color 0.2s, background 0.2s', 300);
         showException();
         ownerWorker[type === 'helmet' ? 'hOn' : 'vOn'] = true;
+        el.classList.remove('detached');
       } else if (!snapped) {
         ownerWorker[type === 'helmet' ? 'hOn' : 'vOn'] = false;
+        el.classList.add('detached');
+      } else {
+        el.classList.remove('detached');
       }
       
       updateGlobalState();
