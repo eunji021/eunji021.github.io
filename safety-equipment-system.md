@@ -167,14 +167,333 @@ short-description: "ESP32 게이트웨이를 이용해 작업자 안전모와 �
   <!-- 상단 탭 메뉴 -->
   
 
+  
+
+    
+<style>
+/* 시뮬레이터 스타일 */
+.sim-container {
+  width: 100%; height: 500px;
+  background: #0f172a;
+  border: 4px solid #10b981; /* STABLE */
+  border-radius: 12px;
+  box-shadow: 0 0 20px rgba(16, 185, 129, 0.4);
+  display: flex; position: relative;
+  transition: all 0.3s; overflow: hidden;
+  margin-bottom: 20px;
+}
+.sim-container.warning { border-color: #f59e0b; box-shadow: 0 0 20px rgba(245, 158, 11, 0.4); }
+.sim-container.emergency { border-color: #ef4444; box-shadow: 0 0 30px rgba(239, 68, 68, 0.6); animation: flashRed 0.8s infinite alternate; }
+@keyframes flashRed { from { box-shadow: 0 0 10px #ef4444; } to { box-shadow: 0 0 50px #ef4444, inset 0 0 30px #ef4444; } }
+
+.sim-app {
+  flex: 1; border-right: 2px dashed #334155; padding: 20px;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative;
+}
+.sim-app-ui {
+  width: 280px; height: 420px; background: #1e293b; border-radius: 20px; border: 2px solid #475569;
+  padding: 20px 15px; position: relative; overflow: hidden; font-family: 'Pretendard', sans-serif;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+}
+.app-badge {
+  background: #10b981; color: white; padding: 6px 12px; border-radius: 20px; font-weight: bold; text-align: center; margin-bottom: 25px; font-size: 1.1rem; letter-spacing: 1px; transition: background 0.3s;
+}
+.app-status { font-size: 1.1rem; color: #cbd5e1; text-align: center; margin-bottom: 30px; font-weight: 600; transition: color 0.3s; }
+.app-item { background: rgba(0,0,0,0.2); padding: 12px 15px; border-radius: 8px; margin-bottom: 12px; color: #10b981; font-weight: bold; display: flex; justify-content: space-between; font-size: 1.05rem; transition: all 0.3s; }
+.app-item.off { color: #ef4444; background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); }
+
+.app-emergency-popup {
+  position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(239, 68, 68, 0.95);
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  color: white; font-weight: bold; text-align: center; padding: 20px; display: none; z-index: 10;
+  backdrop-filter: blur(5px);
+}
+
+.sim-worker {
+  flex: 1.2; position: relative; display: flex; align-items: center; justify-content: center;
+  background: radial-gradient(circle at center, rgba(16,185,129,0.05) 0%, transparent 70%);
+}
+.worker-body {
+  width: 90px; height: 160px; background: #334155; border-radius: 45px 45px 10px 10px; position: relative; transition: transform 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55); z-index: 5;
+}
+.worker-body.fallen { transform: rotate(90deg) translate(60px, 40px); }
+.timeout-text {
+  position: absolute; top: -50px; color: #ef4444; font-weight: bold; font-size: 1.3rem; display: none; width: 250px; text-align: center; left: -80px; text-shadow: 0 0 10px rgba(239,68,68,0.5);
+}
+
+.drag-item {
+  width: 70px; height: 70px; position: absolute; cursor: grab; z-index: 20; user-select: none;
+  display: flex; align-items: center; justify-content: center; font-size: 3rem;
+  background: rgba(255,255,255,0.05); border-radius: 50%; border: 2px dashed rgba(255,255,255,0.2);
+  transition: transform 0.1s;
+}
+.drag-item:active { cursor: grabbing; border-color: #38bdf8; transform: scale(1.1); background: rgba(56, 189, 248, 0.1); }
+</style>
+
+  <!-- 탭 버튼 영역 교체 -->
   <div class="tabs-nav">
-    <button class="tab-btn active" data-target="tab-ppt">한눈에 보기</button>
+    <button class="tab-btn active" data-target="tab-simulator">체험 시뮬레이터</button>
+    <button class="tab-btn" data-target="tab-ppt">한눈에 보기</button>
     <button class="tab-btn" data-target="tab-intro">소개</button>
     <button class="tab-btn" data-target="tab-code">코드</button>
   </div>
 
-    <!-- 1. 한눈에 보기 탭 콘텐츠 -->
-  <div id="tab-ppt" class="tab-content active">
+  <!-- 체험 시뮬레이터 탭 -->
+  <div id="tab-simulator" class="tab-content active">
+    <div class="sim-container" id="sim-main">
+      <div class="sim-app">
+        <div class="sim-app-ui">
+          <div class="app-badge" id="app-badge">STABLE</div>
+          <div class="app-status" id="app-status">현재 작업자: 정상 근무 중</div>
+          <div class="app-item" id="app-helmet"><span>안전모:</span> <span>착용</span></div>
+          <div class="app-item" id="app-vest"><span>안전조끼:</span> <span>착용</span></div>
+          
+          <div class="app-emergency-popup" id="app-popup">
+            <div style="font-size: 3.5rem; margin-bottom:15px; animation: pulse 1s infinite;">🚨</div>
+            <div style="font-size: 1.2rem; line-height: 1.5;">위험 상황:<br>작업자 쓰러짐 감지!!<br>즉시 구조 바랍니다</div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="sim-worker" id="sim-area">
+        <div class="worker-body" id="worker-body">
+          <div class="timeout-text" id="timeout-text">움직임 미감지: 3</div>
+        </div>
+        <div class="drag-item" id="helmet" title="안전모">🪖</div>
+        <div class="drag-item" id="vest" title="안전조끼">🦺</div>
+      </div>
+    </div>
+    <p style="text-align:center; color:#94a3b8; font-size:0.95rem;">💡 마우스로 우측의 안전모(🪖)와 조끼(🦺)를 밖으로 드래그하여 상태 변화를 체험해보세요.</p>
+  </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  // Tab Navigation Logic Update
+  const tabBtns = document.querySelectorAll('.tab-btn');
+  const tabContents = document.querySelectorAll('.tab-content');
+  
+  tabBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      tabBtns.forEach(b => b.classList.remove('active'));
+      tabContents.forEach(c => c.classList.remove('active'));
+      
+      btn.classList.add('active');
+      document.getElementById(btn.getAttribute('data-target')).classList.add('active');
+      
+      // Initialize simulator positions when tab is shown
+      if (btn.getAttribute('data-target') === 'tab-simulator') {
+        initPos();
+        resetTimer();
+      }
+    });
+  });
+
+  // Simulator Logic
+  const simMain = document.getElementById('sim-main');
+  const appBadge = document.getElementById('app-badge');
+  const appStatus = document.getElementById('app-status');
+  const appHelmet = document.getElementById('app-helmet');
+  const appVest = document.getElementById('app-vest');
+  const appPopup = document.getElementById('app-popup');
+  const workerBody = document.getElementById('worker-body');
+  const timeoutText = document.getElementById('timeout-text');
+  const simArea = document.getElementById('sim-area');
+
+  let isHelmetOn = true;
+  let isVestOn = true;
+  let state = 'STABLE';
+
+  function makeDraggable(el, type) {
+    let isDragging = false;
+    let startX, startY, initialX, initialY;
+    
+    el.addEventListener('mousedown', dragStart);
+    el.addEventListener('touchstart', dragStart, {passive: false});
+    
+    function dragStart(e) {
+      if (state === 'EMERGENCY') return; // Can't drag if fallen
+      const clientX = e.type.includes('mouse') ? e.clientX : e.touches[0].clientX;
+      const clientY = e.type.includes('mouse') ? e.clientY : e.touches[0].clientY;
+      
+      initialX = el.offsetLeft;
+      initialY = el.offsetTop;
+      startX = clientX;
+      startY = clientY;
+      isDragging = true;
+      resetTimer(); 
+      
+      document.addEventListener('mousemove', drag);
+      document.addEventListener('mouseup', dragEnd);
+      document.addEventListener('touchmove', drag, {passive: false});
+      document.addEventListener('touchend', dragEnd);
+    }
+    
+    function drag(e) {
+      if (!isDragging) return;
+      e.preventDefault();
+      const clientX = e.type.includes('mouse') ? e.clientX : e.touches[0].clientX;
+      const clientY = e.type.includes('mouse') ? e.clientY : e.touches[0].clientY;
+      const dx = clientX - startX;
+      const dy = clientY - startY;
+      el.style.left = (initialX + dx) + 'px';
+      el.style.top = (initialY + dy) + 'px';
+      resetTimer(); 
+    }
+    
+    function dragEnd(e) {
+      isDragging = false;
+      document.removeEventListener('mousemove', drag);
+      document.removeEventListener('mouseup', dragEnd);
+      document.removeEventListener('touchmove', drag);
+      document.removeEventListener('touchend', dragEnd);
+      
+      const rect = el.getBoundingClientRect();
+      const bodyRect = workerBody.getBoundingClientRect();
+      const areaRect = simArea.getBoundingClientRect();
+      
+      const centerX = rect.left + rect.width/2;
+      const centerY = rect.top + rect.height/2;
+      const bodyCX = bodyRect.left + bodyRect.width/2;
+      
+      let snapped = false;
+      
+      if (Math.abs(centerX - bodyCX) < 80) {
+        if (type === 'helmet' && Math.abs(centerY - bodyRect.top) < 60) {
+          el.style.left = (workerBody.offsetLeft + workerBody.offsetWidth/2 - el.offsetWidth/2) + 'px';
+          el.style.top = (workerBody.offsetTop - el.offsetHeight/2 - 20) + 'px';
+          snapped = true;
+          isHelmetOn = true;
+        }
+        else if (type === 'vest' && Math.abs(centerY - (bodyRect.top + bodyRect.height/2)) < 80) {
+          el.style.left = (workerBody.offsetLeft + workerBody.offsetWidth/2 - el.offsetWidth/2) + 'px';
+          el.style.top = (workerBody.offsetTop + workerBody.offsetHeight/2 - el.offsetHeight/2) + 'px';
+          snapped = true;
+          isVestOn = true;
+        }
+      }
+      
+      if (!snapped) {
+        if (type === 'helmet') isHelmetOn = false;
+        if (type === 'vest') isVestOn = false;
+      }
+      
+      updateState();
+    }
+  }
+
+  makeDraggable(document.getElementById('helmet'), 'helmet');
+  makeDraggable(document.getElementById('vest'), 'vest');
+
+  function initPos() {
+    const helmet = document.getElementById('helmet');
+    const vest = document.getElementById('vest');
+    helmet.style.left = (workerBody.offsetLeft + workerBody.offsetWidth/2 - helmet.offsetWidth/2) + 'px';
+    helmet.style.top = (workerBody.offsetTop - helmet.offsetHeight/2 - 20) + 'px';
+    
+    vest.style.left = (workerBody.offsetLeft + workerBody.offsetWidth/2 - vest.offsetWidth/2) + 'px';
+    vest.style.top = (workerBody.offsetTop + workerBody.offsetHeight/2 - vest.offsetHeight/2) + 'px';
+  }
+
+  let timerWait;
+  let timerInterval;
+  let countdown = 3;
+
+  function resetTimer() {
+    if (state === 'EMERGENCY') {
+        // Allow reset if clicked again
+        state = 'STABLE';
+        workerBody.classList.remove('fallen');
+        appPopup.style.display = 'none';
+        initPos();
+        isHelmetOn = true;
+        isVestOn = true;
+        updateState();
+    }
+    
+    clearInterval(timerInterval);
+    clearTimeout(timerWait);
+    timeoutText.style.display = 'none';
+    countdown = 3;
+    
+    // Start waiting 3 seconds before countdown begins
+    timerWait = setTimeout(startCountdown, 3000);
+  }
+
+  function startCountdown() {
+    timeoutText.style.display = 'block';
+    timeoutText.innerText = `움직임 미감지: ${countdown}...`;
+    timerInterval = setInterval(() => {
+      countdown--;
+      if (countdown > 0) {
+        timeoutText.innerText = `움직임 미감지: ${countdown}...`;
+      } else {
+        triggerEmergency();
+      }
+    }, 1000);
+  }
+
+  function triggerEmergency() {
+    clearInterval(timerInterval);
+    state = 'EMERGENCY';
+    timeoutText.innerText = "🚨 시스템 다운 🚨";
+    workerBody.classList.add('fallen');
+    simMain.className = 'sim-container emergency';
+    appBadge.innerText = 'EMERGENCY';
+    appBadge.style.background = '#ef4444';
+    appPopup.style.display = 'flex';
+  }
+
+  function updateState() {
+    if (state === 'EMERGENCY') return; 
+    
+    if (isHelmetOn && isVestOn) {
+      state = 'STABLE';
+      simMain.className = 'sim-container';
+      appBadge.innerText = 'STABLE';
+      appBadge.style.background = '#10b981';
+      appStatus.innerText = '현재 작업자: 정상 근무 중';
+      appStatus.style.color = '#10b981';
+      appHelmet.innerHTML = `<span>안전모:</span> <span>착용</span>`;
+      appHelmet.className = 'app-item';
+      appVest.innerHTML = `<span>안전조끼:</span> <span>착용</span>`;
+      appVest.className = 'app-item';
+    } else {
+      state = 'WARNING';
+      simMain.className = 'sim-container warning';
+      appBadge.innerText = 'WARNING';
+      appBadge.style.background = '#f59e0b';
+      appStatus.innerText = '장비 미착용 감지!';
+      appStatus.style.color = '#f59e0b';
+      
+      if (!isHelmetOn) {
+        appHelmet.innerHTML = `<span>안전모:</span> <span>미착용!⚠️</span>`;
+        appHelmet.className = 'app-item off';
+      } else {
+        appHelmet.innerHTML = `<span>안전모:</span> <span>착용</span>`;
+        appHelmet.className = 'app-item';
+      }
+      
+      if (!isVestOn) {
+        appVest.innerHTML = `<span>안전조끼:</span> <span>미착용!⚠️</span>`;
+        appVest.className = 'app-item off';
+      } else {
+        appVest.innerHTML = `<span>안전조끼:</span> <span>착용</span>`;
+        appVest.className = 'app-item';
+      }
+    }
+  }
+
+  simArea.addEventListener('mousemove', () => { if(state !== 'EMERGENCY') resetTimer(); });
+  
+  // Wait a tiny bit before initial positioning
+  setTimeout(() => {
+    initPos();
+    resetTimer();
+  }, 100);
+});
+</script>
+<!-- 1. 한눈에 보기 탭 콘텐츠 -->
+  <div id="tab-ppt" class="tab-content">
     <div class="carousel-container" id="slide-carousel">
       <!-- 슬라이드 이미지들 -->
       <div class="carousel-slide active" style="background-image: url('{{ site.baseurl }}/assets/img/projects/safety_slides/slide_1.png');"></div>

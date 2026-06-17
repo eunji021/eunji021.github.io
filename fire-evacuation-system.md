@@ -167,15 +167,293 @@ short-description: "실시간 화재 감지 및 다익스트라 최적 경로 �
   <!-- 상단 탭 메뉴 -->
   
 
+  
+
+  
+    
+<style>
+/* 시뮬레이터 스타일 */
+.sim-container {
+  width: 100%; height: 500px;
+  background: #0f172a;
+  border: 4px solid #10b981; /* STABLE */
+  border-radius: 12px;
+  box-shadow: 0 0 20px rgba(16, 185, 129, 0.4);
+  display: flex; position: relative;
+  transition: all 0.3s; overflow: hidden;
+  margin-bottom: 20px;
+}
+.sim-container.emergency { border-color: #ef4444; box-shadow: 0 0 30px rgba(239, 68, 68, 0.6); animation: flashRed 0.8s infinite alternate; }
+@keyframes flashRed { from { box-shadow: 0 0 10px #ef4444; } to { box-shadow: 0 0 50px #ef4444, inset 0 0 30px #ef4444; } }
+
+.sim-sidebar {
+  width: 250px; border-right: 2px dashed #334155; padding: 20px;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; background: #1e293b;
+  box-shadow: 5px 0 15px rgba(0,0,0,0.3); z-index: 10;
+}
+.app-badge {
+  background: #10b981; color: white; padding: 6px 12px; border-radius: 20px; font-weight: bold; text-align: center; margin-bottom: 30px; font-size: 1.1rem; letter-spacing: 1px; transition: background 0.3s;
+}
+.info-text { font-size: 0.95rem; color: #94a3b8; text-align: center; margin-bottom: 40px; line-height: 1.5; }
+
+.fire-icon {
+  width: 70px; height: 70px; cursor: grab; user-select: none;
+  display: flex; align-items: center; justify-content: center; font-size: 3rem;
+  background: rgba(239, 68, 68, 0.1); border-radius: 50%; border: 2px dashed rgba(239, 68, 68, 0.5);
+  transition: transform 0.1s; position: absolute; z-index: 50;
+}
+.fire-icon:active { cursor: grabbing; transform: scale(1.1); background: rgba(239, 68, 68, 0.3); }
+
+.fire-dock {
+  width: 80px; height: 80px; border: 2px dashed #475569; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+}
+
+.sim-map {
+  flex: 1; position: relative; display: flex; align-items: center; justify-content: center;
+  background: radial-gradient(circle at center, rgba(16,185,129,0.05) 0%, transparent 70%);
+}
+
+.blueprint-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  gap: 15px;
+  width: 90%; height: 80%; padding: 15px;
+  background: rgba(255,255,255,0.02);
+  border: 2px solid #334155; border-radius: 10px; position: relative;
+}
+.room {
+  background: #1e293b; border: 2px solid #475569; border-radius: 8px;
+  display: flex; align-items: center; justify-content: center; flex-direction: column;
+  color: #94a3b8; font-weight: bold; font-size: 1.1rem; transition: all 0.3s;
+}
+.room.dropzone { border: 2px dashed #64748b; }
+.room.fire { background: #ef4444 !important; border-color: #ef4444; color: white; box-shadow: 0 0 30px rgba(239, 68, 68, 0.8); }
+.room.corridor { background: rgba(15, 23, 42, 0.6); border-style: dashed; }
+.room.exit { background: rgba(16, 185, 129, 0.2); border-color: #10b981; color: #10b981; }
+
+.route-svg {
+  position: absolute; top: 0; left: 0; pointer-events: none; width: 100%; height: 100%; z-index: 5;
+}
+.route-path {
+  fill: none; stroke: #38bdf8; stroke-width: 8; stroke-linecap: round; stroke-linejoin: round;
+  stroke-dasharray: 20, 20; animation: flowWave 0.8s linear infinite;
+  opacity: 0; transition: opacity 0.3s;
+  filter: drop-shadow(0 0 8px #38bdf8);
+}
+@keyframes flowWave { from { stroke-dashoffset: 40; } to { stroke-dashoffset: 0; } }
+
+</style>
+
+  <!-- 탭 버튼 영역 교체 -->
   <div class="tabs-nav">
-    <button class="tab-btn active" data-target="tab-ppt">한눈에 보기</button>
+    <button class="tab-btn active" data-target="tab-simulator">체험 시뮬레이터</button>
+    <button class="tab-btn" data-target="tab-ppt">한눈에 보기</button>
     <button class="tab-btn" data-target="tab-intro">소개</button>
     <button class="tab-btn" data-target="tab-code">코드</button>
   </div>
 
+  <!-- 체험 시뮬레이터 탭 -->
+  <div id="tab-simulator" class="tab-content active">
+    <div class="sim-container" id="sim-main-fire">
+      
+      <div class="sim-sidebar">
+        <div class="app-badge" id="fire-badge">STABLE</div>
+        <div class="info-text">
+          우측 평면도의 방에<br>🔥 아이콘을 드래그하여<br>화재를 발생시켜 보세요.
+        </div>
+        <div class="fire-dock" id="fire-dock"></div>
+      </div>
+      
+      <div class="sim-map" id="sim-map-area">
+        <div class="blueprint-grid" id="bp-grid">
+          <div class="room dropzone" id="r1">Room A</div>
+          <div class="room dropzone corridor" id="c1">Corridor</div>
+          <div class="room dropzone" id="r2">Room B</div>
+          
+          <div class="room exit" id="exit1">Exit Left 🚪</div>
+          <div class="room corridor" id="c2">Main Hall</div>
+          <div class="room exit" id="exit2">Exit Right 🚪</div>
+          
+          <!-- 다익스트라 대피 경로 시각화 -->
+          <svg class="route-svg" id="route-svg">
+            <path class="route-path" id="route-path-1" d="" />
+            <path class="route-path" id="route-path-2" d="" />
+          </svg>
+        </div>
+      </div>
+      
+      <!-- 화재 아이콘 (드래그 가능) -->
+      <div class="fire-icon" id="fire-icon" title="화재 발생기">🔥</div>
+      
+    </div>
+    <p style="text-align:center; color:#94a3b8; font-size:0.95rem;">💡 화재 위치가 변경되면 실시간으로 다익스트라 최단 경로가 재계산되어 대피 유도선이 바뀝니다.</p>
+  </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  // Tab Navigation
+  const tabBtns = document.querySelectorAll('.tab-btn');
+  const tabContents = document.querySelectorAll('.tab-content');
   
-    <!-- 1. 한눈에 보기 탭 콘텐츠 -->
-  <div id="tab-ppt" class="tab-content active">
+  tabBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      tabBtns.forEach(b => b.classList.remove('active'));
+      tabContents.forEach(c => c.classList.remove('active'));
+      
+      btn.classList.add('active');
+      document.getElementById(btn.getAttribute('data-target')).classList.add('active');
+      
+      if (btn.getAttribute('data-target') === 'tab-simulator') {
+        initFirePos();
+      }
+    });
+  });
+
+  // Simulator Logic
+  const fireIcon = document.getElementById('fire-icon');
+  const fireDock = document.getElementById('fire-dock');
+  const simMain = document.getElementById('sim-main-fire');
+  const badge = document.getElementById('fire-badge');
+  const r1 = document.getElementById('r1');
+  const r2 = document.getElementById('r2');
+  const c1 = document.getElementById('c1');
+  
+  const path1 = document.getElementById('route-path-1');
+  const path2 = document.getElementById('route-path-2');
+  
+  let currentFireRoom = null;
+
+  function initFirePos() {
+    const dockRect = fireDock.getBoundingClientRect();
+    const simRect = simMain.getBoundingClientRect();
+    fireIcon.style.left = (dockRect.left - simRect.left + dockRect.width/2 - fireIcon.offsetWidth/2) + 'px';
+    fireIcon.style.top = (dockRect.top - simRect.top + dockRect.height/2 - fireIcon.offsetHeight/2) + 'px';
+  }
+
+  let isDragging = false;
+  let startX, startY, initialX, initialY;
+  
+  fireIcon.addEventListener('mousedown', dragStart);
+  fireIcon.addEventListener('touchstart', dragStart, {passive: false});
+  
+  function dragStart(e) {
+    const clientX = e.type.includes('mouse') ? e.clientX : e.touches[0].clientX;
+    const clientY = e.type.includes('mouse') ? e.clientY : e.touches[0].clientY;
+    
+    initialX = fireIcon.offsetLeft;
+    initialY = fireIcon.offsetTop;
+    startX = clientX;
+    startY = clientY;
+    isDragging = true;
+    
+    document.addEventListener('mousemove', drag);
+    document.addEventListener('mouseup', dragEnd);
+    document.addEventListener('touchmove', drag, {passive: false});
+    document.addEventListener('touchend', dragEnd);
+    
+    // Clear fire state while dragging
+    clearFire();
+  }
+  
+  function drag(e) {
+    if (!isDragging) return;
+    e.preventDefault();
+    const clientX = e.type.includes('mouse') ? e.clientX : e.touches[0].clientX;
+    const clientY = e.type.includes('mouse') ? e.clientY : e.touches[0].clientY;
+    const dx = clientX - startX;
+    const dy = clientY - startY;
+    fireIcon.style.left = (initialX + dx) + 'px';
+    fireIcon.style.top = (initialY + dy) + 'px';
+  }
+  
+  function dragEnd(e) {
+    isDragging = false;
+    document.removeEventListener('mousemove', drag);
+    document.removeEventListener('mouseup', dragEnd);
+    document.removeEventListener('touchmove', drag);
+    document.removeEventListener('touchend', dragEnd);
+    
+    checkDrop();
+  }
+  
+  function clearFire() {
+    r1.classList.remove('fire');
+    r2.classList.remove('fire');
+    c1.classList.remove('fire');
+    simMain.classList.remove('emergency');
+    badge.innerText = 'STABLE';
+    badge.style.background = '#10b981';
+    path1.style.opacity = '0';
+    path2.style.opacity = '0';
+    currentFireRoom = null;
+  }
+  
+  function checkDrop() {
+    const iconRect = fireIcon.getBoundingClientRect();
+    const iconCx = iconRect.left + iconRect.width/2;
+    const iconCy = iconRect.top + iconRect.height/2;
+    
+    const rooms = [r1, c1, r2];
+    let droppedRoom = null;
+    
+    for(let room of rooms) {
+      const rect = room.getBoundingClientRect();
+      if(iconCx > rect.left && iconCx < rect.right && iconCy > rect.top && iconCy < rect.bottom) {
+        droppedRoom = room;
+        break;
+      }
+    }
+    
+    if(droppedRoom) {
+      // Snap to room center
+      const simRect = simMain.getBoundingClientRect();
+      const rect = droppedRoom.getBoundingClientRect();
+      fireIcon.style.left = (rect.left - simRect.left + rect.width/2 - fireIcon.offsetWidth/2) + 'px';
+      fireIcon.style.top = (rect.top - simRect.top + rect.height/2 - fireIcon.offsetHeight/2) + 'px';
+      
+      triggerFire(droppedRoom);
+    } else {
+      // Snap back to dock
+      initFirePos();
+    }
+  }
+  
+  function triggerFire(room) {
+    room.classList.add('fire');
+    simMain.classList.add('emergency');
+    badge.innerText = 'EMERGENCY';
+    badge.style.background = '#ef4444';
+    
+    // Draw Routes based on Fire Location (Dijkstra simulation)
+    // Grid centers approx:
+    // row 1: 16.6%, 50%, 83.3%
+    // row 2: 16.6%, 50%, 83.3%
+    // y-coords: 25%, 75%
+    
+    path1.style.opacity = '1';
+    if(room === r1) {
+      // Fire in Room A -> Escape from c1 to c2 to exit2
+      path1.setAttribute('d', 'M 50% 25% L 50% 75% L 83.3% 75%');
+      path2.style.opacity = '0';
+    } else if(room === r2) {
+      // Fire in Room B -> Escape from c1 to c2 to exit1
+      path1.setAttribute('d', 'M 50% 25% L 50% 75% L 16.6% 75%');
+      path2.style.opacity = '0';
+    } else if(room === c1) {
+      // Fire in Corridor 1 -> Room A escapes to exit1 directly, Room B escapes to exit2 directly
+      path1.setAttribute('d', 'M 16.6% 25% L 16.6% 75%');
+      path2.setAttribute('d', 'M 83.3% 25% L 83.3% 75%');
+      path2.style.opacity = '1';
+    }
+  }
+
+  setTimeout(initFirePos, 100);
+});
+</script>
+<!-- 1. 한눈에 보기 탭 콘텐츠 -->
+  <div id="tab-ppt" class="tab-content">
     <div class="carousel-container" id="slide-carousel">
       <!-- 슬라이드 이미지들 -->
         <div class="carousel-slide active" style="background-image: url('{{ site.baseurl }}/assets/img/projects/fire_slides/slide_1.png');"></div>
