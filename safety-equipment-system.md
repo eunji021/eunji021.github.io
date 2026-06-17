@@ -191,8 +191,7 @@ short-description: "ESP32 게이트웨이를 이용해 작업자 안전모와 �
     <div style="margin-top: 40px; text-align: center;">
       <h3 style="color: #10B981; font-family: 'Orbitron', 'Pretendard', sans-serif; margin-bottom: 20px;">프로젝트 최종 결과물</h3>
       <div style="background: rgba(15, 23, 42, 0.4); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 12px; padding: 20px; box-shadow: 0 10px 20px rgba(0,0,0,0.3);">
-        <img src="{{ site.baseurl }}/assets/img/projects/safety_result.png" alt="실시간 안전 장비 시스템 결과물" onerror="this.style.display='none'" style="max-width: 100%; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1);">
-        <p style="color: #94a3b8; font-size: 0.95rem; margin-top: 15px;">이곳에 <strong>safety_result.png</strong> 라는 이름으로 사진을 저장하시면 자동으로 표시됩니다.</p>
+        <img src="{{ site.baseurl }}/assets/img/projects/safety_result.png" alt="실시간 안전 장비 시스템 결과물" onerror="this.style.display='none'" style="width: 100%; max-width: 900px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); display: block; margin: 0 auto;">
       </div>
     </div>
   </div>
