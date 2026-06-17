@@ -2617,7 +2617,12 @@ document.addEventListener("DOMContentLoaded", function() {
     if(start > 0) snippet = "..." + snippet;
     if(end < text.length) snippet = snippet + "...";
     
-    const regex = new RegExp(`(${query})`, "gi");
+        let regex;
+    if (/^[a-zA-Z0-9_]+$/.test(query)) {
+      regex = new RegExp(`\b(${query})\b`, "gi");
+    } else {
+      regex = new RegExp(`(${query})`, "gi");
+    }
     snippet = snippet.replace(regex, "<mark>$1</mark>");
     return snippet;
   }
@@ -2628,7 +2633,6 @@ document.addEventListener("DOMContentLoaded", function() {
     
     if (query === "") {
       // Show TOC fully
-      sections.forEach(sec => sec.tocElement.classList.remove("hidden-section"));
       // Restore previous category
       openCategory(previousCategory);
       return;
@@ -2642,7 +2646,6 @@ document.addEventListener("DOMContentLoaded", function() {
     
     sections.forEach(sec => {
       if (sec.fullText.includes(query)) {
-        if (sec.tocElement) sec.tocElement.classList.remove("hidden-section");
         
         const details = document.createElement('details');
         details.className = 'code-accordion';
@@ -2672,7 +2675,6 @@ document.addEventListener("DOMContentLoaded", function() {
         
         searchList.appendChild(details);
       } else {
-        if (sec.tocElement) sec.tocElement.classList.add("hidden-section");
       }
     });
   });
