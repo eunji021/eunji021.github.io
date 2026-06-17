@@ -219,6 +219,28 @@ author: eunji
     }
     .gitbook-content-area { padding: 30px 20px; }
   }
+
+  /* Code Block Dark Theme (VS Code style) */
+  .highlight { background: #1e1e1e !important; color: #d4d4d4 !important; padding: 15px; border-radius: 8px; font-family: 'Consolas', 'Courier New', monospace; font-size: 0.95rem; overflow-x: auto; margin: 20px 0; border: 1px solid rgba(255,255,255,0.1); }
+  .highlight .k, .highlight .kv { color: #569cd6; font-weight: bold; } /* keyword */
+  .highlight .kd { color: #569cd6; } /* keyword.declaration */
+  .highlight .kn { color: #c586c0; } /* keyword.namespace */
+  .highlight .kp { color: #569cd6; } /* keyword.pseudo */
+  .highlight .kr { color: #c586c0; } /* keyword.reserved */
+  .highlight .kt { color: #4ec9b0; } /* keyword.type */
+  .highlight .s, .highlight .s1, .highlight .s2, .highlight .sb, .highlight .sc { color: #ce9178; } /* string */
+  .highlight .c, .highlight .c1, .highlight .cm { color: #6a9955; font-style: italic; } /* comment */
+  .highlight .m, .highlight .mi, .highlight .mf, .highlight .mo { color: #b5cea8; } /* number */
+  .highlight .nf { color: #dcdcaa; } /* name.function */
+  .highlight .nc { color: #4ec9b0; } /* name.class */
+  .highlight .o, .highlight .ow { color: #d4d4d4; } /* operator */
+  .highlight .p { color: #d4d4d4; } /* punctuation */
+  .highlight .err { color: #f44747; } /* error */
+  
+  /* Inline code style */
+  p > code, li > code, td > code { background: rgba(30, 30, 30, 0.8); padding: 3px 6px; border-radius: 4px; color: #4ec9b0; font-family: 'Consolas', monospace; font-size: 0.9em; border: 1px solid rgba(255,255,255,0.1); }
+  pre > code { background: transparent; padding: 0; color: inherit; border: none; }
+
 </style>
 
 
@@ -2538,6 +2560,13 @@ let previousCategory = 'home';
 function openCategory(catId) {
   if(catId !== 'search-results') {
     previousCategory = catId;
+  }
+  
+  const catEl = document.getElementById('cat-' + catId);
+  if (catEl && catEl.classList.contains('active')) {
+    // Already active -> Toggle it closed (collapse TOC)
+    catEl.classList.remove('active');
+    return;
   }
   
   // Hide all contents
