@@ -311,7 +311,7 @@ document.addEventListener('DOMContentLoaded', () => {
     el.addEventListener('touchstart', dragStart, {passive: false});
     
     function dragStart(e) {
-      if (state === 'EMERGENCY') return; // Can't drag if fallen
+      // Removed EMERGENCY block to allow dragging equipment back
       const clientX = e.type.includes('mouse') ? e.clientX : e.touches[0].clientX;
       const clientY = e.type.includes('mouse') ? e.clientY : e.touches[0].clientY;
       
@@ -398,17 +398,8 @@ document.addEventListener('DOMContentLoaded', () => {
   let timerInterval;
   let countdown = 3;
 
-  function resetTimer() {
-    if (state === 'EMERGENCY') {
-        // Allow reset if clicked again
-        state = 'STABLE';
-        workerBody.classList.remove('fallen');
-        appPopup.style.display = 'none';
-        initPos();
-        isHelmetOn = true;
-        isVestOn = true;
-        updateState();
-    }
+    function resetTimer() {
+    if (state === 'EMERGENCY') return; // Don't reset timer if fallen
     
     clearInterval(timerInterval);
     clearTimeout(timerWait);
@@ -444,7 +435,15 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function updateState() {
-    if (state === 'EMERGENCY') return; 
+    // If both gears are put back on during EMERGENCY, reset to STABLE
+    if (state === 'EMERGENCY' && isHelmetOn && isVestOn) {
+      state = 'STABLE';
+      workerBody.classList.remove('fallen');
+      appPopup.style.display = 'none';
+      resetTimer();
+    } else if (state === 'EMERGENCY') {
+      return; 
+    }
     
     if (isHelmetOn && isVestOn) {
       state = 'STABLE';
