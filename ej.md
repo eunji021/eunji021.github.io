@@ -199,6 +199,13 @@ author: eunji
   }
 </style>
 
+
+<div style="padding: 20px 40px 0 40px; max-width: 1400px; margin: 0 auto; font-size: 1.15rem; font-family: 'Orbitron', 'Pretendard', sans-serif;">
+  <a href="{{ site.baseurl }}/" style="color: #10B981; text-decoration: none; font-weight: 600;">Home</a> 
+  <span style="color: #64748b; margin: 0 10px;">/</span> 
+  <span style="color: #10B981;">핵심 프로그래밍 언어</span>
+</div>
+
 <div class="gitbook-container">
   <!-- Sidebar -->
   <aside class="gitbook-sidebar">
