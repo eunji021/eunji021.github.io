@@ -1,0 +1,312 @@
+
+<style>
+/* 피드백 모달 글로벌 스타일 */
+.fb-modal-overlay {
+  position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+  background: rgba(6, 9, 15, 0.9); z-index: 10000;
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; visibility: hidden; transition: all 0.4s ease;
+  backdrop-filter: blur(8px);
+}
+.fb-modal-overlay.active { opacity: 1; visibility: visible; }
+
+.fb-modal-container {
+  width: 95%; max-width: 1200px; height: 85vh;
+  background: #0f172a; border-radius: 20px;
+  border: 1px solid #334155; box-shadow: 0 20px 50px rgba(0,0,0,0.8);
+  display: flex; flex-direction: row; position: relative; overflow: hidden;
+  transform: scale(0.95) translateY(20px); transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+.fb-modal-overlay.active .fb-modal-container { transform: scale(1) translateY(0); }
+
+/* 모달 닫기 버튼 */
+.fb-close-btn {
+  position: absolute; top: 20px; right: 25px;
+  background: none; border: none; color: #94a3b8; font-size: 2.5rem;
+  cursor: pointer; z-index: 20; transition: color 0.3s; line-height: 1;
+}
+.fb-close-btn:hover { color: #ef4444; }
+
+/* 레이아웃 3분할 */
+.fb-left-panel {
+  flex: 1; padding: 40px; display: flex; flex-direction: column; justify-content: center;
+  border-right: 1px dashed #334155; z-index: 10;
+}
+.fb-center-panel {
+  flex: 1.5; display: flex; align-items: center; justify-content: center; position: relative;
+  background: radial-gradient(circle at center, rgba(16,185,129,0.05) 0%, transparent 60%);
+}
+.fb-right-panel {
+  flex: 1; padding: 40px 30px; display: flex; flex-direction: column;
+  border-left: 1px dashed #334155; background: rgba(0,0,0,0.2); z-index: 10;
+}
+
+/* 좌측: 폼 영역 */
+.fb-form-title { font-family: 'Orbitron', sans-serif; font-size: 1.8rem; color: #10b981; margin-bottom: 30px; text-shadow: 0 0 10px rgba(16,185,129,0.3); }
+.fb-input-group { margin-bottom: 25px; }
+.fb-label { display: block; color: #cbd5e1; font-weight: 600; margin-bottom: 10px; font-size: 0.95rem; }
+.fb-input {
+  width: 100%; background: #1e293b; border: 1px solid #475569; border-radius: 8px;
+  color: white; padding: 12px 15px; font-size: 1rem; outline: none; transition: border 0.3s;
+}
+.fb-input:focus { border-color: #10b981; }
+
+.fb-emoji-selector { display: flex; gap: 15px; margin-bottom: 30px; }
+.fb-emoji-btn {
+  background: #1e293b; border: 1px solid #475569; border-radius: 50%;
+  width: 50px; height: 50px; font-size: 1.5rem; display: flex; align-items: center; justify-content: center;
+  cursor: pointer; transition: all 0.3s;
+}
+.fb-emoji-btn.selected { background: rgba(16,185,129,0.2); border-color: #10b981; transform: scale(1.1); box-shadow: 0 0 15px rgba(16,185,129,0.4); }
+
+.fb-submit-btn {
+  width: 100%; background: #10b981; color: white; font-weight: bold; font-size: 1.1rem;
+  border: none; padding: 15px; border-radius: 8px; cursor: pointer; transition: all 0.3s;
+  box-shadow: 0 5px 15px rgba(16,185,129,0.3);
+}
+.fb-submit-btn:hover { background: #059669; box-shadow: 0 5px 25px rgba(16,185,129,0.5); transform: translateY(-2px); }
+
+/* 중앙: 네온 나무 그래픽 */
+.neon-tree-svg {
+  width: 100%; height: 80%; overflow: visible;
+}
+.tree-trunk, .tree-branch {
+  fill: none; stroke: #10b981; stroke-width: 4; stroke-linecap: round; stroke-linejoin: round;
+  filter: drop-shadow(0 0 8px #10b981);
+}
+.fruit-node {
+  font-size: 2rem; transform-origin: center top; 
+  animation: sway 3s infinite alternate ease-in-out;
+}
+@keyframes sway { from { transform: rotate(-5deg); } to { transform: rotate(5deg); } }
+
+.new-fruit-anim {
+  animation: popIn 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+@keyframes popIn {
+  0% { transform: scale(0) translateY(-50px); opacity: 0; }
+  100% { transform: scale(1) translateY(0); opacity: 1; }
+}
+
+/* 우측: 피드백 보드 */
+.fb-board-title { color: #94a3b8; font-size: 1.2rem; margin-bottom: 20px; font-weight: bold; display:flex; align-items:center; gap: 10px; }
+.fb-board-list {
+  flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 15px;
+  padding-right: 10px;
+}
+.fb-board-list::-webkit-scrollbar { width: 6px; }
+.fb-board-list::-webkit-scrollbar-thumb { background: #334155; border-radius: 3px; }
+
+.fb-card {
+  background: rgba(30, 41, 59, 0.8); border-left: 3px solid #10b981; border-radius: 6px;
+  padding: 15px; display: flex; flex-direction: column; gap: 8px;
+  animation: slideInLeft 0.5s ease-out forwards;
+}
+@keyframes slideInLeft {
+  from { opacity: 0; transform: translateX(30px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+.fb-card-header { display: flex; justify-content: space-between; align-items: center; }
+.fb-card-name { font-weight: bold; color: #e2e8f0; font-size: 0.95rem; }
+.fb-card-emoji { font-size: 1.2rem; }
+.fb-card-msg { color: #94a3b8; font-size: 0.9rem; line-height: 1.4; word-break: break-all; }
+
+/* 모바일 반응형 */
+@media (max-width: 900px) {
+  .fb-modal-container { flex-direction: column; overflow-y: auto; height: 95vh; }
+  .fb-left-panel, .fb-center-panel, .fb-right-panel { border: none; flex: none; height: auto; }
+  .fb-center-panel { height: 300px; border-bottom: 1px dashed #334155; border-top: 1px dashed #334155; }
+}
+</style>
+
+<div class="fb-modal-overlay" id="fb-modal">
+  <div class="fb-modal-container">
+    <button class="fb-close-btn" id="fb-close-btn">&times;</button>
+    
+    <!-- 좌측 폼 -->
+    <div class="fb-left-panel">
+      <h2 class="fb-form-title">LEAVE A FEEDBACK</h2>
+      
+      <div class="fb-input-group">
+        <label class="fb-label">Name / Nickname</label>
+        <input type="text" id="fb-input-name" class="fb-input" placeholder="익명도 좋습니다" maxlength="15">
+      </div>
+      
+      <div class="fb-input-group">
+        <label class="fb-label">Message</label>
+        <input type="text" id="fb-input-msg" class="fb-input" placeholder="응원 한마디 부탁드려요!" maxlength="50">
+      </div>
+      
+      <label class="fb-label">Select a Fruit</label>
+      <div class="fb-emoji-selector" id="fb-emoji-selector">
+        <button class="fb-emoji-btn selected" data-emoji="🍏">🍏</button>
+        <button class="fb-emoji-btn" data-emoji="💡">💡</button>
+        <button class="fb-emoji-btn" data-emoji="🔥">🔥</button>
+      </div>
+      
+      <button class="fb-submit-btn" id="fb-submit-btn">나무에 열매 달기 ➔</button>
+    </div>
+    
+    <!-- 중앙 나무 그래픽 -->
+    <div class="fb-center-panel">
+      <svg class="neon-tree-svg" viewBox="0 0 400 500" id="neon-tree">
+        <!-- Tree Trunk -->
+        <path class="tree-trunk" d="M 200 480 Q 200 350 200 250" />
+        <!-- Branches -->
+        <path class="tree-branch" d="M 200 350 Q 150 300 100 280" />
+        <path class="tree-branch" d="M 200 320 Q 250 250 300 230" />
+        <path class="tree-branch" d="M 200 250 Q 150 180 120 150" />
+        <path class="tree-branch" d="M 200 250 Q 250 180 270 120" />
+        <path class="tree-branch" d="M 200 250 L 200 100" />
+      </svg>
+    </div>
+    
+    <!-- 우측 피드백 보드 -->
+    <div class="fb-right-panel">
+      <div class="fb-board-title">💬 Visitor Board</div>
+      <div class="fb-board-list" id="fb-board-list">
+        <!-- Cards will be injected here via JS -->
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const modal = document.getElementById('fb-modal');
+  const openBtn = document.getElementById('open-feedback-tree');
+  const closeBtn = document.getElementById('fb-close-btn');
+  
+  if(openBtn) {
+    openBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      modal.classList.add('active');
+      renderBoard();
+      renderFruits();
+    });
+  }
+  
+  closeBtn.addEventListener('click', () => modal.classList.remove('active'));
+  modal.addEventListener('click', (e) => { if(e.target === modal) modal.classList.remove('active'); });
+
+  // Emoji Selector Logic
+  const emojiBtns = document.querySelectorAll('.fb-emoji-btn');
+  let selectedEmoji = '🍏';
+  
+  emojiBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      emojiBtns.forEach(b => b.classList.remove('selected'));
+      btn.classList.add('selected');
+      selectedEmoji = btn.getAttribute('data-emoji');
+    });
+  });
+
+  // Mock Data
+  const defaultFeedbacks = [
+    { name: '익명의 합격요정', msg: '프로젝트 정리가 너무 깔끔합니다! 정말 멋져요.', emoji: '💡', x: 100, y: 280 },
+    { name: '지나가던 개발자', msg: '다익스트라 알고리즘 시각화가 인상 깊습니다.', emoji: '🔥', x: 300, y: 230 },
+    { name: '포트폴리오 감상자', msg: '인터랙티브한 화면 구성 덕분에 시간가는 줄 몰랐습니다.', emoji: '🍏', x: 120, y: 150 }
+  ];
+
+  // Tree Positions
+  const availablePositions = [
+    {x: 270, y: 120}, {x: 200, y: 100}, {x: 160, y: 220}, {x: 240, y: 180},
+    {x: 130, y: 320}, {x: 270, y: 300}, {x: 180, y: 160}, {x: 220, y: 260}
+  ];
+
+  function getFeedbacks() {
+    let fbs = localStorage.getItem('site_feedbacks');
+    if(!fbs) {
+      localStorage.setItem('site_feedbacks', JSON.stringify(defaultFeedbacks));
+      return defaultFeedbacks;
+    }
+    return JSON.parse(fbs);
+  }
+
+  function saveFeedback(fb) {
+    const fbs = getFeedbacks();
+    fbs.unshift(fb);
+    localStorage.setItem('site_feedbacks', JSON.stringify(fbs));
+  }
+
+  function renderBoard() {
+    const list = document.getElementById('fb-board-list');
+    list.innerHTML = '';
+    const fbs = getFeedbacks();
+    
+    fbs.forEach(fb => {
+      const card = document.createElement('div');
+      card.className = 'fb-card';
+      card.innerHTML = `
+        <div class="fb-card-header">
+          <span class="fb-card-name">${fb.name}</span>
+          <span class="fb-card-emoji">${fb.emoji}</span>
+        </div>
+        <div class="fb-card-msg">${fb.msg}</div>
+      `;
+      list.appendChild(card);
+    });
+  }
+
+  function renderFruits() {
+    const tree = document.getElementById('neon-tree');
+    // Remove existing fruits
+    const existing = tree.querySelectorAll('text');
+    existing.forEach(el => el.remove());
+    
+    const fbs = getFeedbacks();
+    fbs.forEach(fb => {
+      if(fb.x && fb.y) {
+        const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        text.setAttribute('x', fb.x - 15); // Adjust centering roughly
+        text.setAttribute('y', fb.y + 10);
+        text.setAttribute('class', 'fruit-node');
+        text.textContent = fb.emoji;
+        tree.appendChild(text);
+      }
+    });
+  }
+
+  document.getElementById('fb-submit-btn').addEventListener('click', () => {
+    let name = document.getElementById('fb-input-name').value.trim() || '익명';
+    let msg = document.getElementById('fb-input-msg').value.trim();
+    
+    if(!msg) {
+      alert('응원 메시지를 남겨주세요!');
+      return;
+    }
+    
+    // Pick a random available position
+    const pos = availablePositions[Math.floor(Math.random() * availablePositions.length)];
+    
+    const newFb = { name, msg, emoji: selectedEmoji, x: pos.x, y: pos.y };
+    saveFeedback(newFb);
+    
+    // Reset inputs
+    document.getElementById('fb-input-name').value = '';
+    document.getElementById('fb-input-msg').value = '';
+    
+    // Animate Tree
+    const tree = document.getElementById('neon-tree');
+    const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    text.setAttribute('x', pos.x - 15);
+    text.setAttribute('y', pos.y + 10);
+    text.setAttribute('class', 'fruit-node new-fruit-anim');
+    text.textContent = selectedEmoji;
+    tree.appendChild(text);
+    
+    // Add to board with animation
+    const list = document.getElementById('fb-board-list');
+    const card = document.createElement('div');
+    card.className = 'fb-card';
+    card.innerHTML = `
+      <div class="fb-card-header">
+        <span class="fb-card-name">${newFb.name}</span>
+        <span class="fb-card-emoji">${newFb.emoji}</span>
+      </div>
+      <div class="fb-card-msg">${newFb.msg}</div>
+    `;
+    list.insertBefore(card, list.firstChild);
+  });
+});
+</script>

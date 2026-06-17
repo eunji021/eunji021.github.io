@@ -75,6 +75,18 @@
       gap: 15px;
     }
   }
+
+  .feedback-nav-btn {
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    cursor: pointer; text-decoration: none; transition: transform 0.3s;
+    margin: 0 10px;
+  }
+  .feedback-nav-btn:hover { transform: scale(1.1); }
+  .feedback-nav-icon { font-size: 1.5rem; line-height: 1; }
+  .feedback-nav-text {
+    font-family: 'Orbitron', sans-serif; font-size: 0.6rem; color: #10b981; 
+    letter-spacing: 1px; margin-top: 2px; text-shadow: 0 0 5px rgba(16,185,129,0.5);
+  }
 </style>
 
 <nav class="container grid-xl navbar-custom">
@@ -96,6 +108,13 @@
     </li>
     <li>
       <a class="nav-links-custom" href="#courses-section">Courses</a>
+    </li>
+
+    <li>
+      <a class="feedback-nav-btn" id="open-feedback-tree">
+        <div class="feedback-nav-icon">🌲</div>
+        <div class="feedback-nav-text">FEEDBACK</div>
+      </a>
     </li>
     <li>
       <a href="mailto:gwun012@naver.com" class="nav-btn-custom">CONTACT</a>
