@@ -187,6 +187,54 @@ author: eunji
 </div>
 
 <div class="gitbook-container">
+
+<style>
+/* 검색 모달 스타일 */
+.search-modal-overlay {
+  position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+  background: rgba(15, 23, 42, 0.85); z-index: 9999; display: none;
+  align-items: flex-start; justify-content: center; padding-top: 80px;
+  backdrop-filter: blur(5px);
+}
+.search-modal-overlay.active { display: flex; animation: fadeInModal 0.2s ease-out; }
+@keyframes fadeInModal { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
+
+.search-modal-box {
+  background: #1e293b; width: 90%; max-width: 650px; border-radius: 12px;
+  border: 1px solid #334155; box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+  display: flex; flex-direction: column; max-height: 80vh;
+}
+.search-modal-header {
+  padding: 15px 20px; border-bottom: 1px solid #334155; display: flex; align-items: center;
+}
+.search-modal-input {
+  background: transparent; border: none; color: white; font-size: 1.2rem; flex: 1; outline: none; margin-left: 10px;
+}
+.search-modal-close {
+  background: none; border: none; color: #94a3b8; font-size: 1.8rem; cursor: pointer; transition: color 0.2s;
+}
+.search-modal-close:hover { color: #ef4444; }
+.search-modal-results {
+  padding: 20px; overflow-y: auto; flex: 1;
+}
+
+/* 덮어쓰기 방지: 메인 콘텐츠 영역 숨김 클래스 제거용 */
+.search-results-container { display: none !important; }
+</style>
+
+<div class="search-modal-overlay" id="search-modal">
+  <div class="search-modal-box">
+    <div class="search-modal-header">
+      <i class="uil uil-search" style="color:#10b981; font-size: 1.5rem;"></i>
+      <input type="text" class="search-modal-input" id="modal-search-input" placeholder="검색어를 입력하세요..." autocomplete="off">
+      <button class="search-modal-close" id="search-modal-close">&times;</button>
+    </div>
+    <div class="search-modal-results" id="search-modal-results">
+      <div style="text-align:center; color:#64748b; margin-top:30px;">검색어를 입력하면 결과가 나타납니다.</div>
+    </div>
+  </div>
+</div>
+
   <!-- Sidebar -->
   <aside class="gitbook-sidebar">
     <div class="gitbook-search-wrapper">
@@ -2142,7 +2190,16 @@ function openCategory(catId) {
 
 // Search Logic
 document.addEventListener("DOMContentLoaded", function() {
-  const searchInput = document.getElementById("gitbook-search");
+  const sidebarSearchBtn = document.getElementById("gitbook-search");
+    const searchInput = document.getElementById("modal-search-input");
+    const searchModal = document.getElementById("search-modal");
+    const searchModalResults = document.getElementById("search-modal-results");
+    const searchModalClose = document.getElementById("search-modal-close");
+
+    sidebarSearchBtn.addEventListener("click", (e) => { e.preventDefault(); searchModal.classList.add("active"); searchInput.focus(); });
+    searchModalClose.addEventListener("click", () => { searchModal.classList.remove("active"); });
+    searchModal.addEventListener("click", (e) => { if(e.target === searchModal) searchModal.classList.remove("active"); });
+
   const searchHeader = document.getElementById("search-results-header");
   const searchList = document.getElementById("search-results-list");
   
@@ -2192,7 +2249,7 @@ document.addEventListener("DOMContentLoaded", function() {
       return;
     }
     
-    openCategory('search-results');
+    // openCategory('search-results');
         searchList.innerHTML = "";
     
     sections.forEach(sec => {
@@ -2215,7 +2272,7 @@ document.addEventListener("DOMContentLoaded", function() {
         btn.className = 'go-to-doc-btn';
         btn.innerHTML = '📄 해당 노트로 이동';
         btn.addEventListener('click', () => {
-          openCategory(sec.id);
+          openCategory(sec.id); searchModal.classList.remove('active');
         });
         
         contentDiv.appendChild(snippet);
