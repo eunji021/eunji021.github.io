@@ -248,7 +248,7 @@ author: eunji
   <main class="gitbook-content-area">
     <div id="content-home" class="content-section active">
       <div class="home-banner">
-        <h1>🤖 인공지능 기초 프로그래밍</h1>
+        <h1>인공지능 기초 프로그래밍</h1>
         <p>머신러닝의 핵심 알고리즘 이론과 파이썬 실습 코드를 통합한 전용 공간입니다.<br>좌측 메뉴에서 학습할 모델을 선택하거나 검색창을 이용해보세요.</p>
       </div>
     </div>
