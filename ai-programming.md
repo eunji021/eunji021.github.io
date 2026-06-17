@@ -152,30 +152,20 @@ author: eunji
     height: auto;
   }
 
-  /* Search Results View */
-  .search-results-header {
-    font-size: 1.5rem;
-    color: #94a3b8;
-    text-align: center;
-    margin-bottom: 40px;
-    font-family: 'Orbitron', 'Pretendard', sans-serif;
-  }
-  .search-result-item {
-    margin-bottom: 30px;
-    padding-bottom: 20px;
-    border-bottom: 1px solid rgba(16, 185, 129, 0.1);
-  }
-  .search-result-title {
-    font-size: 1.2rem;
-    color: #10B981;
-    margin-bottom: 10px;
-    font-weight: 600;
-    cursor: pointer;
-  }
-  .search-result-title:hover { color: #059669; text-decoration: underline; }
+    /* Search Results View - Accordion */
+  .code-accordion { background: #1e293b; border: 1px solid #334155; border-radius: 8px; margin-bottom: 15px; overflow: hidden; }
+  .code-accordion summary { padding: 15px 20px; background: #0f172a; color: #10b981; font-weight: 600; cursor: pointer; list-style: none; position: relative; font-size: 1.1rem; outline: none; transition: background 0.2s; }
+  .code-accordion summary:hover { background: #1e293b; }
+  .code-accordion summary::-webkit-details-marker { display: none; }
+  .code-accordion summary::after { content: '▼'; position: absolute; right: 20px; top: 15px; font-size: 0.9rem; color: #94a3b8; transition: transform 0.3s; }
+  .code-accordion[open] summary::after { transform: rotate(180deg); }
+  .accordion-content { padding: 20px; border-top: 1px solid #334155; background: #0B1412; }
+  
   .search-result-snippet { color: #cbd5e1; font-size: 0.95rem; line-height: 1.6; word-break: break-all; }
   .search-result-snippet mark { background-color: rgba(250, 204, 21, 0.8); color: #0f172a; padding: 0 3px; font-weight: bold; }
   .hidden-section { display: none !important; }
+  .go-to-doc-btn { display: inline-block; margin-top: 15px; padding: 8px 16px; background: rgba(16, 185, 129, 0.1); color: #10B981; border: 1px solid #10B981; border-radius: 6px; cursor: pointer; font-size: 0.9rem; font-weight: 600; transition: all 0.2s; }
+  .go-to-doc-btn:hover { background: #10B981; color: #0f172a; }
 
   /* Home Banner */
   .home-banner {
@@ -2120,8 +2110,7 @@ print(dt.score(훈련용_data , 훈련용_target))
 
 </div>
     <div id="content-search-results" class="content-section">
-      <div class="search-results-header" id="search-results-header"></div>
-      <div id="search-results-list"></div>
+            <div id="search-results-list"></div>
     </div>
   </main>
 </div>
@@ -2205,37 +2194,43 @@ document.addEventListener("DOMContentLoaded", function() {
     }
     
     openCategory('search-results');
-    searchList.innerHTML = "";
-    let matchCount = 0;
+        searchList.innerHTML = "";
     
     sections.forEach(sec => {
       if (sec.fullText.includes(query)) {
-        matchCount++;
         sec.navEl.classList.remove("hidden-section");
         
-        const item = document.createElement('div');
-        item.className = 'search-result-item';
+        const details = document.createElement('details');
+        details.className = 'code-accordion';
         
-        const titleDiv = document.createElement('div');
-        titleDiv.className = 'search-result-title';
-        titleDiv.innerHTML = sec.title;
-        titleDiv.addEventListener('click', () => {
-          openCategory(sec.id);
-        });
+        const summary = document.createElement('summary');
+        summary.innerHTML = sec.title;
+        
+        const contentDiv = document.createElement('div');
+        contentDiv.className = 'accordion-content';
         
         const snippet = document.createElement('div');
         snippet.className = 'search-result-snippet';
         snippet.innerHTML = getSnippet(sec.rawText, query);
         
-        item.appendChild(titleDiv);
-        item.appendChild(snippet);
-        searchList.appendChild(item);
+        const btn = document.createElement('div');
+        btn.className = 'go-to-doc-btn';
+        btn.innerHTML = '📄 해당 노트로 이동';
+        btn.addEventListener('click', () => {
+          openCategory(sec.id);
+        });
+        
+        contentDiv.appendChild(snippet);
+        contentDiv.appendChild(btn);
+        
+        details.appendChild(summary);
+        details.appendChild(contentDiv);
+        
+        searchList.appendChild(details);
       } else {
         sec.navEl.classList.add("hidden-section");
       }
     });
-    
-    searchHeader.innerHTML = `${matchCount} RESULTS MATCHING "${query.toUpperCase()}"`;
   });
 });
 </script>
