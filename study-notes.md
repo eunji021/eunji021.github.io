@@ -2642,7 +2642,7 @@ document.addEventListener("DOMContentLoaded", function() {
     
     sections.forEach(sec => {
       if (sec.fullText.includes(query)) {
-        sec.navEl.classList.remove("hidden-section");
+        if (sec.tocElement) sec.tocElement.classList.remove("hidden-section");
         
         const details = document.createElement('details');
         details.className = 'code-accordion';
@@ -2672,7 +2672,7 @@ document.addEventListener("DOMContentLoaded", function() {
         
         searchList.appendChild(details);
       } else {
-        sec.navEl.classList.add("hidden-section");
+        if (sec.tocElement) sec.tocElement.classList.add("hidden-section");
       }
     });
   });
