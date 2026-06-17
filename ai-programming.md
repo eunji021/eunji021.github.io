@@ -108,12 +108,17 @@ author: eunji
   .gitbook-content-area h1 { border-bottom: 2px solid rgba(16, 185, 129, 0.4); padding-bottom: 15px; color: #10B981; }
   .gitbook-content-area h2 { border-bottom: 1px solid rgba(16, 185, 129, 0.2); padding-bottom: 10px; }
   
-  /* Code Block Dark Theme */
+    /* Code Block Dark Theme */
   .highlight { background: #1e1e1e !important; color: #d4d4d4 !important; padding: 15px; border-radius: 8px; font-family: 'Consolas', 'Courier New', monospace; font-size: 0.95rem; overflow-x: auto; margin: 20px 0; border: 1px solid rgba(255,255,255,0.1); }
-  .highlight .k, .highlight .kv { color: #569cd6; font-weight: bold; }
-  .highlight .s, .highlight .s1, .highlight .s2 { color: #ce9178; }
+  .highlight .k, .highlight .kv, .highlight .kd, .highlight .kn, .highlight .kp, .highlight .kr, .highlight .kt { color: #569cd6; font-weight: bold; }
+  .highlight .s, .highlight .s1, .highlight .s2, .highlight .sb, .highlight .sc { color: #ce9178; }
   .highlight .c, .highlight .c1, .highlight .cm { color: #6a9955; font-style: italic; }
-  .highlight .m, .highlight .mi, .highlight .mf { color: #b5cea8; }
+  .highlight .m, .highlight .mi, .highlight .mf, .highlight .mo { color: #b5cea8; }
+  .highlight .nf, .highlight .nc { color: #dcdcaa; }
+  .highlight .o, .highlight .ow, .highlight .p { color: #d4d4d4; }
+  .highlight .err { color: #d4d4d4 !important; background-color: transparent !important; }
+  .highlight .n, .highlight .nx, .highlight .nd, .highlight .ni, .highlight .ne, .highlight .nf, .highlight .nl, .highlight .nn, .highlight .nt, .highlight .nv, .highlight .vc, .highlight .vg, .highlight .vi { color: #9cdcfe; }
+  .highlight .nb, .highlight .bp { color: #4ec9b0; }
   p > code, li > code, td > code { background: rgba(30, 30, 30, 0.8); padding: 3px 6px; border-radius: 4px; color: #4ec9b0; font-family: 'Consolas', monospace; font-size: 0.9em; border: 1px solid rgba(255,255,255,0.1); }
   
   /* Console Output Box */
