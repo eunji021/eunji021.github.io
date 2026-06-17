@@ -119,6 +119,7 @@ author: eunji
   .highlight .err { color: #d4d4d4 !important; background-color: transparent !important; }
   .highlight .n, .highlight .nx, .highlight .nd, .highlight .ni, .highlight .ne, .highlight .nf, .highlight .nl, .highlight .nn, .highlight .nt, .highlight .nv, .highlight .vc, .highlight .vg, .highlight .vi { color: #9cdcfe; }
   .highlight .nb, .highlight .bp { color: #4ec9b0; }
+    .highlight code { background: transparent !important; border: none !important; padding: 0 !important; color: inherit !important; box-shadow: none !important; }
   p > code, li > code, td > code { background: rgba(30, 30, 30, 0.8); padding: 3px 6px; border-radius: 4px; color: #4ec9b0; font-family: 'Consolas', monospace; font-size: 0.9em; border: 1px solid rgba(255,255,255,0.1); }
   
   /* Console Output Box */
