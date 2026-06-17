@@ -281,7 +281,7 @@ author: eunji
     
 <div id="content-home" class="content-section active">
   <div class="home-banner">
-    <h1>🏡 Study Notes</h1>
+    <h1>Study Notes</h1>
     <p>이곳은 학습과 공부 기록을 정리하는 공간입니다.<br>좌측의 카테고리나 검색창을 이용해 원하는 노트를 찾아보세요!</p>
   </div>
 </div>
