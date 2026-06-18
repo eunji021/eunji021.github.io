@@ -710,14 +710,18 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     zones.forEach(z => {
-      document.getElementById('bg-' + z).classList.remove('fire');
-      document.getElementById('wall-' + z).classList.remove('fire');
+      const bg = document.getElementById('bg-' + z);
+      if(bg) bg.classList.remove('fire');
+      const wall = document.getElementById('wall-' + z);
+      if(wall) wall.classList.remove('fire');
       if(document.getElementById('route-' + z)) {
         document.getElementById('route-' + z).classList.remove('active');
       }
     });
-    document.getElementById('wall-c-mid').classList.remove('fire');
-    document.getElementById('bg-c-mid').classList.remove('fire');
+    const wallMid = document.getElementById('wall-c-mid');
+    if(wallMid) wallMid.classList.remove('fire');
+    const bgMid = document.getElementById('bg-c-mid');
+    if(bgMid) bgMid.classList.remove('fire');
     
     simMainFire.classList.remove('emergency');
     appBadgeFire.innerText = 'ALL STABLE';
