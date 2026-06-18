@@ -1023,7 +1023,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 <!-- ===================== 소개 탭 ===================== -->
 <div id="tab-intro" class="tab-content" markdown="1">
-{% include_relative safe.md %}
+{% include_relative realtime_intro.md %}
 </div>
 
 <!-- ===================== 코드 탭 ===================== -->
