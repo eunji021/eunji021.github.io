@@ -510,15 +510,6 @@ document.addEventListener('DOMContentLoaded', () => {
         evacueeMotion.beginElement();
         appendLog(`[대피] 인원 1명 출구 이동 중...`);
       }
-    if(safeRoutes.length > 0) {
-      appendLog(`[시스템] 안전 대피 경로 개방 완료 (${safeRoutes.length}개)`);
-      if(evacueeGroup && evacueeMotion) {
-        evacueeGroup.style.display = 'block';
-        const escapeRoute = safeRoutes[0]; // 첫 번째 안전 경로로 대피
-        evacueeMotion.setAttribute('path', routePathsMap[escapeRoute]);
-        evacueeMotion.beginElement();
-        appendLog(`[대피] 인원 1명 출구 이동 중...`);
-      }
     } else {
       appendLog(`[경고] 모든 대피 경로 고립 위험!`);
     }
