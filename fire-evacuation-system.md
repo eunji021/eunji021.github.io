@@ -853,11 +853,6 @@ resetAll();
         </div>
       </div>
 
-      <!-- 프로젝트 최종 결과물 사진 (슬라이드 바로 아래) -->
-      <div class="result-section" style="margin-top: 30px; margin-bottom: 40px; background:#0f172a; border:2px solid #334155; border-radius:12px; padding:24px;">
-        <div class="result-section-title" style="color:#cbd5e1; font-weight:bold; font-size:1rem; margin-bottom:16px; font-family:'Pretendard',sans-serif;">🏁 프로젝트 최종 결과물</div>
-        <img src="/assets/img/projects/fire_result.png" alt="fire 최종 결과물" class="result-img" style="width:100%; border-radius:8px; border:1px solid #334155; box-shadow: 0 4px 20px rgba(0,0,0,0.3);">
-      </div>
 
       <!-- 영상/사진 좌우 배치 (슬라이드 밑으로 이동) -->
       <div class="ov-media-row">

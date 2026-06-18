@@ -931,85 +931,79 @@ document.addEventListener('DOMContentLoaded', () => {
 
   <!-- ===================== 한눈에 보기 탭 ===================== -->
   <!-- ===================== 한눈에 보기 탭 ===================== -->
-  <div id="tab-overview" class="tab-content">
-    <style>
-      .ov-media-row { display:flex; gap:20px; margin-bottom:30px; align-items:flex-start; }
-      .ov-media-row > * { flex:1; min-width:0; }
-      @media(max-width:700px) { .ov-media-row { flex-direction:column; } }
-      .ov-media-box {
-        background:#0f172a; border:2px solid #334155; border-radius:12px;
-        overflow:hidden; aspect-ratio:16/9;
-        display:flex; align-items:center; justify-content:center;
-        color:#475569; font-size:0.9rem; text-align:center; padding:20px;
-        font-family:'Pretendard',sans-serif;
-      }
-      .ov-media-box video,.ov-media-box img { width:100%; height:100%; object-fit:cover; display:block; }
-      .ov-media-label { text-align:center; color:#64748b; font-size:0.8rem; margin-top:8px; font-family:'Pretendard',sans-serif; }
-    </style>
+<div id="tab-overview" class="tab-content">
+<style>
+.ov-media-row { display:flex; gap:20px; margin-bottom:30px; align-items:flex-start; }
+.ov-media-row > * { flex:1; min-width:0; }
+@media(max-width:700px) { .ov-media-row { flex-direction:column; } }
+.ov-media-box {
+  background:#0f172a; border:2px solid #334155; border-radius:12px;
+  overflow:hidden; aspect-ratio:16/9;
+  display:flex; align-items:center; justify-content:center;
+  color:#475569; font-size:0.9rem; text-align:center; padding:20px;
+  font-family:'Pretendard',sans-serif;
+}
+.ov-media-box video,.ov-media-box img { width:100%; height:100%; object-fit:cover; display:block; }
+.ov-media-label { text-align:center; color:#64748b; font-size:0.8rem; margin-top:8px; font-family:'Pretendard',sans-serif; }
+</style>
 
-    <div style="padding:30px 0; font-family:'Pretendard',sans-serif;">
+<div style="padding:30px 0; font-family:'Pretendard',sans-serif;">
 
-      <!-- PDF 슬라이더 (타이틀 제거, 캐러셀 방식) -->
-      <div class="pdf-slider-wrap" style="background:#0f172a; border:2px solid #334155; border-radius:12px; padding:24px; margin-bottom:20px;">
-        <div class="pdf-slider-container" id="pdf-slider-safety" style="position:relative; width:100%; aspect-ratio:16/9; background:#1e293b; border-radius:8px; overflow:hidden;">
-          <div class="pdf-slide active" style="position:absolute; top:0; left:0; width:100%; height:100%; opacity:0; transition:opacity 0.4s ease; display:flex; align-items:center; justify-content:center; color:#475569; font-size:0.9rem; text-align:center; padding:20px; font-family:'Pretendard',sans-serif;">
-            <div><div style="font-size:2.5rem;margin-bottom:10px;">📂</div><div style="color:#64748b;">로딩 중...</div></div>
-          </div>
-        </div>
-        <div class="pdf-nav" style="display:flex; align-items:center; justify-content:center; gap:16px; margin-top:14px;">
-          <button class="pdf-btn" id="pdf-safety-prev" style="background:rgba(16,185,129,0.15); border:1px solid rgba(16,185,129,0.4); color:#10b981; border-radius:8px; padding:8px 18px; cursor:pointer; font-weight:bold; font-size:1rem; transition:all 0.2s; font-family:'Pretendard',sans-serif;">◀</button>
-          <span class="pdf-counter" id="pdf-safety-counter" style="color:#94a3b8; font-size:0.9rem; font-family:'Pretendard',sans-serif; min-width:60px; text-align:center;">- / -</span>
-          <button class="pdf-btn" id="pdf-safety-next" style="background:rgba(16,185,129,0.15); border:1px solid rgba(16,185,129,0.4); color:#10b981; border-radius:8px; padding:8px 18px; cursor:pointer; font-weight:bold; font-size:1rem; transition:all 0.2s; font-family:'Pretendard',sans-serif;">▶</button>
-        </div>
-      </div>
+<!-- PDF 슬라이더 (타이틀 제거, 캐러셀 방식) -->
+<div class="pdf-slider-wrap" style="background:#0f172a; border:2px solid #334155; border-radius:12px; padding:24px; margin-bottom:20px;">
+<div class="pdf-slider-container" id="pdf-slider-safety" style="position:relative; width:100%; aspect-ratio:16/9; background:#1e293b; border-radius:8px; overflow:hidden;">
+<div class="pdf-slide active" style="position:absolute; top:0; left:0; width:100%; height:100%; opacity:0; transition:opacity 0.4s ease; display:flex; align-items:center; justify-content:center; color:#475569; font-size:0.9rem; text-align:center; padding:20px; font-family:'Pretendard',sans-serif;">
+<div><div style="font-size:2.5rem;margin-bottom:10px;">📂</div><div style="color:#64748b;">로딩 중...</div></div>
+</div>
+</div>
+<div class="pdf-nav" style="display:flex; align-items:center; justify-content:center; gap:16px; margin-top:14px;">
+<button class="pdf-btn" id="pdf-safety-prev" style="background:rgba(16,185,129,0.15); border:1px solid rgba(16,185,129,0.4); color:#10b981; border-radius:8px; padding:8px 18px; cursor:pointer; font-weight:bold; font-size:1rem; transition:all 0.2s; font-family:'Pretendard',sans-serif;">◀</button>
+<span class="pdf-counter" id="pdf-safety-counter" style="color:#94a3b8; font-size:0.9rem; font-family:'Pretendard',sans-serif; min-width:60px; text-align:center;">- / -</span>
+<button class="pdf-btn" id="pdf-safety-next" style="background:rgba(16,185,129,0.15); border:1px solid rgba(16,185,129,0.4); color:#10b981; border-radius:8px; padding:8px 18px; cursor:pointer; font-weight:bold; font-size:1rem; transition:all 0.2s; font-family:'Pretendard',sans-serif;">▶</button>
+</div>
+</div>
 
-      <!-- 프로젝트 최종 결과물 사진 (슬라이드 바로 아래) -->
-      <div class="result-section" style="margin-top: 30px; margin-bottom: 40px; background:#0f172a; border:2px solid #334155; border-radius:12px; padding:24px;">
-        <div class="result-section-title" style="color:#cbd5e1; font-weight:bold; font-size:1rem; margin-bottom:16px; font-family:'Pretendard',sans-serif;">🏁 프로젝트 최종 결과물</div>
-        <img src="/assets/img/projects/safety_result.png" alt="safety 최종 결과물" class="result-img" style="width:100%; border-radius:8px; border:1px solid #334155; box-shadow: 0 4px 20px rgba(0,0,0,0.3);">
-      </div>
+<!-- 영상/사진 좌우 배치 (슬라이드 밑으로 이동) -->
+<div class="ov-media-row">
+<div>
+<div class="ov-media-box">
+<!-- 영상: <video src="/assets/videos/safety_demo.mp4" controls></video> -->
+<div><div style="font-size:2.5rem;margin-bottom:10px;">🎬</div><div><strong style="color:#94a3b8;">시연 영상</strong><br><span style="color:#64748b;">video 태그로 교체해 주세요</span></div></div>
+</div>
+<p class="ov-media-label">📽️ 시스템 시연 영상</p>
+</div>
+<div>
+<div class="ov-media-box">
+<!-- 사진: <img src="/assets/images/safety_hw.jpg" alt="하드웨어"> -->
+<div><div style="font-size:2.5rem;margin-bottom:10px;">📸</div><div><strong style="color:#94a3b8;">하드웨어 사진</strong><br><span style="color:#64748b;">img 태그로 교체해 주세요</span></div></div>
+</div>
+<p class="ov-media-label">🔧 실제 하드웨어 구성</p>
+</div>
+</div>
 
-      <!-- 영상/사진 좌우 배치 (슬라이드 밑으로 이동) -->
-      <div class="ov-media-row">
-        <div>
-          <div class="ov-media-box">
-            <!-- 영상: <video src="/assets/videos/safety_demo.mp4" controls></video> -->
-            <div><div style="font-size:2.5rem;margin-bottom:10px;">🎬</div><div><strong style="color:#94a3b8;">시연 영상</strong><br><span style="color:#64748b;">video 태그로 교체해 주세요</span></div></div>
-          </div>
-          <p class="ov-media-label">📽️ 시스템 시연 영상</p>
-        </div>
-        <div>
-          <div class="ov-media-box">
-            <!-- 사진: <img src="/assets/images/safety_hw.jpg" alt="하드웨어"> -->
-            <div><div style="font-size:2.5rem;margin-bottom:10px;">📸</div><div><strong style="color:#94a3b8;">하드웨어 사진</strong><br><span style="color:#64748b;">img 태그로 교체해 주세요</span></div></div>
-          </div>
-          <p class="ov-media-label">🔧 실제 하드웨어 구성</p>
-        </div>
-      </div>
+</div>
+</div>
 
-    </div>
-  </div>
-
-  <!-- ===================== 소개 탭 ===================== -->
-  <div id="tab-intro" class="tab-content" markdown="1">
+<!-- ===================== 소개 탭 ===================== -->
+<div id="tab-intro" class="tab-content" markdown="1">
 {% include_relative safe.md %}
-  </div>
+</div>
 
-  <!-- ===================== 코드 탭 ===================== -->
-  <div id="tab-code" class="tab-content" markdown="1">
-    <div style="padding: 30px 0;">
-      <!-- 상단 타이틀 상시 노출 -->
-      <div class="code-tab-header">
-        <div class="code-tab-title">🔢 핵심 소스코드</div>
-        <div class="code-tab-desc">상위 1~4번 섹션은 바로 확인하실 수 있으며, 5번 전체 소스코드는 클릭하여 펼쳐볼 수 있습니다.</div>
-      </div>
+<!-- ===================== 코드 탭 ===================== -->
+<div id="tab-code" class="tab-content" markdown="1">
+<div style="padding: 30px 0;">
+<!-- 상단 타이틀 상시 노출 -->
+<div class="code-tab-header">
+<div class="code-tab-title">🔢 핵심 소스코드</div>
+<div class="code-tab-desc">상위 1~4번 섹션은 바로 확인하실 수 있으며, 5번 전체 소스코드는 클릭하여 펼쳐볼 수 있습니다.</div>
+</div>
 
-      <!-- 1~4번 섹션 상시 노출 -->
-      <div class="code-direct-view" style="margin-bottom: 30px;">
+<!-- 1~4번 섹션 상시 노출 -->
+<div class="code-direct-view" style="margin-bottom: 30px;">
 {% include_relative safe_code.md %}
-      </div>
-    </div>
-  </div>
+</div>
+</div>
+</div>
 
 </div>
 
