@@ -1,4 +1,4 @@
----
+﻿---
 layout: post
 title: "실시간 안전 장비 착용 여부 시스템"
 category: projects
@@ -491,13 +491,13 @@ document.addEventListener('DOMContentLoaded', () => {
     clearTimeout(w.timerWait);
     w.tText.style.display = 'none';
     w.countdown = 1;
-    w.timerWait = setTimeout(() => startCountdown(w), 3000);
+    w.timerWait = setTimeout(() => startCountdown(w), 500);
   }
 
   function startCountdown(w) {
     if(w.state === 'STABLE' || w.state === 'EMERGENCY') return;
     w.tText.style.display = 'block';
-    w.tText.innerText = `미감지: 3`;
+    w.tText.innerText = `미감지: 1`;
     
     w.timerInterval = setInterval(() => {
       w.countdown--;
