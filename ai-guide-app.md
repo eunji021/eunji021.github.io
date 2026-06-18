@@ -162,319 +162,243 @@ short-description: "딥러닝 기반 객체 인식 모델을 모바일 장치에
     font-family: 'Pretendard', sans-serif;
   }
 
-  /* 프로젝트 C 시뮬레이터 CSS */
+    /* 프로젝트 C 시뮬레이터 CSS (클린 스마트폰 UI) */
   .sim-container {
-    width: 100%; height: 600px;
-    background: #0f172a;
-    border: 4px solid #10b981; /* STABLE Green */
-    border-radius: 12px;
-    box-shadow: 0 0 20px rgba(16, 185, 129, 0.4);
+    width: 100%; min-height: 650px;
+    background: transparent;
     display: flex; align-items: center; justify-content: center; position: relative;
-    transition: all 0.5s; overflow: hidden;
     margin-bottom: 20px;
   }
-  .sim-container.scanning { border-color: #3b82f6; box-shadow: 0 0 30px rgba(59, 130, 246, 0.6); animation: pulseBlue 1.5s infinite alternate; }
-  @keyframes pulseBlue { from { box-shadow: 0 0 10px #3b82f6; } to { box-shadow: 0 0 40px #3b82f6, inset 0 0 20px #3b82f6; } }
 
   .sim-phone {
-    width: 320px; height: 520px; background: #1e293b;
-    border-radius: 40px; border: 10px solid #000;
+    width: 340px; height: 680px; background: #fff;
+    border-radius: 40px; border: 12px solid #1e293b;
     position: relative; overflow: hidden; font-family: 'Pretendard', sans-serif;
-    box-shadow: 0 20px 40px rgba(0,0,0,0.8); z-index: 5;
+    box-shadow: 0 25px 50px rgba(0,0,0,0.5); z-index: 5;
     display: flex; flex-direction: column;
   }
   /* 노치 */
   .sim-phone::before {
     content: ''; position: absolute; top: 0; left: 50%; transform: translateX(-50%);
-    width: 120px; height: 25px; background: #000; border-radius: 0 0 15px 15px; z-index: 20;
+    width: 130px; height: 30px; background: #1e293b; border-radius: 0 0 15px 15px; z-index: 50;
   }
   /* 하단 바 */
   .sim-phone::after {
     content: ''; position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%);
-    width: 120px; height: 5px; background: rgba(255,255,255,0.4); border-radius: 5px; z-index: 20;
+    width: 120px; height: 5px; background: rgba(0,0,0,0.3); border-radius: 5px; z-index: 50;
   }
 
   /* 카메라 뷰 (기본 화면) */
   .camera-view {
     position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-    background: url('https://images.unsplash.com/photo-1542281286-9e0a16bb7366?auto=format&fit=crop&w=400&q=80') center/cover;
-    filter: brightness(0.7) blur(2px); transition: opacity 0.5s; z-index: 10;
+    background: url('./assets/images/open.png') center/cover no-repeat, #000;
+    transition: opacity 0.4s ease-out; z-index: 10;
   }
+  
   .crosshair {
-    position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-    width: 200px; height: 200px; border: 2px dashed rgba(255,255,255,0.4); border-radius: 10px;
+    position: absolute; top: 45%; left: 50%; transform: translate(-50%, -50%);
+    width: 220px; height: 220px; border: 1px solid rgba(255,255,255,0.6);
+    display: flex; flex-direction: column; justify-content: space-between;
+  }
+  .crosshair::before, .crosshair::after { content: ''; position: absolute; background: rgba(255,255,255,0.8); }
+  .crosshair::before { top: 50%; left: 45%; width: 10%; height: 1px; }
+  .crosshair::after { left: 50%; top: 45%; height: 10%; width: 1px; }
+  
+  .camera-ui-top {
+    position: absolute; top: 40px; width: 100%; display: flex; justify-content: space-between; padding: 0 20px; color: white;
   }
   
-  /* 바운딩 박스 */
-  .bounding-box {
-    position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-    width: 180px; height: 240px; border: 3px solid #10b981; border-radius: 5px;
-    background: rgba(16,185,129,0.1); display: none; z-index: 15;
-    box-shadow: 0 0 15px rgba(16,185,129,0.5);
+  /* 셔터 영역 */
+  .shutter-area {
+    position: absolute; bottom: 0; left: 0; width: 100%; height: 130px;
+    background: rgba(0,0,0,0.6); display: flex; align-items: center; justify-content: center; z-index: 20;
   }
-  
-  .typing-text {
-    position: absolute; top: -30px; left: 0; color: #10b981; font-weight: bold; font-size: 0.9rem;
-    white-space: nowrap; overflow: hidden; border-right: 2px solid #10b981; width: 0;
+  .shutter-btn {
+    width: 70px; height: 70px; background: #fff; border-radius: 50%; border: 4px solid #cbd5e1;
+    cursor: pointer; transition: transform 0.1s, background 0.2s; display: flex; align-items: center; justify-content: center;
   }
-  @keyframes typeText { from { width: 0; } to { width: 100%; } }
-  @keyframes blinkCursor { 50% { border-color: transparent; } }
+  .shutter-btn:active { transform: scale(0.9); background: #f1f5f9; }
+  .shutter-btn::inner { content: ''; width: 54px; height: 54px; background: #fff; border-radius: 50%; border: 1px solid #e2e8f0; }
 
-  /* 유적지 가이드 UI 화면 */
+  /* 플래시 이펙트 */
+  .camera-flash {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    background: white; opacity: 0; z-index: 40; pointer-events: none;
+  }
+  .camera-flash.fire { animation: flashAnim 0.3s ease-out; }
+  @keyframes flashAnim { 0% { opacity: 1; } 100% { opacity: 0; } }
+
+  /* 국가 문화재청 Mock UI 화면 */
   .guide-ui {
     position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-    background: #0f172a; z-index: 11; opacity: 0; pointer-events: none; transition: opacity 0.8s;
-    display: flex; flex-direction: column; padding: 40px 20px 20px 20px;
+    background: #f8fafc; z-index: 11; opacity: 0; pointer-events: none; transition: opacity 0.4s;
+    display: flex; flex-direction: column; overflow-y: auto; overflow-x: hidden; scrollbar-width: none;
   }
   .guide-ui.active { opacity: 1; pointer-events: auto; }
   
-  .guide-img { width: 100%; height: 180px; background: #334155; border-radius: 12px; margin-bottom: 20px; overflow: hidden; }
+  .mock-header {
+    width: 100%; padding: 40px 15px 15px 15px; background: #fff; border-bottom: 1px solid #e2e8f0;
+    display: flex; align-items: center; justify-content: center; position: sticky; top: 0; z-index: 20;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  }
+  .mock-header-logo {
+    font-size: 1.1rem; font-weight: 800; color: #0f172a; letter-spacing: -0.5px;
+  }
+  .mock-header-logo span { color: #b91c1c; } /* 포인트 컬러 */
+
+  .guide-content { padding: 20px; flex: 1; }
+  
+  .guide-img { width: 100%; height: 200px; background: #e2e8f0; border-radius: 8px; margin-bottom: 20px; overflow: hidden; }
   .guide-img img { width: 100%; height: 100%; object-fit: cover; }
   
-  .guide-title { color: #fff; font-size: 1.5rem; font-weight: bold; margin-bottom: 5px; }
-  .guide-sub { color: #94a3b8; font-size: 0.9rem; margin-bottom: 15px; }
-  .guide-desc { color: #cbd5e1; font-size: 0.95rem; line-height: 1.5; margin-bottom: 20px; flex: 1; }
+  .badge { display: inline-block; padding: 4px 10px; background: #b91c1c; color: white; font-size: 0.75rem; font-weight: bold; border-radius: 4px; margin-bottom: 10px; }
+  .guide-title { color: #0f172a; font-size: 1.6rem; font-weight: 800; margin-bottom: 8px; letter-spacing: -0.5px; line-height: 1.2; }
+  .guide-sub { color: #64748b; font-size: 0.9rem; margin-bottom: 20px; border-bottom: 1px solid #e2e8f0; padding-bottom: 15px; }
   
-  .audio-wave { display: flex; align-items: center; justify-content: center; gap: 4px; height: 40px; margin-bottom: 20px; }
-  .wave-bar { width: 4px; background: #38bdf8; border-radius: 2px; animation: waveAnim 1s infinite alternate ease-in-out; }
-  .wave-bar:nth-child(2) { animation-delay: 0.2s; } .wave-bar:nth-child(3) { animation-delay: 0.4s; } .wave-bar:nth-child(4) { animation-delay: 0.1s; } .wave-bar:nth-child(5) { animation-delay: 0.5s; }
-  @keyframes waveAnim { from { height: 10px; } to { height: 35px; } }
+  .guide-desc { color: #334155; font-size: 0.95rem; line-height: 1.7; margin-bottom: 30px; text-align: justify; }
   
-  .reset-btn { background: #334155; color: white; border: none; padding: 12px; border-radius: 8px; font-weight: bold; cursor: pointer; transition: background 0.2s; }
-  .reset-btn:hover { background: #475569; }
+  .info-table { width: 100%; border-collapse: collapse; margin-bottom: 80px; }
+  .info-table th, .info-table td { padding: 12px 10px; border-bottom: 1px solid #e2e8f0; font-size: 0.9rem; }
+  .info-table th { background: #f1f5f9; text-align: left; color: #475569; width: 35%; font-weight: 600; }
+  .info-table td { color: #0f172a; }
 
-  /* 드래그 앤 드롭 아이템 */
-  .pagoda-icon {
-    position: absolute; right: 40px; bottom: 40px; width: 100px; height: 100px; cursor: grab; z-index: 30; user-select: none;
-    border-radius: 12px; overflow: hidden; border: 3px solid #cbd5e1; box-shadow: 0 10px 20px rgba(0,0,0,0.5); transition: transform 0.1s;
+  .reset-btn-wrap {
+    position: sticky; bottom: 0; left: 0; width: 100%; padding: 15px 20px 25px 20px; background: linear-gradient(to top, rgba(255,255,255,1) 70%, rgba(255,255,255,0)); z-index: 20;
   }
-  .pagoda-icon:active { cursor: grabbing; transform: scale(1.05); border-color: #38bdf8; }
-  .pagoda-icon img { width: 100%; height: 100%; object-fit: cover; pointer-events: none; }
-  
-  .pagoda-dock {
-    position: absolute; right: 40px; bottom: 40px; width: 100px; height: 100px; border: 2px dashed #475569; border-radius: 12px;
-    display: flex; align-items: center; justify-content: center; color: #475569; font-size: 0.8rem; text-align: center;
-  }
-</style>
+  .reset-btn { width: 100%; background: #0f172a; color: white; border: none; padding: 15px; border-radius: 12px; font-weight: bold; font-size: 1rem; cursor: pointer; transition: background 0.2s; box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
+  .reset-btn:hover { background: #1e293b; }
+
 </style>
 
-<div class="project-tabs-container">
-  <!-- 상단 탭 메뉴 -->
-  <div class="tabs-nav">
-    <button class="tab-btn active" data-target="tab-simulator">체험 시뮬레이터</button>
-    <button class="tab-btn" data-target="tab-ppt">한눈에 보기</button>
-    <button class="tab-btn" data-target="tab-intro">소개</button>
-    <button class="tab-btn" data-target="tab-code">코드</button>
-  </div>
-
-  
-  <!-- 0. 체험 시뮬레이터 탭 콘텐츠 -->
+  <!-- 체험 시뮬레이터 탭 -->
   <div id="tab-simulator" class="tab-content active">
-    <div class="sim-container" id="sim-main-ai">
+    <div class="sim-container">
       
+      <!-- 스마트폰 단독 UI -->
       <div class="sim-phone">
+        
+        <!-- 1. 카메라 대기 화면 -->
         <div class="camera-view" id="camera-view">
-          <div class="crosshair"></div>
-          <div class="bounding-box" id="bounding-box">
-            <div class="typing-text" id="typing-text"></div>
+          <div class="camera-ui-top">
+            <span style="font-size: 1.2rem;">⚡</span>
+            <span style="font-size: 0.9rem; font-weight: bold; background: rgba(0,0,0,0.5); padding: 2px 10px; border-radius: 10px;">AI LENS</span>
+            <span style="font-size: 1.2rem;">⚙️</span>
+          </div>
+          <div class="crosshair">
+            <div style="position: absolute; top: -5px; left: -5px; width: 20px; height: 20px; border-top: 2px solid #fff; border-left: 2px solid #fff;"></div>
+            <div style="position: absolute; top: -5px; right: -5px; width: 20px; height: 20px; border-top: 2px solid #fff; border-right: 2px solid #fff;"></div>
+            <div style="position: absolute; bottom: -5px; left: -5px; width: 20px; height: 20px; border-bottom: 2px solid #fff; border-left: 2px solid #fff;"></div>
+            <div style="position: absolute; bottom: -5px; right: -5px; width: 20px; height: 20px; border-bottom: 2px solid #fff; border-right: 2px solid #fff;"></div>
+          </div>
+          <p style="position: absolute; bottom: 150px; width: 100%; text-align: center; color: white; font-size: 0.9rem; text-shadow: 0 2px 4px rgba(0,0,0,0.8);">유적지를 스캔하려면 셔터를 누르세요</p>
+          
+          <div class="shutter-area">
+            <button class="shutter-btn" id="shutter-btn">
+              <div style="width: 56px; height: 56px; background: white; border-radius: 50%; border: 2px solid #cbd5e1;"></div>
+            </button>
+          </div>
+        </div>
+
+        <!-- 2. 플래시 오버레이 -->
+        <div class="camera-flash" id="camera-flash"></div>
+
+        <!-- 3. 유적지 가이드 (국가 문화재청 Mock UI) -->
+        <div class="guide-ui" id="guide-ui">
+          <div class="mock-header">
+            <div class="mock-header-logo">🏛️ 국가문화유산포털 <span>K-Heritage</span></div>
+          </div>
+          
+          <div class="guide-content">
+            <div class="badge">국보 제11호</div>
+            <div class="guide-title">익산 미륵사지 석탑</div>
+            <div class="guide-sub">Iksan Mireuksaji Seoktap (Stone Pagoda)</div>
+            
+            <div class="guide-img">
+              <!-- 촬영한 open.png 이미지가 상단에 헤더 이미지로 매핑됨 -->
+              <img src="./assets/images/open.png" alt="미륵사지 석탑" onerror="this.src='https://images.unsplash.com/photo-1542281286-9e0a16bb7366?auto=format&fit=crop&w=400&q=80'">
+            </div>
+            
+            <div class="guide-desc">
+              이 탑은 백제 무왕(재위 600∼641) 대에 건립된 것으로 추정되며, 우리나라에 남아 있는 가장 오래되고 거대한 석탑입니다. 목조건축의 기법을 돌로 구현해 낸 독특한 양식을 지니고 있어, 백제 건축 문화의 뛰어난 수준을 보여주는 핵심 유적입니다.
+            </div>
+            
+            <table class="info-table">
+              <tr><th>지정일</th><td>1962.12.20</td></tr>
+              <tr><th>소재지</th><td>전북특별자치도 익산시 금마면</td></tr>
+              <tr><th>시대</th><td>백제 시대</td></tr>
+              <tr><th>분류</th><td>유적건조물 / 종교신앙</td></tr>
+            </table>
+          </div>
+          
+          <div class="reset-btn-wrap">
+            <button class="reset-btn" id="btn-reset">다시 촬영하기</button>
           </div>
         </div>
         
-        <div class="guide-ui" id="guide-ui">
-          <div class="guide-img">
-            <img src="https://images.unsplash.com/photo-1542281286-9e0a16bb7366?auto=format&fit=crop&w=400&q=80" alt="Mireuksaji">
-          </div>
-          <div class="guide-title">미륵사지 석탑</div>
-          <div class="guide-sub">국보 제11호 | 백제 시대</div>
-          <div class="guide-desc">
-            익산 미륵사지 석탑은 한국에 남아있는 가장 크고 오래된 석탑입니다. 백제 무왕 시대에 건립된 것으로 추정되며, 목탑의 구조를 석재로 구현한 독특한 양식을 띠고 있습니다.
-          </div>
-          <div class="audio-wave">
-            <div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div>
-          </div>
-          <button class="reset-btn" id="btn-reset">다시 촬영하기</button>
-        </div>
       </div>
-      
-      <div class="pagoda-dock" id="pagoda-dock">Drag Me!</div>
-      <div class="pagoda-icon" id="pagoda-icon">
-        <img src="https://images.unsplash.com/photo-1542281286-9e0a16bb7366?auto=format&fit=crop&w=200&q=80" alt="Pagoda">
-      </div>
-      
-    </div>
-    <p style="text-align:center; color:#94a3b8; font-size:0.95rem;">💡 우측 하단의 미륵사지 사진을 스마트폰 카메라 화면 중앙으로 드래그 앤 드롭 해보세요.</p>
-  </div>
-<!-- 1. 한눈에 보기 탭 콘텐츠 -->
-  <div id="tab-ppt" class="tab-content">
-    <div class="carousel-container" id="slide-carousel">
-      <!-- 슬라이드 이미지 (경로를 맞춰서 수정해주세요) -->
-      <div class="carousel-slide active" style="background-image: url('{{ site.baseurl }}/assets/img/projects/placeholder.png');"></div>
-      
-      <button class="carousel-btn prev" onclick="moveSlide(-1)">&#10094;</button>
-      <button class="carousel-btn next" onclick="moveSlide(1)">&#10095;</button>
     </div>
   </div>
 
 <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      // Tab Navigation
-      const tabBtns = document.querySelectorAll('.tab-btn');
-      const tabContents = document.querySelectorAll('.tab-content');
+document.addEventListener('DOMContentLoaded', () => {
+  // Tab Navigation
+  const tabBtns = document.querySelectorAll('.tab-btn');
+  const tabContents = document.querySelectorAll('.tab-content');
+  
+  tabBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      tabBtns.forEach(b => b.classList.remove('active'));
+      tabContents.forEach(c => c.classList.remove('active'));
       
-      tabBtns.forEach(btn => {
-        btn.addEventListener('click', () => {
-          tabBtns.forEach(b => b.classList.remove('active'));
-          tabContents.forEach(c => c.classList.remove('active'));
-          
-          btn.classList.add('active');
-          document.getElementById(btn.getAttribute('data-target')).classList.add('active');
-          
-          if (btn.getAttribute('data-target') === 'tab-simulator') {
-            resetSimulator();
-          }
-        });
-      });
-
-      // Carousel Logic
-      let currentSlide = 0;
-      const slides = document.querySelectorAll('.carousel-slide');
-      const prevBtn = document.querySelector('.carousel-btn.prev');
-      const nextBtn = document.querySelector('.carousel-btn.next');
-
-      window.moveSlide = function(direction) {
-        if(!slides.length) return;
-        const newIndex = currentSlide + direction;
-        if (newIndex < 0 || newIndex >= slides.length) return;
-        slides[currentSlide].classList.remove('active');
-        currentSlide = newIndex;
-        slides[currentSlide].classList.add('active');
-        updateButtons();
-      }
-
-      function updateButtons() {
-        if(!prevBtn) return;
-        prevBtn.style.display = (currentSlide === 0) ? 'none' : 'block';
-        nextBtn.style.display = (currentSlide === slides.length - 1) ? 'none' : 'block';
-      }
-      updateButtons();
-
-      // Simulator Logic
-      const simMain = document.getElementById('sim-main-ai');
-      const cameraView = document.getElementById('camera-view');
-      const guideUi = document.getElementById('guide-ui');
-      const boundingBox = document.getElementById('bounding-box');
-      const typingText = document.getElementById('typing-text');
-      const pagodaIcon = document.getElementById('pagoda-icon');
-      const pagodaDock = document.getElementById('pagoda-dock');
-      const btnReset = document.getElementById('btn-reset');
-      
-      let isDragging = false;
-      let startX, startY, initialX, initialY;
-      let isScanning = false;
-
-      function resetSimulator() {
-        isScanning = false;
-        simMain.className = 'sim-container';
-        cameraView.style.opacity = '1';
-        guideUi.classList.remove('active');
-        boundingBox.style.display = 'none';
-        typingText.style.animation = 'none';
-        typingText.innerText = '';
-        
-        pagodaIcon.style.opacity = '1';
-        pagodaIcon.style.transition = 'none';
-        
-        const dockRect = pagodaDock.getBoundingClientRect();
-        const simRect = simMain.getBoundingClientRect();
-        pagodaIcon.style.left = (dockRect.left - simRect.left) + 'px';
-        pagodaIcon.style.top = (dockRect.top - simRect.top) + 'px';
-      }
-
-      setTimeout(resetSimulator, 100);
-      btnReset.addEventListener('click', resetSimulator);
-
-      pagodaIcon.addEventListener('mousedown', dragStart);
-      pagodaIcon.addEventListener('touchstart', dragStart, {passive: false});
-
-      function dragStart(e) {
-        if(isScanning) return;
-        const clientX = e.type.includes('mouse') ? e.clientX : e.touches[0].clientX;
-        const clientY = e.type.includes('mouse') ? e.clientY : e.touches[0].clientY;
-        
-        initialX = pagodaIcon.offsetLeft;
-        initialY = pagodaIcon.offsetTop;
-        startX = clientX;
-        startY = clientY;
-        isDragging = true;
-        pagodaIcon.style.transition = 'none';
-        
-        document.addEventListener('mousemove', drag);
-        document.addEventListener('mouseup', dragEnd);
-        document.addEventListener('touchmove', drag, {passive: false});
-        document.addEventListener('touchend', dragEnd);
-      }
-
-      function drag(e) {
-        if (!isDragging) return;
-        e.preventDefault();
-        const clientX = e.type.includes('mouse') ? e.clientX : e.touches[0].clientX;
-        const clientY = e.type.includes('mouse') ? e.clientY : e.touches[0].clientY;
-        const dx = clientX - startX;
-        const dy = clientY - startY;
-        pagodaIcon.style.left = (initialX + dx) + 'px';
-        pagodaIcon.style.top = (initialY + dy) + 'px';
-      }
-
-      function dragEnd(e) {
-        isDragging = false;
-        document.removeEventListener('mousemove', drag);
-        document.removeEventListener('mouseup', dragEnd);
-        document.removeEventListener('touchmove', drag);
-        document.removeEventListener('touchend', dragEnd);
-        
-        // Check if dropped near the center of the phone
-        const iconRect = pagodaIcon.getBoundingClientRect();
-        const simRect = simMain.getBoundingClientRect();
-        
-        const iconCx = iconRect.left + iconRect.width/2;
-        const iconCy = iconRect.top + iconRect.height/2;
-        const simCx = simRect.left + simRect.width/2;
-        const simCy = simRect.top + simRect.height/2;
-        
-        const dist = Math.sqrt(Math.pow(iconCx - simCx, 2) + Math.pow(iconCy - simCy, 2));
-        
-        if (dist < 150) {
-          startScan();
-        } else {
-          // Snap back
-          pagodaIcon.style.transition = 'all 0.3s';
-          const dockRect = pagodaDock.getBoundingClientRect();
-          pagodaIcon.style.left = (dockRect.left - simRect.left) + 'px';
-          pagodaIcon.style.top = (dockRect.top - simRect.top) + 'px';
-        }
-      }
-
-      function startScan() {
-        isScanning = true;
-        pagodaIcon.style.transition = 'all 0.3s';
-        pagodaIcon.style.opacity = '0'; // Hide dragged icon
-        
-        // Stage 2: Scanning
-        simMain.className = 'sim-container scanning';
-        boundingBox.style.display = 'block';
-        typingText.innerText = '[Object: Mireuksaji Seoktap / Confidence: 98%]';
-        typingText.style.animation = 'typeText 1.5s steps(40, end) forwards, blinkCursor 0.5s step-end infinite alternate';
-        
-        // Stage 3: Load Guide UI after scan
-        setTimeout(() => {
-          simMain.className = 'sim-container'; // Back to STABLE Green
-          cameraView.style.opacity = '0';
-          guideUi.classList.add('active');
-        }, 1800);
-      }
-
+      btn.classList.add('active');
+      document.getElementById(btn.getAttribute('data-target')).classList.add('active');
     });
-  </script>
+  });
+
+  // Simulator Elements
+  const shutterBtn = document.getElementById('shutter-btn');
+  const cameraFlash = document.getElementById('camera-flash');
+  const cameraView = document.getElementById('camera-view');
+  const guideUi = document.getElementById('guide-ui');
+  
+  // Audio effect (optional if browser allows, otherwise just visual)
+  // const shutterSound = new Audio('https://www.soundjay.com/camera/camera-shutter-click-01.mp3');
+
+  shutterBtn.addEventListener('click', () => {
+    // 1. 찰칵 플래시 효과
+    cameraFlash.classList.add('fire');
+    // try { shutterSound.play(); } catch(e) {}
+    
+    // 2. 0.2초 뒤 화면 전환 시작 (자연스러운 딜레이)
+    setTimeout(() => {
+      cameraView.style.opacity = '0';
+      cameraView.style.pointerEvents = 'none';
+      
+      setTimeout(() => {
+        guideUi.classList.add('active');
+      }, 300);
+      
+    }, 200);
+    
+    // 플래시 애니메이션 클래스 제거 (재사용 위해)
+    setTimeout(() => {
+      cameraFlash.classList.remove('fire');
+    }, 400);
+  });
+  
+  // 리셋 버튼
+  const btnReset = document.getElementById('btn-reset');
+  btnReset.addEventListener('click', () => {
+    guideUi.classList.remove('active');
+    setTimeout(() => {
+      cameraView.style.opacity = '1';
+      cameraView.style.pointerEvents = 'auto';
+      // 스크롤 맨 위로 초기화
+      guideUi.scrollTop = 0;
+    }, 400);
+  });
+});
+</script>
 
   <!-- 2. 소개 탭 콘텐츠 -->
   <div id="tab-intro" class="tab-content" markdown="1">
