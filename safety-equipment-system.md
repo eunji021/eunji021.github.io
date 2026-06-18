@@ -1032,7 +1032,7 @@ document.addEventListener('DOMContentLoaded', () => {
 <!-- 상단 타이틀 상시 노출 -->
 <div class="code-tab-header">
 <div class="code-tab-title">🔢 핵심 소스코드</div>
-<div class="code-tab-desc">상위 1~4번 섹션은 바로 확인하실 수 있으며, 5번 세부 소스코드(5-1 ~ 5-4)들은 각각 클릭하여 펼쳐볼 수 있습니다.</div>
+<div class="code-tab-desc">상위 1~4번 섹션은 바로 확인하실 수 있으며, 5번 전체 코드 및 세부 소스코드(5-1 ~ 5-4)들은 클릭하여 펼쳐볼 수 있습니다.</div>
 </div>
 
 <!-- 1~4번 섹션 상시 노출 -->
