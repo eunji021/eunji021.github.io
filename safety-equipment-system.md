@@ -161,6 +161,14 @@ short-description: "ESP32 게이트웨이를 이용해 작업자 안전모와 �
     text-align: center;
     font-family: 'Pretendard', sans-serif;
   }
+  .sim-test-btn {
+    position: absolute; bottom: -70px; left: 50%; transform: translateX(-50%);
+    padding: 6px 12px; background: #ef4444; color: white; border: none; border-radius: 6px;
+    font-size: 0.75rem; font-weight: bold; cursor: pointer; transition: all 0.2s; white-space: nowrap;
+    box-shadow: 0 4px 10px rgba(239, 68, 68, 0.4); z-index: 10;
+  }
+  .sim-test-btn:hover { background: #dc2626; transform: translateX(-50%) translateY(-2px); }
+  .sim-test-btn:active { transform: translateX(-50%) translateY(0); }
 </style>
 
 <div class="project-tabs-container">
@@ -323,6 +331,14 @@ short-description: "ESP32 게이트웨이를 이용해 작업자 안전모와 �
     20% { opacity: 1; scaleX(1); }
     100% { transform: translateX(-300px) scaleX(0.5); opacity: 0; }
   }
+  .sim-test-btn {
+    position: absolute; bottom: -70px; left: 50%; transform: translateX(-50%);
+    padding: 6px 12px; background: #ef4444; color: white; border: none; border-radius: 6px;
+    font-size: 0.75rem; font-weight: bold; cursor: pointer; transition: all 0.2s; white-space: nowrap;
+    box-shadow: 0 4px 10px rgba(239, 68, 68, 0.4); z-index: 10;
+  }
+  .sim-test-btn:hover { background: #dc2626; transform: translateX(-50%) translateY(-2px); }
+  .sim-test-btn:active { transform: translateX(-50%) translateY(0); }
 </style>
 
   <!-- 체험 시뮬레이터 탭 -->
@@ -405,7 +421,7 @@ short-description: "ESP32 게이트웨이를 이용해 작업자 안전모와 �
       
     </div>
     <p style="text-align:center; color:#94a3b8; font-size:0.95rem;">💡 마우스 휠로 좌측 모바일 앱을 스크롤 해보세요. 작업자의 장비를 서로 바꿔 씌우는 시도(예외 상황)도 테스트 해볼 수 있습니다.</p>
-    <p style="text-align:center; color:#ef4444; font-size:0.95rem; font-weight:bold; margin-top:-10px;">⚠️ 주의: 우측 각 작업자(사람 모양) 구역 밖으로 마우스 커서를 벗어난 상태로 3초가 지나면 "움직임 없음"으로 간주되어 쓰러짐 경고가 발생합니다!</p>
+    <p style="text-align:center; color:#ef4444; font-size:0.95rem; font-weight:bold; margin-top:-10px;">💡 각 작업자 아래의 [⚠️ 움직임 정지 테스트] 버튼을 클릭하면 3초 뒤에 "움직임 없음" 경고를 시뮬레이션 할 수 있습니다.</p>
   </div>
 
 <script>
@@ -729,14 +745,13 @@ document.addEventListener('DOMContentLoaded', () => {
       w.tText.style.display = 'none';
     };
     
-    // Mouse Enter = Moving (Stop timer)
-    w.wrapper.addEventListener('mouseenter', stopNoMovementTimer);
-    
-    // Mouse Leave = No Movement (Start timer)
-    w.wrapper.addEventListener('mouseleave', startNoMovementTimer);
-    
-    // Default: start the timer because mouse is not on them initially
-    startNoMovementTimer();
+    const testBtn = document.getElementById(`btn-nomove-${w.id}`);
+    if(testBtn) {
+      testBtn.addEventListener('click', () => {
+        if(w.state === 'EMERGENCY' || !w.hOn || !w.vOn) return;
+        startNoMovementTimer();
+      });
+    }
   });
 });
 </script>
