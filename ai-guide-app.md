@@ -1,4 +1,4 @@
----
+﻿---
 layout: post
 title: "AI 유적지 가이드 앱"
 category: projects
@@ -191,7 +191,7 @@ short-description: "딥러닝 기반 객체 인식 모델을 모바일 장치에
   /* 카메라 뷰 (기본 화면) */
   .camera-view {
     position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-    background: url('./assets/images/open.png') center/cover no-repeat, #000;
+    background: url('/open.png') center/cover no-repeat, #000;
     transition: opacity 0.4s ease-out; z-index: 10;
   }
   
@@ -315,7 +315,7 @@ short-description: "딥러닝 기반 객체 인식 모델을 모바일 장치에
             
             <div class="guide-img">
               <!-- 촬영한 open.png 이미지가 상단에 헤더 이미지로 매핑됨 -->
-              <img src="./assets/images/open.png" alt="미륵사지 석탑" onerror="this.src='https://images.unsplash.com/photo-1542281286-9e0a16bb7366?auto=format&fit=crop&w=400&q=80'">
+              <img src="/open.png" alt="미륵사지 석탑" onerror="this.src='https://images.unsplash.com/photo-1542281286-9e0a16bb7366?auto=format&fit=crop&w=400&q=80'">
             </div>
             
             <div class="guide-desc">
