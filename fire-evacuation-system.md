@@ -67,10 +67,9 @@ short-description: "실시간 화재 감지 및 다익스트라 최적 경로 �
   }
   /* 슬라이드 뷰어(PDF Slider) 스타일 */
   .pdf-slider-relative-wrap {
-    display: flex;
-    align-items: center;
-    gap: 16px;
+    position: relative;
     width: 100%;
+    aspect-ratio: 16 / 9;
   }
   .pdf-slide {
     position: absolute;
@@ -94,28 +93,33 @@ short-description: "실시간 화재 감지 및 다익스트라 최적 경로 �
     display: block;
   }
   .pdf-btn-side {
-    background: rgba(15, 23, 42, 0.35);
-    backdrop-filter: blur(6px);
-    -webkit-backdrop-filter: blur(6px);
-    color: rgba(255, 255, 255, 0.6);
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    font-size: 1.5rem;
-    width: 44px;
-    height: 80px;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(16, 185, 129, 0.5);
+    color: #ffffff;
+    border: none;
+    font-size: 1.8rem;
+    font-weight: bold;
+    width: 42px;
+    height: 76px;
     cursor: pointer;
     z-index: 10;
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.2s ease;
     border-radius: 8px;
-    flex-shrink: 0;
   }
   .pdf-btn-side:hover {
-    background: rgba(16, 185, 129, 0.7);
-    color: #ffffff;
-    border-color: rgba(16, 185, 129, 0.5);
+    background: rgba(16, 185, 129, 0.85);
     box-shadow: 0 0 15px rgba(16, 185, 129, 0.4);
+  }
+  .pdf-btn-side.prev {
+    left: 15px;
+  }
+  .pdf-btn-side.next {
+    right: 15px;
   }
   /* Code Accordion Styles */
   .code-accordion {
@@ -872,13 +876,13 @@ resetAll();
       <!-- PDF 슬라이더 (타이틀 제거, 캐러셀 방식) -->
       <div class="pdf-slider-wrap" style="background:#0f172a; border:2px solid #334155; border-radius:12px; padding:24px; margin-bottom:20px;">
         <div class="pdf-slider-relative-wrap">
-          <button class="pdf-btn-side prev" id="pdf-fire-prev">◀</button>
-          <div class="pdf-slider-container" id="pdf-slider-fire" style="position:relative; flex:1; aspect-ratio:16/9; background:#1e293b; border-radius:8px; overflow:hidden;">
+          <div class="pdf-slider-container" id="pdf-slider-fire" style="position:relative; width:100%; height:100%; background:#1e293b; border-radius:8px; overflow:hidden;">
             <div class="pdf-slide active" style="position:absolute; top:0; left:0; width:100%; height:100%; opacity:0; transition:opacity 0.4s ease; display:flex; align-items:center; justify-content:center; color:#475569; font-size:0.9rem; text-align:center; padding:20px; font-family:'Pretendard',sans-serif;">
               <div><div style="font-size:2.5rem;margin-bottom:10px;">📂</div><div style="color:#64748b;">로딩 중...</div></div>
             </div>
           </div>
-          <button class="pdf-btn-side next" id="pdf-fire-next">▶</button>
+          <button class="pdf-btn-side prev" id="pdf-fire-prev">&lt;</button>
+          <button class="pdf-btn-side next" id="pdf-fire-next">&gt;</button>
         </div>
       </div>
 
