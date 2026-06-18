@@ -137,10 +137,16 @@
     <div class="fb-left-panel">
       <h2 class="fb-form-title">LEAVE A FEEDBACK</h2>
       
-      <div class="fb-input-group">
-        <label class="fb-label">Name / Nickname</label>
-        <input type="text" id="fb-input-name" class="fb-input" placeholder="익명도 좋습니다" maxlength="15">
-      </div>
+              <div class="fb-input-group">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
+            <label class="fb-label" style="margin-bottom: 0;">Name / Nickname</label>
+            <label style="font-size: 0.8rem; color: #cbd5e1; cursor: pointer; display: flex; align-items: center; gap: 5px;">
+              <input type="checkbox" id="fb-anon-toggle" style="accent-color: #10b981; cursor: pointer;">
+              익명으로 작성
+            </label>
+          </div>
+          <input type="text" id="fb-input-name" class="fb-input" placeholder="익명도 좋습니다" maxlength="15">
+        </div>
       
       <div class="fb-input-group">
         <label class="fb-label">Message</label>
@@ -318,7 +324,13 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   document.getElementById('fb-submit-btn').addEventListener('click', () => {
-    let name = document.getElementById('fb-input-name').value.trim() || '익명';
+          let name = '';
+      const anonToggle = document.getElementById('fb-anon-toggle');
+      if (anonToggle && anonToggle.checked) {
+        name = '익명';
+      } else {
+        name = document.getElementById('fb-input-name').value.trim() || '익명';
+      }
     let msg = document.getElementById('fb-input-msg').value.trim();
     
     if(!msg) {
@@ -359,4 +371,23 @@ document.addEventListener('DOMContentLoaded', () => {
     list.insertBefore(card, list.firstChild);
   });
 });
+
+    const anonToggle = document.getElementById('fb-anon-toggle');
+    const nameInput = document.getElementById('fb-input-name');
+    if (anonToggle && nameInput) {
+      anonToggle.addEventListener('change', function() {
+        if(this.checked) {
+          nameInput.dataset.savedName = nameInput.value;
+          nameInput.value = '익명';
+          nameInput.disabled = true;
+          nameInput.style.backgroundColor = 'rgba(255,255,255,0.05)';
+          nameInput.style.color = '#94a3b8';
+        } else {
+          nameInput.value = nameInput.dataset.savedName || '';
+          nameInput.disabled = false;
+          nameInput.style.backgroundColor = 'rgba(255, 255, 255, 0.1)';
+          nameInput.style.color = 'white';
+        }
+      });
+    }
 </script>
