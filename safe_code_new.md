@@ -22,6 +22,8 @@
   * 앱인벤터의 다중 연결 한계를 깨기 위해, `millis()` 함수 기반의 타임 스케줄러로 **`1초(1000ms)`**마다 `sendWorker1Next` 플래그를 토글시켜 작업자 1과 2의 데이터를 교차 전송함.
 
 
+
+
 ```cpp
 #include <BLEDevice.h>
 #include <BLEUtils.h>
@@ -133,10 +135,12 @@ void loop() {
   delay(100);
 }
 
+
 ### 3. BLE 거리 판정 및 이탈 감지 로직 코드 (BLE_Distance_Scanner.ino)
 * **핵심 로직 설명:** * 기준이 되는 비콘(targetMac)의 RSSI 무선 강도를 체크하여 -50dBm 이하로 떨어지면    작업자가 구역을 이탈한 것으로 보고 부저 경고 신호를 발생시킴.
 
 * 메모리 오버플로우를 막기 위해 스캔 후 clearResults()로 버퍼를 즉각 초기화함.
+
 
 ```cpp
 #include <BLEDevice.h>
@@ -198,12 +202,16 @@ void loop() {
   }
 }
 
+
 ### 4. MIT APP Inventor(앱 인벤터)
+
 
 ###  5. 실시간 안전 장비 착용 여부 시스템 전체적인 코드
 * **작업자 MAC 주소:**  esp32 마다 고유의 'MAC' 주소가 있어 'MAC' 주소만 바꿔서 사용함.
 
+
 #### 5-1 MAC 주소 찾는 코드
+
 
 ```cpp
 #include <BLEDevice.h>
@@ -220,6 +228,8 @@ void setup() {
 void loop() {
   // do nothing
 }
+
+
 
 #### 5-2 수신용 코드
 ```cpp
@@ -466,6 +476,7 @@ void loop() {
   delay(100); // 조금 쉬기
 }
 
+
 #### 5-3 송신용 코드
 
 ```cpp
@@ -497,6 +508,7 @@ void setup() {
 void loop() {
   delay(1000);
 }
+
 
 #### 5-4 중계기 코드
 ```cpp
