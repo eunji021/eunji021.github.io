@@ -223,11 +223,15 @@ short-description: "ESP32 게이트웨이를 이용해 작업자 안전모와 �
 
 <div class="project-tabs-container">
   <!-- 상단 탭 메뉴 -->
-  
+  <div class="tabs-nav">
+    <button class="tab-btn active" data-target="tab-simulator">💻 시뮬레이터</button>
+    <button class="tab-btn" data-target="tab-overview">📊 한눈에 보기</button>
+    <button class="tab-btn" data-target="tab-intro">📄 소개</button>
+    <button class="tab-btn" data-target="tab-code">🔢 코드</button>
+  </div>
 
-  
+  <!-- 1. 시뮬레이터 탭 콘텐츠 -->
 
-    
 <style>
     /* 시뮬레이터 스타일 */
   .sim-container {
@@ -911,4 +915,337 @@ document.addEventListener('DOMContentLoaded', () => {
 
   });
 });
+</script>
+
+  <!-- ===================== 한눈에 보기 탭 ===================== -->
+  <div id="tab-overview" class="tab-content">
+
+    <style>
+      .ov-media-row { display: flex; gap: 20px; margin-bottom: 30px; align-items: flex-start; }
+      .ov-media-row > * { flex: 1; min-width: 0; }
+      @media (max-width: 700px) { .ov-media-row { flex-direction: column; } }
+      .ov-media-box {
+        background: #0f172a; border: 2px solid #334155; border-radius: 12px;
+        overflow: hidden; aspect-ratio: 16/9;
+        display: flex; align-items: center; justify-content: center;
+        color: #475569; font-size: 0.9rem; text-align: center; padding: 20px;
+        font-family: 'Pretendard', sans-serif;
+      }
+      .ov-media-box video, .ov-media-box img { width:100%; height:100%; object-fit:cover; display:block; }
+      .ov-media-label { text-align:center; color:#64748b; font-size:0.8rem; margin-top:8px; font-family:'Pretendard',sans-serif; }
+      .pdf-slider-wrap {
+        background: #0f172a; border: 2px solid #334155; border-radius: 12px;
+        padding: 24px; margin-bottom: 20px;
+      }
+      .pdf-slider-title {
+        color: #cbd5e1; font-weight: bold; font-size: 1rem; margin-bottom: 16px;
+        font-family: 'Pretendard', sans-serif; display: flex; align-items: center; gap: 8px;
+      }
+      .pdf-slider-container {
+        position: relative; width: 100%; aspect-ratio: 16/9;
+        background: #1e293b; border-radius: 8px; overflow: hidden;
+      }
+      .pdf-slide {
+        position: absolute; top:0; left:0; width:100%; height:100%;
+        opacity: 0; transition: opacity 0.4s ease;
+        display:flex; align-items:center; justify-content:center;
+        color:#475569; font-size:0.9rem; text-align:center; padding:20px;
+        font-family:'Pretendard',sans-serif;
+      }
+      .pdf-slide.active { opacity: 1; }
+      .pdf-slide img { width:100%; height:100%; object-fit:contain; display:block; }
+      .pdf-nav { display:flex; align-items:center; justify-content:center; gap:16px; margin-top:14px; }
+      .pdf-btn {
+        background: rgba(16,185,129,0.15); border: 1px solid rgba(16,185,129,0.4);
+        color: #10b981; border-radius: 8px; padding: 8px 18px; cursor: pointer;
+        font-weight: bold; font-size: 1rem; transition: all 0.2s; font-family:'Pretendard',sans-serif;
+      }
+      .pdf-btn:hover { background: rgba(16,185,129,0.3); }
+      .pdf-counter { color:#94a3b8; font-size:0.9rem; font-family:'Pretendard',sans-serif; min-width:60px; text-align:center; }
+    </style>
+
+    <div style="padding: 30px 0; font-family: 'Pretendard', sans-serif;">
+
+      <!-- 상단: 영상 / 사진 좌우 배치 -->
+      <div class="ov-media-row">
+        <div>
+          <div class="ov-media-box">
+            <!-- 영상 삽입: <video src="/assets/videos/safety_demo.mp4" controls></video> -->
+            <!-- 사진 삽입: <img src="/assets/images/safety_demo.jpg" alt="설명"> -->
+            <div>
+              <div style="font-size:2.5rem;margin-bottom:10px;">🎬</div>
+              <div><strong style="color:#94a3b8;">시연 영상</strong><br><span style="color:#64748b;">video 태그로 교체해 주세요</span></div>
+            </div>
+          </div>
+          <p class="ov-media-label">📽️ 시스템 시연 영상</p>
+        </div>
+        <div>
+          <div class="ov-media-box">
+            <!-- 사진 삽입: <img src="/assets/images/safety_hw.jpg" alt="하드웨어"> -->
+            <div>
+              <div style="font-size:2.5rem;margin-bottom:10px;">📸</div>
+              <div><strong style="color:#94a3b8;">하드웨어 사진</strong><br><span style="color:#64748b;">img 태그로 교체해 주세요</span></div>
+            </div>
+          </div>
+          <p class="ov-media-label">🔧 실제 하드웨어 구성</p>
+        </div>
+      </div>
+
+      <!-- 하단: PDF 슬라이더 -->
+      <div class="pdf-slider-wrap">
+        <div class="pdf-slider-title">📑 발표 자료 슬라이드</div>
+        <div class="pdf-slider-container" id="pdf-slider-safety">
+          <div class="pdf-slide active">
+            <div>
+              <div style="font-size:2.5rem;margin-bottom:10px;">📂</div>
+              <div style="color:#64748b;">슬라이드 이미지를<br>아래 JS 배열에 추가해 주세요</div>
+            </div>
+          </div>
+        </div>
+        <div class="pdf-nav">
+          <button class="pdf-btn" id="pdf-safety-prev">◀</button>
+          <span class="pdf-counter" id="pdf-safety-counter">- / -</span>
+          <button class="pdf-btn" id="pdf-safety-next">▶</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ===================== 소개 탭 ===================== -->
+  <div id="tab-intro" class="tab-content">
+
+    <style>
+      .intro-section { margin-bottom: 32px; }
+      .intro-section-title {
+        display: flex; align-items: center; gap: 10px;
+        color: #10b981; font-size: 1.2rem; font-weight: 700;
+        border-bottom: 2px solid rgba(16,185,129,0.2);
+        padding-bottom: 10px; margin-bottom: 16px;
+        font-family: 'Pretendard', sans-serif;
+      }
+      .intro-row { display:flex; gap:12px; margin-bottom:10px; font-family:'Pretendard',sans-serif; }
+      .intro-label { color:#94a3b8; font-size:0.9rem; min-width:110px; font-weight:600; padding-top:2px; }
+      .intro-value { color:#e2e8f0; font-size:0.95rem; line-height:1.7; flex:1; }
+      .intro-chip {
+        display:inline-block; background:rgba(16,185,129,0.12);
+        border:1px solid rgba(16,185,129,0.3); color:#10b981;
+        border-radius:20px; padding:3px 12px; font-size:0.8rem;
+        margin:3px 3px 3px 0; font-family:'Pretendard',sans-serif;
+      }
+      .intro-chip.blue { background:rgba(56,189,248,0.12); border-color:rgba(56,189,248,0.3); color:#38bdf8; }
+      .intro-chip.purple { background:rgba(167,139,250,0.12); border-color:rgba(167,139,250,0.3); color:#a78bfa; }
+      .intro-issue-box {
+        background:rgba(15,23,42,0.6); border-left:3px solid #f59e0b;
+        border-radius:0 8px 8px 0; padding:14px 18px; margin-bottom:14px;
+        font-family:'Pretendard',sans-serif;
+      }
+      .intro-issue-box .issue-title { color:#f59e0b; font-weight:700; font-size:0.95rem; margin-bottom:8px; }
+      .intro-issue-box .issue-row { color:#94a3b8; font-size:0.88rem; margin-bottom:4px; line-height:1.6; }
+      .intro-issue-box .issue-row strong { color:#cbd5e1; }
+    </style>
+
+    <div style="padding: 30px 0; font-family: 'Pretendard', sans-serif;">
+
+      <div class="intro-section">
+        <div class="intro-section-title">📌 프로젝트 개요</div>
+        <div class="intro-row">
+          <span class="intro-label">진행 기간</span>
+          <span class="intro-value"><!-- 예: 2024.03 ~ 2024.06 (팀 3명) --></span>
+        </div>
+        <div class="intro-row">
+          <span class="intro-label">기획 배경</span>
+          <span class="intro-value"><!-- 기획 배경을 이곳에 작성해 주세요 --></span>
+        </div>
+        <div class="intro-row">
+          <span class="intro-label">프로젝트 목적</span>
+          <span class="intro-value"><!-- 프로젝트 목적을 이곳에 작성해 주세요 --></span>
+        </div>
+      </div>
+
+      <div class="intro-section">
+        <div class="intro-section-title">🛠 사용 기술 및 개발 환경</div>
+        <div class="intro-row">
+          <span class="intro-label">언어</span>
+          <span class="intro-value">
+            <span class="intro-chip">C/C++</span>
+            <span class="intro-chip">Python</span>
+          </span>
+        </div>
+        <div class="intro-row">
+          <span class="intro-label">하드웨어</span>
+          <span class="intro-value">
+            <span class="intro-chip blue">ESP32</span>
+            <!-- 추가 하드웨어 칩 -->
+          </span>
+        </div>
+        <div class="intro-row">
+          <span class="intro-label">소프트웨어</span>
+          <span class="intro-value">
+            <span class="intro-chip purple">VS Code</span>
+            <span class="intro-chip purple">Arduino IDE</span>
+          </span>
+        </div>
+        <div class="intro-row">
+          <span class="intro-label">통신 프로토콜</span>
+          <span class="intro-value"><!-- 예: BLE, Wi-Fi, Serial, I2C --></span>
+        </div>
+      </div>
+
+      <div class="intro-section">
+        <div class="intro-section-title">⚡ 핵심 기능</div>
+        <div class="intro-row">
+          <span class="intro-label">기능 1</span>
+          <span class="intro-value"><!-- 핵심 기능 1 설명 --></span>
+        </div>
+        <div class="intro-row">
+          <span class="intro-label">기능 2</span>
+          <span class="intro-value"><!-- 핵심 기능 2 설명 --></span>
+        </div>
+      </div>
+
+      <div class="intro-section">
+        <div class="intro-section-title">🔧 개발 중 겪은 문제와 해결 과정</div>
+        <div class="intro-issue-box">
+          <div class="issue-title">⚠ Issue 1: <!-- 이슈 제목 --></div>
+          <div class="issue-row"><strong>현상:</strong> <!-- 현상 설명 --></div>
+          <div class="issue-row"><strong>원인:</strong> <!-- 원인 분석 --></div>
+          <div class="issue-row"><strong>해결:</strong> <!-- 해결 방법 --></div>
+        </div>
+      </div>
+
+      <div class="intro-section">
+        <div class="intro-section-title">🏁 프로젝트 결과 및 느낀 점</div>
+        <div class="intro-row">
+          <span class="intro-label">최종 성과</span>
+          <span class="intro-value"><!-- 성과 내용 --></span>
+        </div>
+        <div class="intro-row">
+          <span class="intro-label">배운 점</span>
+          <span class="intro-value"><!-- 회고 내용 --></span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ===================== 코드 탭 ===================== -->
+  <div id="tab-code" class="tab-content">
+
+    <style>
+      .code-tab-header {
+        position: sticky; top: 0;
+        background: linear-gradient(180deg, #0f172a 80%, transparent);
+        z-index: 10; padding: 20px 0 14px 0; margin-bottom: 10px;
+        font-family: 'Pretendard', sans-serif;
+      }
+      .code-tab-title { color:#10b981; font-size:1.4rem; font-weight:700; display:flex; align-items:center; gap:10px; }
+      .code-tab-desc { color:#64748b; font-size:0.85rem; margin-top:4px; }
+      .code-accordion-new {
+        background:#1e293b; border:1px solid #334155; border-radius:10px;
+        margin-bottom:12px; overflow:hidden; font-family:'Pretendard',sans-serif;
+      }
+      .code-accordion-new summary {
+        padding:16px 20px; background:#0f172a; color:#10b981;
+        font-weight:600; cursor:pointer; list-style:none;
+        display:flex; align-items:center; justify-content:space-between;
+        font-size:1rem; outline:none; transition:background 0.2s;
+      }
+      .code-accordion-new summary:hover { background:#1e293b; }
+      .code-accordion-new summary::-webkit-details-marker { display:none; }
+      .code-accordion-new summary::after { content:'▼'; font-size:0.8rem; color:#64748b; transition:transform 0.3s; }
+      .code-accordion-new[open] summary::after { transform:rotate(180deg); }
+      .code-accordion-new .accordion-body { padding:20px; border-top:1px solid #334155; }
+      .code-file-tag {
+        display:inline-block; background:rgba(16,185,129,0.12);
+        border:1px solid rgba(16,185,129,0.3); color:#10b981;
+        border-radius:6px; padding:2px 10px; font-size:0.75rem;
+        margin-bottom:10px; font-family:monospace;
+      }
+    </style>
+
+    <div style="padding: 30px 0;">
+
+      <!-- 상단 타이틀 상시 노출 -->
+      <div class="code-tab-header">
+        <div class="code-tab-title">🔢 핵심 소스코드</div>
+        <div class="code-tab-desc">각 섹션을 클릭하면 코드를 펼쳐볼 수 있습니다.</div>
+      </div>
+
+      <!-- 아코디언 1 -->
+      <details class="code-accordion-new">
+        <summary>📄 <!-- 파일/기능 제목 1 --></summary>
+        <div class="accordion-body">
+          <div class="code-file-tag"><!-- 파일명.cpp --></div>
+{% highlight cpp %}
+// 코드를 이곳에 붙여넣어 주세요
+{% endhighlight %}
+        </div>
+      </details>
+
+      <!-- 아코디언 2 -->
+      <details class="code-accordion-new">
+        <summary>📄 <!-- 파일/기능 제목 2 --></summary>
+        <div class="accordion-body">
+          <div class="code-file-tag"><!-- 파일명.cpp --></div>
+{% highlight cpp %}
+// 코드를 이곳에 붙여넣어 주세요
+{% endhighlight %}
+        </div>
+      </details>
+
+      <!-- 아코디언 3 -->
+      <details class="code-accordion-new">
+        <summary>📄 <!-- 파일/기능 제목 3 --></summary>
+        <div class="accordion-body">
+          <div class="code-file-tag"><!-- 파일명.cpp --></div>
+{% highlight cpp %}
+// 코드를 이곳에 붙여넣어 주세요
+{% endhighlight %}
+        </div>
+      </details>
+
+      <!-- ↑ 아코디언 블록 복사 후 추가 가능 -->
+
+    </div>
+  </div>
+
+</div>
+
+<script>
+/* PDF 슬라이더 - safety-equipment-system 용 */
+(function() {
+  // ↓ 슬라이드 이미지 경로를 여기에 추가하세요
+  var slides = [
+    // '/assets/slides/safety_01.jpg',
+    // '/assets/slides/safety_02.jpg',
+  ];
+  var container = document.getElementById('pdf-slider-safety');
+  var counter   = document.getElementById('pdf-safety-counter');
+  var btnPrev   = document.getElementById('pdf-safety-prev');
+  var btnNext   = document.getElementById('pdf-safety-next');
+  if (!container || !slides.length) {
+    if(counter) counter.textContent = '슬라이드 준비 중';
+    return;
+  }
+  var idx = 0;
+  container.innerHTML = '';
+  slides.forEach(function(src, i) {
+    var slide = document.createElement('div');
+    slide.className = 'pdf-slide' + (i === 0 ? ' active' : '');
+    var img = document.createElement('img');
+    img.src = src; img.alt = 'Slide ' + (i+1);
+    slide.appendChild(img);
+    container.appendChild(slide);
+  });
+  function showSlide(n) {
+    var els = container.querySelectorAll('.pdf-slide');
+    idx = (n + slides.length) % slides.length;
+    els.forEach(function(el, i) { el.classList.toggle('active', i === idx); });
+    counter.textContent = (idx+1) + ' / ' + slides.length;
+  }
+  if(btnPrev) btnPrev.addEventListener('click', function(){ showSlide(idx - 1); });
+  if(btnNext) btnNext.addEventListener('click', function(){ showSlide(idx + 1); });
+  showSlide(0);
+})();
 </script>
