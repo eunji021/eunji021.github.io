@@ -954,38 +954,36 @@ document.addEventListener('DOMContentLoaded', () => {
   <div id="tab-overview" class="tab-content">
     <div style="padding:30px 0; font-family:'Pretendard',sans-serif;">
 
-      <!-- PDF 슬라이더 -->
-      <div class="pdf-slider-wrap">
-        <div class="pdf-slider-container" id="pdf-slider-safety">
-          <div class="pdf-slide active"><div><div style="font-size:2.5rem;margin-bottom:10px;">📂</div><div style="color:#64748b;">로딩 중...</div></div></div>
-        </div>
-        <div class="pdf-nav">
-          <button class="pdf-btn" id="pdf-safety-prev">◀</button>
-          <span class="pdf-counter" id="pdf-safety-counter">- / -</span>
-          <button class="pdf-btn" id="pdf-safety-next">▶</button>
-        </div>
+      <!-- PPT 발표 슬라이드 세로 나열 -->
+      <div class="slides-vertical-list" style="display:flex; flex-direction:column; gap:24px; margin-bottom:40px;">
+        <img src="/assets/img/projects/safety_slides/slide_1.png" alt="Slide 1" style="width:100%; border-radius:8px; border:1px solid #334155; box-shadow: 0 4px 20px rgba(0,0,0,0.3);">
+        <img src="/assets/img/projects/safety_slides/slide_2.png" alt="Slide 2" style="width:100%; border-radius:8px; border:1px solid #334155; box-shadow: 0 4px 20px rgba(0,0,0,0.3);">
+        <img src="/assets/img/projects/safety_slides/slide_3.png" alt="Slide 3" style="width:100%; border-radius:8px; border:1px solid #334155; box-shadow: 0 4px 20px rgba(0,0,0,0.3);">
+        <img src="/assets/img/projects/safety_slides/slide_4.png" alt="Slide 4" style="width:100%; border-radius:8px; border:1px solid #334155; box-shadow: 0 4px 20px rgba(0,0,0,0.3);">
+        <img src="/assets/img/projects/safety_slides/slide_5.png" alt="Slide 5" style="width:100%; border-radius:8px; border:1px solid #334155; box-shadow: 0 4px 20px rgba(0,0,0,0.3);">
+        <img src="/assets/img/projects/safety_slides/slide_6.png" alt="Slide 6" style="width:100%; border-radius:8px; border:1px solid #334155; box-shadow: 0 4px 20px rgba(0,0,0,0.3);">
       </div>
 
       <!-- 영상/사진 좌우 배치 (슬라이드 밑으로 이동) -->
-      <div class="ov-media-row">
-        <div>
-          <div class="ov-media-box">
-            <!-- 영상: <video src="/assets/videos/safety_demo.mp4" controls></video> -->
+      <div class="ov-media-row" style="display:flex; gap:20px; margin-bottom:30px; align-items:flex-start;">
+        <div style="flex:1; min-width:0;">
+          <div class="ov-media-box" style="background:#0f172a; border:2px solid #334155; border-radius:12px; overflow:hidden; aspect-ratio:16/9; display:flex; align-items:center; justify-content:center; color:#475569; font-size:0.9rem; text-align:center; padding:20px; font-family:'Pretendard',sans-serif;">
+            <!-- 영상: <video src="/assets/videos/safety_demo.mp4" controls style="width:100%; height:100%; object-fit:cover; display:block;"></video> -->
             <div><div style="font-size:2.5rem;margin-bottom:10px;">🎬</div><div><strong style="color:#94a3b8;">시연 영상</strong><br><span style="color:#64748b;">video 태그로 교체해 주세요</span></div></div>
           </div>
-          <p class="ov-media-label">📽️ 시스템 시연 영상</p>
+          <p class="ov-media-label" style="text-align:center; color:#64748b; font-size:0.8rem; margin-top:8px; font-family:'Pretendard',sans-serif;">📽️ 시스템 시연 영상</p>
         </div>
-        <div>
-          <div class="ov-media-box">
-            <!-- 사진: <img src="/assets/images/safety_hw.jpg" alt="하드웨어"> -->
+        <div style="flex:1; min-width:0;">
+          <div class="ov-media-box" style="background:#0f172a; border:2px solid #334155; border-radius:12px; overflow:hidden; aspect-ratio:16/9; display:flex; align-items:center; justify-content:center; color:#475569; font-size:0.9rem; text-align:center; padding:20px; font-family:'Pretendard',sans-serif;">
+            <!-- 사진: <img src="/assets/images/safety_hw.jpg" alt="하드웨어" style="width:100%; height:100%; object-fit:cover; display:block;"> -->
             <div><div style="font-size:2.5rem;margin-bottom:10px;">📸</div><div><strong style="color:#94a3b8;">하드웨어 사진</strong><br><span style="color:#64748b;">img 태그로 교체해 주세요</span></div></div>
           </div>
-          <p class="ov-media-label">🔧 실제 하드웨어 구성</p>
+          <p class="ov-media-label" style="text-align:center; color:#64748b; font-size:0.8rem; margin-top:8px; font-family:'Pretendard',sans-serif;">🔧 실제 하드웨어 구성</p>
         </div>
       </div>
 
     </div>
-  </div>
+    </div>
 
   <!-- ===================== 소개 탭 ===================== -->
   <div id="tab-intro" class="tab-content" markdown="1">
@@ -1734,38 +1732,3 @@ void loop() {
 </div>
 </div>
 
-<script>
-(function() {
-  var slides = [
-    '/assets/img/projects/safety_slides/slide_1.png',
-    '/assets/img/projects/safety_slides/slide_2.png',
-    '/assets/img/projects/safety_slides/slide_3.png',
-    '/assets/img/projects/safety_slides/slide_4.png',
-    '/assets/img/projects/safety_slides/slide_5.png',
-    '/assets/img/projects/safety_slides/slide_6.png'
-  ];
-  var container = document.getElementById('pdf-slider-safety');
-  var counter   = document.getElementById('pdf-safety-counter');
-  var btnPrev   = document.getElementById('pdf-safety-prev');
-  var btnNext   = document.getElementById('pdf-safety-next');
-  if (!container || !slides.length) { if(counter) counter.textContent='슬라이드 준비 중'; return; }
-  var idx = 0;
-  container.innerHTML = '';
-  slides.forEach(function(src,i) {
-    var slide = document.createElement('div');
-    slide.className = 'pdf-slide' + (i===0?' active':'');
-    var img = document.createElement('img');
-    img.src=src; img.alt='Slide '+(i+1);
-    slide.appendChild(img); container.appendChild(slide);
-  });
-  function showSlide(n) {
-    var els = container.querySelectorAll('.pdf-slide');
-    idx = (n+slides.length)%slides.length;
-    els.forEach(function(el,i){ el.classList.toggle('active',i===idx); });
-    counter.textContent=(idx+1)+' / '+slides.length;
-  }
-  if(btnPrev) btnPrev.addEventListener('click',function(){ showSlide(idx-1); });
-  if(btnNext) btnNext.addEventListener('click',function(){ showSlide(idx+1); });
-  showSlide(0);
-})();
-</script>
