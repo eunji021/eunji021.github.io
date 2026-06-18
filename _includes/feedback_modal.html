@@ -51,7 +51,14 @@
 }
 .fb-input:focus { border-color: #10b981; }
 
-.fb-emoji-selector { display: flex; gap: 15px; margin-bottom: 30px; }
+.fb-emoji-selector { display: flex; gap: 20px; margin-bottom: 30px; }
+
+.emoji-wrapper { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+.emoji-label { font-size: 0.75rem; color: #94a3b8; font-family: 'Pretendard', sans-serif; }
+.board-category { margin-bottom: 20px; }
+.cat-title { font-size: 0.9rem; color: #10b981; font-weight: bold; margin-bottom: 10px; border-bottom: 1px dashed #334155; padding-bottom: 5px; }
+.cat-list { display: flex; flex-direction: column; gap: 10px; }
+
 .fb-emoji-btn {
   background: #1e293b; border: 1px solid #475569; border-radius: 50%;
   width: 50px; height: 50px; font-size: 1.5rem; display: flex; align-items: center; justify-content: center;
@@ -139,9 +146,18 @@
       
       <label class="fb-label">Select a Fruit</label>
       <div class="fb-emoji-selector" id="fb-emoji-selector">
-        <button class="fb-emoji-btn selected" data-emoji="🍏">🍏</button>
-        <button class="fb-emoji-btn" data-emoji="💡">💡</button>
-        <button class="fb-emoji-btn" data-emoji="🔥">🔥</button>
+        <div class="emoji-wrapper">
+          <button class="fb-emoji-btn selected" data-emoji="🍎">🍎</button>
+          <span class="emoji-label">응원</span>
+        </div>
+        <div class="emoji-wrapper">
+          <button class="fb-emoji-btn" data-emoji="💡">💡</button>
+          <span class="emoji-label">피드백</span>
+        </div>
+        <div class="emoji-wrapper">
+          <button class="fb-emoji-btn" data-emoji="🔥">🔥</button>
+          <span class="emoji-label">궁금증</span>
+        </div>
       </div>
       
       <button class="fb-submit-btn" id="fb-submit-btn">나무에 열매 달기 ➔</button>
@@ -165,7 +181,18 @@
     <div class="fb-right-panel">
       <div class="fb-board-title">💬 Visitor Board</div>
       <div class="fb-board-list" id="fb-board-list">
-        <!-- Cards will be injected here via JS -->
+        <div class="board-category">
+          <div class="cat-title">🍎 [응원 부분]</div>
+          <div id="list-cheer" class="cat-list"></div>
+        </div>
+        <div class="board-category">
+          <div class="cat-title">💡 [피드백 부분]</div>
+          <div id="list-feedback" class="cat-list"></div>
+        </div>
+        <div class="board-category">
+          <div class="cat-title">🔥 [궁금증 부분]</div>
+          <div id="list-question" class="cat-list"></div>
+        </div>
       </div>
     </div>
   </div>
@@ -191,13 +218,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Emoji Selector Logic
   const emojiBtns = document.querySelectorAll('.fb-emoji-btn');
-  let selectedEmoji = '🍏';
+  let selectedEmoji = '🍎';
+  const msgInput = document.getElementById('fb-input-msg');
   
   emojiBtns.forEach(btn => {
     btn.addEventListener('click', () => {
       emojiBtns.forEach(b => b.classList.remove('selected'));
       btn.classList.add('selected');
       selectedEmoji = btn.getAttribute('data-emoji');
+      
+      if(selectedEmoji === '🍎') msgInput.placeholder = '응원 한마디 부탁드려요!';
+      else if(selectedEmoji === '💡') msgInput.placeholder = '개선 및 피드백을 적어주세요!';
+      else if(selectedEmoji === '🔥') msgInput.placeholder = '궁금한 내용을 질문해 주세요!';
     });
   });
 
@@ -205,7 +237,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const defaultFeedbacks = [
     { name: '익명의 합격요정', msg: '프로젝트 정리가 너무 깔끔합니다! 정말 멋져요.', emoji: '💡', x: 100, y: 280 },
     { name: '지나가던 개발자', msg: '다익스트라 알고리즘 시각화가 인상 깊습니다.', emoji: '🔥', x: 300, y: 230 },
-    { name: '포트폴리오 감상자', msg: '인터랙티브한 화면 구성 덕분에 시간가는 줄 몰랐습니다.', emoji: '🍏', x: 120, y: 150 }
+    { name: '포트폴리오 감상자', msg: '인터랙티브한 화면 구성 덕분에 시간가는 줄 몰랐습니다.', emoji: '🍎', x: 120, y: 150 }
   ];
 
   // Tree Positions
@@ -230,8 +262,16 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function renderBoard() {
-    const list = document.getElementById('fb-board-list');
-    list.innerHTML = '';
+    const listCheer = document.getElementById('list-cheer');
+    const listFeedback = document.getElementById('list-feedback');
+    const listQuestion = document.getElementById('list-question');
+    
+    if(!listCheer) return; // Prevent error if not rendered
+    
+    listCheer.innerHTML = '';
+    listFeedback.innerHTML = '';
+    listQuestion.innerHTML = '';
+    
     const fbs = getFeedbacks();
     
     fbs.forEach(fb => {
@@ -239,12 +279,14 @@ document.addEventListener('DOMContentLoaded', () => {
       card.className = 'fb-card';
       card.innerHTML = `
         <div class="fb-card-header">
-          <span class="fb-card-name">${fb.name}</span>
+          <span class="fb-card-name">익명</span>
           <span class="fb-card-emoji">${fb.emoji}</span>
         </div>
         <div class="fb-card-msg">${fb.msg}</div>
       `;
-      list.appendChild(card);
+      if(fb.emoji === '🍎' || fb.emoji === '🍏') listCheer.appendChild(card);
+      else if(fb.emoji === '💡') listFeedback.appendChild(card);
+      else if(fb.emoji === '🔥') listQuestion.appendChild(card);
     });
   }
 
