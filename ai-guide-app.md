@@ -67,9 +67,10 @@ short-description: "딥러닝 기반 객체 인식 모델을 모바일 장치에
   }
   /* 슬라이드 뷰어(PDF Slider) 스타일 */
   .pdf-slider-relative-wrap {
-    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 16px;
     width: 100%;
-    aspect-ratio: 16 / 9;
   }
   .pdf-slide {
     position: absolute;
@@ -93,9 +94,6 @@ short-description: "딥러닝 기반 객체 인식 모델을 모바일 장치에
     display: block;
   }
   .pdf-btn-side {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
     background: rgba(15, 23, 42, 0.35);
     backdrop-filter: blur(6px);
     -webkit-backdrop-filter: blur(6px);
@@ -111,37 +109,13 @@ short-description: "딥러닝 기반 객체 인식 모델을 모바일 장치에
     justify-content: center;
     transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
     border-radius: 8px;
+    flex-shrink: 0;
   }
   .pdf-btn-side:hover {
     background: rgba(16, 185, 129, 0.7);
     color: #ffffff;
     border-color: rgba(16, 185, 129, 0.5);
     box-shadow: 0 0 15px rgba(16, 185, 129, 0.4);
-  }
-  .pdf-btn-side.prev {
-    left: 16px;
-  }
-  .pdf-btn-side.next {
-    right: 16px;
-  }
-  .pdf-counter-badge {
-    position: absolute;
-    bottom: 16px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: rgba(15, 23, 42, 0.75);
-    backdrop-filter: blur(6px);
-    -webkit-backdrop-filter: blur(6px);
-    color: #e2e8f0;
-    padding: 6px 16px;
-    border-radius: 30px;
-    font-size: 0.85rem;
-    font-weight: 600;
-    z-index: 10;
-    pointer-events: none;
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    font-family: 'Pretendard', sans-serif;
-    letter-spacing: 0.5px;
   }
   /* Code Accordion Styles */
   .code-accordion {
@@ -467,14 +441,13 @@ document.addEventListener('DOMContentLoaded', () => {
       <!-- PDF 슬라이더 (타이틀 제거, 캐러셀 방식) -->
       <div class="pdf-slider-wrap" style="background:#0f172a; border:2px solid #334155; border-radius:12px; padding:24px; margin-bottom:20px;">
         <div class="pdf-slider-relative-wrap">
-          <div class="pdf-slider-container" id="pdf-slider-ai" style="position:relative; width:100%; height:100%; background:#1e293b; border-radius:8px; overflow:hidden;">
+          <button class="pdf-btn-side prev" id="pdf-ai-prev">◀</button>
+          <div class="pdf-slider-container" id="pdf-slider-ai" style="position:relative; flex:1; aspect-ratio:16/9; background:#1e293b; border-radius:8px; overflow:hidden;">
             <div class="pdf-slide active" style="position:absolute; top:0; left:0; width:100%; height:100%; opacity:0; transition:opacity 0.4s ease; display:flex; align-items:center; justify-content:center; color:#475569; font-size:0.9rem; text-align:center; padding:20px; font-family:'Pretendard',sans-serif;">
               <div><div style="font-size:2.5rem;margin-bottom:10px;">📂</div><div style="color:#64748b;">로딩 중...</div></div>
             </div>
           </div>
-          <button class="pdf-btn-side prev" id="pdf-ai-prev">◀</button>
           <button class="pdf-btn-side next" id="pdf-ai-next">▶</button>
-          <span class="pdf-counter-badge" id="pdf-ai-counter">- / -</span>
         </div>
       </div>
 
@@ -505,10 +478,9 @@ document.addEventListener('DOMContentLoaded', () => {
       '/open.png'
     ];
     var container = document.getElementById('pdf-slider-ai');
-    var counter   = document.getElementById('pdf-ai-counter');
     var btnPrev   = document.getElementById('pdf-ai-prev');
     var btnNext   = document.getElementById('pdf-ai-next');
-    if (!container || !slides.length) { if(counter) { counter.textContent='슬라이드 준비 중'; } return; }
+    if (!container || !slides.length) { return; }
     var idx = 0;
     container.innerHTML = '';
     slides.forEach(function(src,i) {
@@ -520,9 +492,10 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     function showSlide(n) {
       var els = container.querySelectorAll('.pdf-slide');
-      idx = (n+slides.length)%slides.length;
+      idx = Math.max(0, Math.min(n, slides.length - 1));
       els.forEach(function(el,i){ el.classList.toggle('active',i===idx); });
-      counter.textContent=(idx+1)+' / '+slides.length;
+      if(btnPrev) { btnPrev.style.visibility = (idx === 0) ? 'hidden' : 'visible'; }
+      if(btnNext) { btnNext.style.visibility = (idx === slides.length - 1) ? 'hidden' : 'visible'; }
     }
     if(btnPrev) { btnPrev.addEventListener('click',function(){ showSlide(idx-1); }); }
     if(btnNext) { btnNext.addEventListener('click',function(){ showSlide(idx+1); }); }
