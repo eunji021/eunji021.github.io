@@ -1081,18 +1081,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
   <!-- ===================== 코드 탭 ===================== -->
   <div id="tab-code" class="tab-content" markdown="1">
-
     <div style="padding: 30px 0;">
       <!-- 상단 타이틀 상시 노출 -->
       <div class="code-tab-header">
         <div class="code-tab-title">🔢 핵심 소스코드</div>
-        <div class="code-tab-desc">각 섹션을 클릭하면 코드를 펼쳐볼 수 있습니다.</div>
+        <div class="code-tab-desc">상위 1~4번 섹션은 바로 확인하실 수 있으며, 5번 전체 소스코드는 클릭하여 펼쳐볼 수 있습니다.</div>
       </div>
 
-      <!-- 아코디언 1 -->
-      <details class="code-accordion-new">
-        <summary>📄 1·2. 전체 데이터 흐름 및 게이트웨이 핵심 소스코드</summary>
-        <div class="accordion-body" markdown="1">
+      <!-- 1~4번 섹션 상시 노출 -->
+      <div class="code-direct-view" style="margin-bottom: 30px;">
 ### 1. 전체 시스템 데이터 흐름 요약
 > 각 장치 간의 블루투스(BLE) 무선 통신 프로토콜을 맞춰 시스템 전체가 실시간으로 유기적으로 동작하도록 구조를 설계함.
 
@@ -1109,15 +1106,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
 ---
 
-### 2. 내가 전담한 핵심 코드 및 상세 설명 
+### 2. 내가 전담한 핵심 코드 및 상세 설명
 
-####  중계기 제어 및 앱 송신 메인 코드 (`Relay_Master_Code.ino`)
+#### 중계기 제어 및 앱 송신 메인 코드 (`Relay_Master_Code.ino`)
 * **핵심 로직 설명:** * 고유 MAC 주소 매칭과 `toLowerCase()` 함수를 통해 현장 노이즈 신호를 원천 차단함.
   * 앱인벤터의 다중 연결 한계를 깨기 위해, `millis()` 함수 기반의 타임 스케줄러로 **`1초(1000ms)`**마다 `sendWorker1Next` 플래그를 토글시켜 작업자 1과 2의 데이터를 교차 전송함.
 
-
-
 ```cpp
+cpp
 #include <BLEDevice.h>
 #include <BLEUtils.h>
 #include <BLEScan.h>
@@ -1227,19 +1223,16 @@ void loop() {
   }
   delay(100);
 }
-        </div>
-      </details>
+```
 
-      <!-- 아코디언 2 -->
-      <details class="code-accordion-new">
-        <summary>📄 3. BLE 거리 판정 및 이탈 감지 로직 코드</summary>
-        <div class="accordion-body" markdown="1">
+---
+
 ### 3. BLE 거리 판정 및 이탈 감지 로직 코드 (BLE_Distance_Scanner.ino)
 * **핵심 로직 설명:** * 기준이 되는 비콘(targetMac)의 RSSI 무선 강도를 체크하여 -50dBm 이하로 떨어지면    작업자가 구역을 이탈한 것으로 보고 부저 경고 신호를 발생시킴.
-
 * 메모리 오버플로우를 막기 위해 스캔 후 clearResults()로 버퍼를 즉각 초기화함.
 
 ```cpp
+cpp
 #include <BLEDevice.h>
 #include <BLEUtils.h>
 #include <BLEScan.h>
@@ -1298,13 +1291,10 @@ void loop() {
     delay(2000); 
   }
 }
-        </div>
-      </details>
+```
 
-      <!-- 아코디언 3 -->
-      <details class="code-accordion-new">
-        <summary>📄 4. MIT App Inventor (앱 인벤터) 구성</summary>
-        <div class="accordion-body" markdown="1">
+---
+
 ### 4. MIT APP Inventor(앱 인벤터)
 
 <div style="margin-top:16px; text-align:center;">
@@ -1312,19 +1302,17 @@ void loop() {
   <p style="color:#64748b; font-size:0.8rem; text-align:center; margin-top:8px;">App Inventor 블록 코드 전체 구성</p>
 </div>
 
-        </div>
-      </details>
+      </div>
 
-      <!-- 아코디언 4 (실시간 안전 장비 착용 여부 시스템 전체적인 코드 - 누르면 닫히고 열리도록 details, default closed) -->
+      <!-- 5번 전체 소스코드 아코디언 토글 -->
       <details class="code-accordion-new">
-        <summary>📄 5. 실시간 안전 장비 착용 여부 시스템 전체적인 코드</summary>
+        <summary>📄 5. 실시간 안전 장비 착용 여부 시스템 전체적인 소스코드</summary>
         <div class="accordion-body" markdown="1">
-###  5. 실시간 안전 장비 착용 여부 시스템 전체적인 코드
-* **작업자 MAC 주소:**  esp32 마다 고유의 'MAC' 주소가 있어 'MAC' 주소만 바꿔서 사용함.
+* **작업자 MAC 주소:** esp32 마다 고유의 'MAC' 주소가 있어 'MAC' 주소만 바꿔서 사용함.
 
 #### 5-1 MAC 주소 찾는 코드
-
 ```cpp
+cpp
 #include <BLEDevice.h>
 
 void setup() {
@@ -1339,10 +1327,12 @@ void setup() {
 void loop() {
   // do nothing
 }
-
+```
 
 #### 5-2 수신용 코드
 ```cpp
+#### 5-2 수신용 코드
+cpp
 #include <Wire.h>
 #include <MPU6050.h>
 #include <BLEDevice.h>
@@ -1586,10 +1576,13 @@ void loop() {
 
   delay(100); // 조금 쉬기
 }
+```
 
 #### 5-3 송신용 코드
-
 ```cpp
+#### 5-3 송신용 코드
+
+cpp
 #include <BLEDevice.h>
 #include <BLEUtils.h>
 #include <BLEServer.h>
@@ -1618,9 +1611,12 @@ void setup() {
 void loop() {
   delay(1000);
 }
+```
 
 #### 5-4 중계기 코드
 ```cpp
+#### 5-4 중계기 코드
+cpp
 #include <BLEDevice.h>
 #include <BLEUtils.h>
 #include <BLEScan.h>
@@ -1730,11 +1726,12 @@ void loop() {
   }
   delay(100);
 }
+```
+
         </div>
       </details>
     </div>
-
-  </div>
+</div>
 </div>
 
 <script>
