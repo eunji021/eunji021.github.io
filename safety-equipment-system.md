@@ -437,7 +437,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const simArea = document.getElementById('sim-area');
   
   const worker1 = {
-    id: 1, state: 'STABLE', hOn: true, vOn: true, countdown: 2, timerInterval: null, timerWait: null,
+    id: 1, state: 'STABLE', hOn: true, vOn: true, countdown: 1, timerInterval: null, timerWait: null,
     body: document.getElementById('worker-body-1'),
     card: document.getElementById('card-1'),
     badge: document.getElementById('w1-badge'),
@@ -448,7 +448,7 @@ document.addEventListener('DOMContentLoaded', () => {
   };
   
   const worker2 = {
-    id: 2, state: 'STABLE', hOn: true, vOn: true, countdown: 2, timerInterval: null, timerWait: null,
+    id: 2, state: 'STABLE', hOn: true, vOn: true, countdown: 1, timerInterval: null, timerWait: null,
     body: document.getElementById('worker-body-2'),
     card: document.getElementById('card-2'),
     badge: document.getElementById('w2-badge'),
@@ -490,7 +490,7 @@ document.addEventListener('DOMContentLoaded', () => {
     clearInterval(w.timerInterval);
     clearTimeout(w.timerWait);
     w.tText.style.display = 'none';
-    w.countdown = 2;
+    w.countdown = 1;
     w.timerWait = setTimeout(() => startCountdown(w), 3000);
   }
 
