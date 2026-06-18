@@ -328,58 +328,87 @@ short-description: "실시간 화재 감지 및 다익스트라 최적 경로 �
         <!-- 마스터 규격 평면도 SVG (1000x600 비율) -->
         <svg class="blueprint-svg" viewBox="0 0 1000 600" preserveAspectRatio="xMidYMid meet">
           <!-- 1. 배경 영역 (바닥) -->
-          <rect x="50" y="50" width="900" height="150" class="zone-bg" id="bg-r1" />
-          <rect x="50" y="250" width="400" height="150" class="zone-bg" id="bg-r2" />
-          <rect x="550" y="250" width="400" height="150" class="zone-bg" id="bg-r3" />
-          <rect x="50" y="450" width="400" height="100" class="zone-bg" id="bg-c-left" />
-          <rect x="550" y="450" width="400" height="100" class="zone-bg" id="bg-c-right" />
-          <rect x="450" y="200" width="100" height="350" class="zone-bg" id="bg-c-mid" /> <!-- 중앙 복도 및 출구 라인 -->
+          <!-- 방 -->
+          <rect x="20" y="80" width="120" height="100" class="zone-bg" id="bg-r1" />
+          <rect x="860" y="80" width="120" height="100" class="zone-bg" id="bg-r2" />
+          <rect x="20" y="420" width="120" height="100" class="zone-bg" id="bg-r3" />
+          <rect x="860" y="420" width="120" height="100" class="zone-bg" id="bg-r4" />
+          <rect x="350" y="190" width="300" height="100" class="zone-bg" id="bg-r5" />
+          <rect x="350" y="310" width="300" height="100" class="zone-bg" id="bg-r6" />
           
-          <!-- 2. 대피 유도선 (파란색 파도타기) - 기본 숨김 -->
-          <!-- R1에서 탈출 (가운데 복도 타고 내려옴) -->
-          <path d="M 500 125 L 500 550" class="route-path" id="route-r1" />
-          <!-- R2에서 탈출 (왼쪽 복도 타고 가운데로 와서 내려옴) -->
-          <path d="M 250 325 L 250 500 L 500 500 L 500 550" class="route-path" id="route-r2" />
-          <!-- R3에서 탈출 (오른쪽 복도 타고 가운데로 와서 내려옴) -->
-          <path d="M 750 325 L 750 500 L 500 500 L 500 550" class="route-path" id="route-r3" />
-          <!-- C-Left에서 탈출 -->
-          <path d="M 250 500 L 500 500 L 500 550" class="route-path" id="route-c-left" />
-          <!-- C-Right에서 탈출 -->
-          <path d="M 750 500 L 500 500 L 500 550" class="route-path" id="route-c-right" />
+          <!-- 복도 -->
+          <rect x="140" y="100" width="60" height="400" class="zone-bg" id="bg-c-left" />
+          <rect x="800" y="100" width="60" height="400" class="zone-bg" id="bg-c-right" />
+          <rect x="200" y="100" width="300" height="60" class="zone-bg" id="bg-c-top-l" />
+          <rect x="500" y="100" width="300" height="60" class="zone-bg" id="bg-c-top-r" />
+          <rect x="200" y="440" width="300" height="60" class="zone-bg" id="bg-c-bot-l" />
+          <rect x="500" y="440" width="300" height="60" class="zone-bg" id="bg-c-bot-r" />
+          
+          <!-- 2. 대피 유도선 (Dijkstra Path) -->
+          <path d="" class="route-path" id="route-dynamic" />
 
           <!-- 3. 벽면 LED 스트립 -->
-          <rect x="50" y="50" width="900" height="150" class="wall-led" id="wall-r1" />
-          <rect x="50" y="250" width="400" height="150" class="wall-led" id="wall-r2" />
-          <rect x="550" y="250" width="400" height="150" class="wall-led" id="wall-r3" />
-          <rect x="50" y="450" width="400" height="100" class="wall-led" id="wall-c-left" />
-          <rect x="550" y="450" width="400" height="100" class="wall-led" id="wall-c-right" />
-          <rect x="450" y="200" width="100" height="350" class="wall-led" id="wall-c-mid" />
+          <rect x="20" y="80" width="120" height="100" class="wall-led" id="wall-r1" />
+          <rect x="860" y="80" width="120" height="100" class="wall-led" id="wall-r2" />
+          <rect x="20" y="420" width="120" height="100" class="wall-led" id="wall-r3" />
+          <rect x="860" y="420" width="120" height="100" class="wall-led" id="wall-r4" />
+          <rect x="350" y="190" width="300" height="100" class="wall-led" id="wall-r5" />
+          <rect x="350" y="310" width="300" height="100" class="wall-led" id="wall-r6" />
+          
+          <rect x="140" y="100" width="60" height="400" class="wall-led" id="wall-c-left" />
+          <rect x="800" y="100" width="60" height="400" class="wall-led" id="wall-c-right" />
+          <rect x="200" y="100" width="300" height="60" class="wall-led" id="wall-c-top-l" />
+          <rect x="500" y="100" width="300" height="60" class="wall-led" id="wall-c-top-r" />
+          <rect x="200" y="440" width="300" height="60" class="wall-led" id="wall-c-bot-l" />
+          <rect x="500" y="440" width="300" height="60" class="wall-led" id="wall-c-bot-r" />
           
           <!-- 4. 텍스트 라벨 -->
-          <text x="500" y="125" class="zone-label">Room 1 (대형룸)</text>
-          <text x="250" y="325" class="zone-label">Room 2</text>
-          <text x="750" y="325" class="zone-label">Room 3</text>
-          <text x="250" y="500" class="zone-label">Left Corridor</text>
-          <text x="750" y="500" class="zone-label">Right Corridor</text>
+          <text x="80" y="130" class="zone-label" font-size="16">Room 1</text>
+          <text x="920" y="130" class="zone-label" font-size="16">Room 2</text>
+          <text x="80" y="470" class="zone-label" font-size="16">Room 3</text>
+          <text x="920" y="470" class="zone-label" font-size="16">Room 4</text>
+          <text x="500" y="240" class="zone-label" font-size="20">Room 5 (Main)</text>
+          <text x="500" y="360" class="zone-label" font-size="20">Room 6 (Sub)</text>
           
-          <!-- Exit 표시 -->
-          <rect x="450" y="550" width="100" height="50" fill="#10b981" />
-          <text x="500" y="575" fill="#fff" font-family="'Pretendard', sans-serif" font-weight="bold" font-size="20" text-anchor="middle" dominant-baseline="middle" pointer-events="none">EXIT 🏃</text>
+          <text x="170" y="300" class="zone-label" font-size="12" transform="rotate(-90 170 300)">Left Corridor</text>
+          <text x="830" y="300" class="zone-label" font-size="12" transform="rotate(-90 830 300)">Right Corridor</text>
+          <text x="350" y="130" class="zone-label" font-size="14">Top-L Corridor</text>
+          <text x="650" y="130" class="zone-label" font-size="14">Top-R Corridor</text>
+          <text x="350" y="470" class="zone-label" font-size="14">Bot-L Corridor</text>
+          <text x="650" y="470" class="zone-label" font-size="14">Bot-R Corridor</text>
+          
+          <!-- Exit 1 & 2 표시 -->
+          <rect x="140" y="50" width="60" height="50" fill="#10b981" />
+          <text x="170" y="75" fill="#fff" font-family="'Pretendard', sans-serif" font-weight="bold" font-size="16" text-anchor="middle" dominant-baseline="middle" pointer-events="none">EXIT 1</text>
+          
+          <rect x="800" y="50" width="60" height="50" fill="#10b981" />
+          <text x="830" y="75" fill="#fff" font-family="'Pretendard', sans-serif" font-weight="bold" font-size="16" text-anchor="middle" dominant-baseline="middle" pointer-events="none">EXIT 2</text>
 
           <!-- 5. 투명 드롭존 (마우스 이벤트용) -->
-          <rect x="50" y="50" width="900" height="150" class="dropzone" data-zone="r1" />
-          <rect x="50" y="250" width="400" height="150" class="dropzone" data-zone="r2" />
-          <rect x="550" y="250" width="400" height="150" class="dropzone" data-zone="r3" />
-          <rect x="50" y="450" width="400" height="100" class="dropzone" data-zone="c-left" />
-          <rect x="550" y="450" width="400" height="100" class="dropzone" data-zone="c-right" />
+          <rect x="20" y="80" width="120" height="100" class="dropzone" data-zone="r1" />
+          <rect x="860" y="80" width="120" height="100" class="dropzone" data-zone="r2" />
+          <rect x="20" y="420" width="120" height="100" class="dropzone" data-zone="r3" />
+          <rect x="860" y="420" width="120" height="100" class="dropzone" data-zone="r4" />
+          <rect x="350" y="190" width="300" height="100" class="dropzone" data-zone="r5" />
+          <rect x="350" y="310" width="300" height="100" class="dropzone" data-zone="r6" />
+          
+          <rect x="140" y="100" width="60" height="400" class="dropzone" data-zone="c-left" />
+          <rect x="800" y="100" width="60" height="400" class="dropzone" data-zone="c-right" />
+          <rect x="200" y="100" width="300" height="60" class="dropzone" data-zone="c-top-l" />
+          <rect x="500" y="100" width="300" height="60" class="dropzone" data-zone="c-top-r" />
+          <rect x="200" y="440" width="300" height="60" class="dropzone" data-zone="c-bot-l" />
+          <rect x="500" y="440" width="300" height="60" class="dropzone" data-zone="c-bot-r" />
+          <rect x="140" y="50" width="60" height="50" class="dropzone" data-zone="e1" />
+          <rect x="800" y="50" width="60" height="50" class="dropzone" data-zone="e2" />
         
           <!-- 6. 대피자 애니메이션 (SVG) -->
           <g id="evacuee-group" style="display: none;">
             <circle cx="0" cy="0" r="18" fill="#fcd34d" filter="drop-shadow(0 0 5px #f59e0b)" />
             <text x="0" y="2" font-size="20" text-anchor="middle" dominant-baseline="middle">🏃</text>
-            <animateMotion id="evacuee-motion" dur="2s" fill="freeze" path="" />
+            <animateMotion id="evacuee-motion" dur="3s" fill="freeze" path="" />
           </g>
-                  <!-- 7. 연기 확산 그래픽 -->
+          
+          <!-- 7. 연기 확산 그래픽 -->
           <circle id="smoke-effect" class="smoke-cloud" cx="500" cy="300" r="0" />
         </svg>
       </div>
@@ -414,20 +443,108 @@ document.addEventListener('DOMContentLoaded', () => {
   let startX, startY, initialX, initialY;
   
   // Zones and Routes definition
-  const zones = ['r1', 'r2', 'r3', 'c-left', 'c-right'];
-  const routes = ['r1', 'r2', 'r3', 'c-left', 'c-right'];
+  const zones = ['r1', 'r2', 'r3', 'r4', 'r5', 'r6', 'c-left', 'c-right', 'c-top-l', 'c-top-r', 'c-bot-l', 'c-bot-r', 'e1', 'e2'];
   
+  // Dijkstra Graph Definition
+  const graph = {
+    n1: { e1: 80, n3: 340, nt: 330 },
+    n2: { e2: 80, n4: 340, nt: 330 },
+    n3: { n1: 340, nb: 330 },
+    n4: { n2: 340, nb: 330 },
+    nt: { n1: 330, n2: 330 },
+    nb: { n3: 330, n4: 330 },
+    e1: { n1: 80 },
+    e2: { n2: 80 }
+  };
+
+  const roomNodes = { r1: 'n1', r2: 'n2', r3: 'n3', r4: 'n4', r5: 'nt', r6: 'nb' };
+  const roomCoords = { r1: [80, 130], r2: [920, 130], r3: [80, 470], r4: [920, 470], r5: [500, 240], r6: [500, 360] };
+  const nodeCoords = {
+    n1: [170, 130], n2: [830, 130], n3: [170, 470], n4: [830, 470],
+    nt: [500, 130], nb: [500, 470], e1: [170, 50], e2: [830, 50]
+  };
+
+  const fireEdges = {
+    'c-left': [['n1', 'n3']],
+    'c-right': [['n2', 'n4']],
+    'c-top-l': [['n1', 'nt']],
+    'c-top-r': [['nt', 'n2']],
+    'c-bot-l': [['n3', 'nb']],
+    'c-bot-r': [['nb', 'n4']],
+    'e1': [['n1', 'e1']],
+    'e2': [['n2', 'e2']]
+  };
+
+  function findShortestPath(startRoom, fireZoneId) {
+    let g = JSON.parse(JSON.stringify(graph));
+    if (fireZoneId && fireEdges[fireZoneId]) {
+      fireEdges[fireZoneId].forEach(edge => {
+        if(g[edge[0]] && g[edge[0]][edge[1]]) delete g[edge[0]][edge[1]];
+        if(g[edge[1]] && g[edge[1]][edge[0]]) delete g[edge[1]][edge[0]];
+      });
+    }
+    
+    let startNode = roomNodes[startRoom];
+    if (fireZoneId === startRoom) return null; // Trapped in room
+    
+    let distances = {};
+    let prev = {};
+    let pq = [{node: startNode, dist: 0}];
+    
+    Object.keys(g).forEach(n => distances[n] = Infinity);
+    distances[startNode] = 0;
+    
+    while(pq.length > 0) {
+      pq.sort((a,b) => a.dist - b.dist);
+      let curr = pq.shift();
+      
+      if (curr.node === 'e1' || curr.node === 'e2') break;
+      
+      for (let neighbor in g[curr.node]) {
+        let alt = distances[curr.node] + g[curr.node][neighbor];
+        if (alt < distances[neighbor]) {
+          distances[neighbor] = alt;
+          prev[neighbor] = curr.node;
+          pq.push({node: neighbor, dist: alt});
+        }
+      }
+    }
+    
+    let bestExit = null;
+    if (distances['e1'] < distances['e2']) bestExit = 'e1';
+    else if (distances['e2'] < distances['e1']) bestExit = 'e2';
+    else bestExit = 'e1';
+    
+    if (distances[bestExit] === Infinity) return null; // No path
+    
+    let path = [bestExit];
+    let curr = bestExit;
+    while(prev[curr]) {
+      curr = prev[curr];
+      path.unshift(curr);
+    }
+    return path;
+  }
+
+  function renderPathString(startRoom, pathNodes) {
+    if(!pathNodes) return "";
+    let pts = [roomCoords[startRoom]];
+    pathNodes.forEach(n => pts.push(nodeCoords[n]));
+    let d = `M ${pts[0][0]} ${pts[0][1]} `;
+    for(let i=1; i<pts.length; i++) {
+      d += `L ${pts[i][0]} ${pts[i][1]} `;
+    }
+    return d;
+  }
+
   function resetAll() {
     zones.forEach(z => {
-      document.getElementById('bg-' + z).classList.remove('fire');
-      document.getElementById('wall-' + z).classList.remove('fire');
-      if(document.getElementById('route-' + z)) {
-        document.getElementById('route-' + z).classList.remove('active');
-      }
+      let bg = document.getElementById('bg-' + z);
+      let wall = document.getElementById('wall-' + z);
+      if(bg) bg.classList.remove('fire');
+      if(wall) wall.classList.remove('fire');
     });
-    // 중앙 복도 벽면 초기화
-    document.getElementById('wall-c-mid').classList.remove('fire');
-    document.getElementById('bg-c-mid').classList.remove('fire');
+    document.getElementById('route-dynamic').classList.remove('active');
     
     simMainFire.classList.remove('emergency');
     appBadgeFire.innerText = 'ALL STABLE';
@@ -441,17 +558,75 @@ document.addEventListener('DOMContentLoaded', () => {
   const evacueeMotion = document.getElementById('evacuee-motion');
   const smokeEffect = document.getElementById('smoke-effect');
   let smokeTimeout = null;
-  
   let tempInterval = null;
   let currentTemp = 24;
 
-  const routePathsMap = {
-    'r1': 'M 500 125 L 500 550',
-    'r2': 'M 250 325 L 250 500 L 500 500 L 500 550',
-    'r3': 'M 750 325 L 750 500 L 500 500 L 500 550',
-    'c-left': 'M 250 500 L 500 500 L 500 550',
-    'c-right': 'M 750 500 L 500 500 L 500 550'
-  };
+  let activeEvacRoom = 'r5'; // Default simulation room
+
+  function triggerFire(zoneId) {
+    resetAll();
+    
+    const bg = document.getElementById('bg-' + zoneId);
+    const wall = document.getElementById('wall-' + zoneId);
+    if(bg) bg.classList.add('fire');
+    if(wall) wall.classList.add('fire');
+    
+    simMainFire.classList.add('emergency');
+    appBadgeFire.innerText = 'EMERGENCY';
+    appBadgeFire.classList.add('emergency');
+    
+    // Smoke
+    clearTimeout(smokeTimeout);
+    smokeEffect.classList.remove('active');
+    const rect = bg.getBoundingClientRect();
+    const svgRect = document.querySelector('.blueprint-svg').getBoundingClientRect();
+    const cx = (rect.left - svgRect.left) + rect.width/2;
+    const cy = (rect.top - svgRect.top) + rect.height/2;
+    smokeEffect.setAttribute('cx', cx);
+    smokeEffect.setAttribute('cy', cy);
+    setTimeout(() => { smokeEffect.classList.add('active'); }, 100);
+
+    // Dijkstra
+    let pathNodes = findShortestPath(activeEvacRoom, zoneId);
+    let routeLine = document.getElementById('route-dynamic');
+    
+    if (dashTemp) {
+      currentTemp = 24;
+      dashTemp.innerText = currentTemp + '°C';
+      dashTemp.className = '';
+    }
+    const lcd = document.getElementById('lcd-display');
+    
+    if (!pathNodes) {
+      // Trapped!
+      if(dashStatus) { dashStatus.innerText = '고립! 경로 없음!'; dashStatus.className = 'danger'; }
+      if(lcd) { lcd.innerText = `TRAPPED: ${zoneId.toUpperCase()}`; lcd.className = 'lcd-display danger'; }
+      evacueeGroup.style.display = 'none';
+      routeLine.classList.remove('active');
+      appendLog(`[경고] 화재로 인해 ${activeEvacRoom.toUpperCase()} 대피 경로 차단!`);
+    } else {
+      if(dashStatus) { dashStatus.innerText = '우회 대피 안내 중'; dashStatus.className = 'danger'; }
+      if(lcd) { lcd.innerText = `FIRE: ${zoneId.toUpperCase()}`; lcd.className = 'lcd-display danger'; }
+      
+      let pathStr = renderPathString(activeEvacRoom, pathNodes);
+      routeLine.setAttribute('d', pathStr);
+      routeLine.classList.add('active');
+      
+      evacueeGroup.style.display = 'block';
+      evacueeMotion.setAttribute('path', pathStr);
+      evacueeMotion.beginElement();
+      
+      let exitName = pathNodes[pathNodes.length-1] === 'e1' ? 'EXIT 1(좌측)' : 'EXIT 2(우측)';
+      appendLog(`[시스템] 다익스트라 우회 경로 계산 완료: ${exitName} 방향 대피 유도`);
+    }
+    
+    clearInterval(tempInterval);
+    tempInterval = setInterval(() => {
+      if(currentTemp < 95) currentTemp += Math.floor(Math.random() * 5) + 2;
+      if(dashTemp) dashTemp.innerText = currentTemp + '°C';
+      if(currentTemp > 60 && dashTemp) dashTemp.className = 'danger';
+    }, 1000);
+  }
 
   function appendLog(msg) {
     if(!dashConsole) return;
@@ -490,78 +665,6 @@ document.addEventListener('DOMContentLoaded', () => {
     simMainFire.classList.remove('emergency');
     appBadgeFire.innerText = 'ALL STABLE';
     appBadgeFire.classList.remove('emergency');
-  }
-
-  function triggerFire(zoneId) {
-    resetAll();
-    
-    // 1. 해당 구역 빨간색 점등
-    document.getElementById('bg-' + zoneId).classList.add('fire');
-    document.getElementById('wall-' + zoneId).classList.add('fire');
-    
-    // 중앙 복도(c-mid)가 직접적인 dropzone은 아니지만 연출을 위해 불난 곳 근처면 점등
-    if(zoneId === 'c-left' || zoneId === 'c-right' || zoneId === 'r1') {
-       // c-mid 자체를 불태우진 않고 유도선만 계산
-    }
-
-    // 2. 전체 프레임 EMERGENCY
-    simMainFire.classList.add('emergency');
-    appBadgeFire.innerText = 'EMERGENCY';
-    appBadgeFire.classList.add('emergency');
-    
-    if(dashTemp) dashTemp.className = 'danger';
-    if(dashStatus) dashStatus.className = 'danger';
-    if(dashStatus) dashStatus.innerText = '경보 발생!';
-    appendLog(`[위험] ${zoneId.toUpperCase()} 구역 화재 감지!`);
-    const lcd = document.getElementById('lcd-display');
-    if(lcd) { lcd.innerText = `FIRE: ${zoneId.toUpperCase()}`; lcd.className = 'lcd-display danger'; }
-
-    appendLog('[시스템] 다익스트라 최단 경로 재탐색 중...');
-    
-    tempInterval = setInterval(() => {
-      if(currentTemp < 95) currentTemp += Math.floor(Math.random() * 5) + 2;
-      if(dashTemp) dashTemp.innerText = currentTemp + '°C';
-    }, 200);
-
-    let safeRoutes = [];
-    routes.forEach(r => {
-      if (r !== zoneId) {
-        let isTrapped = false;
-        if (zoneId === 'c-left' && r === 'r2') isTrapped = true;
-        if (zoneId === 'c-right' && r === 'r3') isTrapped = true;
-        if (!isTrapped) {
-          document.getElementById('route-' + r).classList.add('active');
-          safeRoutes.push(r);
-        }
-      }
-    });
-
-    if(safeRoutes.length > 0) {
-      appendLog(`[시스템] 안전 대피 경로 개방 완료 (${safeRoutes.length}개)`);
-      if(evacueeGroup && evacueeMotion) {
-        evacueeGroup.style.display = 'block';
-        const escapeRoute = safeRoutes[0]; // 첫 번째 안전 경로로 대피
-        evacueeMotion.setAttribute('path', routePathsMap[escapeRoute]);
-        evacueeMotion.beginElement();
-        appendLog(`[대피] 인원 1명 출구 이동 중...`);
-      }
-    } else {
-      appendLog(`[경고] 모든 대피 경로 고립 위험!`);
-    }
-
-    // 연기 확산 시각 효과 (3초 뒤 발동)
-    const centers = {
-      'r1': {x: 500, y: 125}, 'r2': {x: 250, y: 325}, 'r3': {x: 750, y: 325},
-      'c-left': {x: 250, y: 500}, 'c-right': {x: 750, y: 500}
-    };
-    if(centers[zoneId] && smokeEffect) {
-      smokeEffect.setAttribute('cx', centers[zoneId].x);
-      smokeEffect.setAttribute('cy', centers[zoneId].y);
-      smokeTimeout = setTimeout(() => {
-        smokeEffect.classList.add('active');
-        appendLog(`[경고] 화재 구역 중심으로 연기 확산 진행 중!`);
-      }, 3000);
-    }
   }
 
   fireDrag.addEventListener('mousedown', dragStart);
