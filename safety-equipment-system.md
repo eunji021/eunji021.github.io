@@ -1023,12 +1023,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
 <!-- ===================== 소개 탭 ===================== -->
 <div id="tab-intro" class="tab-content" markdown="1">
+
 {% include_relative realtime_intro.md %}
+
 </div>
 
 <!-- ===================== 코드 탭 ===================== -->
 <div id="tab-code" class="tab-content" markdown="1">
+
 <div style="padding: 30px 0;" markdown="1">
+
 <!-- 상단 타이틀 상시 노출 -->
 <div class="code-tab-header">
 <div class="code-tab-title">🔢 핵심 소스코드</div>
@@ -1037,9 +1041,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
 <!-- 1~4번 섹션 상시 노출 -->
 <div class="code-direct-view" style="margin-bottom: 30px;" markdown="1">
+
 {% include_relative safe_code.md %}
+
 </div>
+
 </div>
+
 </div>
 
 </div>
