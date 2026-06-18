@@ -95,6 +95,9 @@
   100% { transform: scale(1) translateY(0); opacity: 1; }
 }
 
+
+.fb-back-btn:hover { background: #475569; transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
+
 /* 우측: 피드백 보드 */
 .fb-board-title { color: #94a3b8; font-size: 1.2rem; margin-bottom: 20px; font-weight: bold; display:flex; align-items:center; gap: 10px; }
 .fb-board-list {
@@ -160,7 +163,10 @@
         </div>
       </div>
       
-      <button class="fb-submit-btn" id="fb-submit-btn">나무에 열매 달기 ➔</button>
+      <div style="display:flex; gap:10px;">
+        <button class="fb-submit-btn" id="fb-submit-btn" style="flex:2;">나무에 열매 달기 ➔</button>
+        <button class="fb-back-btn" id="fb-back-btn" style="flex:1; background:#334155; color:white; border:none; padding:15px; border-radius:8px; font-weight:bold; cursor:pointer; transition:all 0.3s;">돌아가기 ↩</button>
+      </div>
     </div>
     
     <!-- 중앙 나무 그래픽 -->
@@ -214,6 +220,8 @@ document.addEventListener('DOMContentLoaded', () => {
   }
   
   closeBtn.addEventListener('click', () => modal.classList.remove('active'));
+  const backBtn = document.getElementById('fb-back-btn');
+  if(backBtn) backBtn.addEventListener('click', () => modal.classList.remove('active'));
   modal.addEventListener('click', (e) => { if(e.target === modal) modal.classList.remove('active'); });
 
   // Emoji Selector Logic
