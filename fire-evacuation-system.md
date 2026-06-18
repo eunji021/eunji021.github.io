@@ -589,10 +589,109 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
 
-  fireDrag.addEventListener  dashConsole.scrollTop = dashConsole.scrollHeight;
+  
+  const dashConsole = document.querySelector('.dash-console');
+  // Wait! Let's just grab elements globally if they aren't declared:
+  // (We'll assume they might be declared above, but let's safely declare them)
+  const dashTemp = document.getElementById('dash-temp');
+  const dashStatus = document.getElementById('dash-status');
+  const evacueeGroup = document.getElementById('evacuee-group');
+  const evacueeMotion = document.getElementById('evacuee-motion');
+  const smokeEffect = document.getElementById('smoke-effect');
+  const routeDynamic = document.getElementById('route-dynamic');
+
+  let tempInterval = null;
+  let currentTemp = 24;
+  let smokeTimeout = null;
+
+  function appendLog(msg) {
+    if(dashConsole) {
+      dashConsole.innerHTML += `> ${msg}<br>`;
+      dashConsole.scrollTop = dashConsole.scrollHeight;
+    }
+  }
+
+  function triggerFire(zoneId) {
+    if(typeof isFrozenB !== 'undefined' && isFrozenB) return;
+    resetAll();
+    
+    const bg = document.getElementById('bg-' + zoneId);
+    const wall = document.getElementById('wall-' + zoneId);
+    if(bg) bg.classList.add('fire');
+    if(wall) wall.classList.add('fire');
+    
+    if(simMainFire) simMainFire.classList.add('emergency');
+    if(appBadgeFire) {
+      appBadgeFire.innerText = 'EMERGENCY';
+      appBadgeFire.classList.add('emergency');
+    }
+    
+    const lcd = document.getElementById('lcd-display');
+    if(lcd) {
+      lcd.innerText = `FIRE DETECTED: ${zoneId.toUpperCase()}`;
+      lcd.classList.add('danger');
+    }
+    
+    if(dashStatus) {
+      dashStatus.innerHTML = '<span class="danger">화재 발생 (경계경보)</span>';
+    }
+    
+    currentTemp = 24;
+    tempInterval = setInterval(() => {
+      if(typeof isFrozenB !== 'undefined' && isFrozenB) return;
+      currentTemp += Math.floor(Math.random() * 5) + 2;
+      if(dashTemp) {
+        dashTemp.innerText = currentTemp + '°C';
+        if(currentTemp > 50) dashTemp.classList.add('danger');
+      }
+    }, 1000);
+
+    if(smokeEffect && bg) {
+      const zoneRect = bg.getBoundingClientRect();
+      const svgRect = document.querySelector('.blueprint-svg').getBoundingClientRect();
+      // Use relative SVG coords by dividing by scale, or just approximate.
+      // Wait, bounding client rect can be tricky with preservesAspectRatio.
+      // Better to extract x,y from the rect element itself:
+      const x = parseFloat(bg.getAttribute('x'));
+      const y = parseFloat(bg.getAttribute('y'));
+      const w = parseFloat(bg.getAttribute('width'));
+      const h = parseFloat(bg.getAttribute('height'));
+      smokeEffect.setAttribute('cx', x + w/2);
+      smokeEffect.setAttribute('cy', y + h/2);
+      smokeEffect.classList.add('active');
+    }
+    
+    appendLog(`[경보] ${zoneId.toUpperCase()} 구역 화재 감지! 센서 가동 중...`);
+    
+    setTimeout(() => {
+      if(typeof isFrozenB !== 'undefined' && isFrozenB) return;
+      appendLog("[시스템] 다익스트라 우회 경로 탐색 알고리즘 가동...");
+      let path = findShortestPath('r5', zoneId);
+      
+      setTimeout(() => {
+        if(typeof isFrozenB !== 'undefined' && isFrozenB) return;
+        if(!path) {
+          appendLog("<span class='danger'>[경고] 탈출 가능한 비상구가 없습니다!</span>");
+          if(routeDynamic) routeDynamic.classList.remove('active');
+        } else {
+          appendLog(`[알림] 최적 경로 수렴 완료: r5 -> ${path.join(' -> ')}`);
+          let d = renderPathString('r5', path);
+          if(routeDynamic) {
+            routeDynamic.setAttribute('d', d);
+            routeDynamic.classList.add('active');
+          }
+          if(evacueeGroup && evacueeMotion) {
+            evacueeGroup.style.display = 'block';
+            evacueeMotion.setAttribute('path', d);
+            evacueeMotion.beginElement();
+          }
+        }
+      }, 500);
+    }, 500);
   }
 
   function resetAll() {
+
     clearInterval(tempInterval);
     currentTemp = 24;
     if(dashTemp) dashTemp.innerText = currentTemp + '°C';
