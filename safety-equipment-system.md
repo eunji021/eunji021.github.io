@@ -537,11 +537,7 @@ document.addEventListener('DOMContentLoaded', () => {
   function updateGlobalState() {
     [worker1, worker2].forEach(w => {
       const allGood = w.hOn && w.vOn;
-      if(w.state === 'EMERGENCY' && allGood) {
-        w.state = 'STABLE';
-        w.body.classList.remove('fallen');
-        resetTimer(w);
-      } else if (w.state !== 'EMERGENCY') {
+      if (w.state !== 'EMERGENCY') {
         w.state = allGood ? 'STABLE' : 'WARNING';
       }
 
@@ -701,7 +697,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   [worker1, worker2].forEach(w => {
     const startNoMovementTimer = () => {
-      if(w.state === 'EMERGENCY') return;
+      if(w.state === 'EMERGENCY' || !w.hOn || !w.vOn) return;
       clearTimeout(w.wheelTimer);
       w.tText.style.display = 'block';
       
