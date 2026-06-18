@@ -1,4 +1,4 @@
-﻿---
+---
 layout: post
 title: "AI 유적지 가이드 앱"
 category: projects

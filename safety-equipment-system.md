@@ -1,4 +1,4 @@
-﻿---
+---
 layout: post
 title: "실시간 안전 장비 착용 여부 시스템"
 category: projects
