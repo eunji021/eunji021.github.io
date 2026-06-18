@@ -256,10 +256,10 @@ short-description: "ESP32 게이트웨이를 이용해 작업자 안전모와 �
 <div class="project-tabs-container">
   <!-- 상단 탭 메뉴 -->
   <div class="tabs-nav">
-    <button class="tab-btn active" data-target="tab-simulator">💻 시뮬레이터</button>
-    <button class="tab-btn" data-target="tab-overview">📊 한눈에 보기</button>
-    <button class="tab-btn" data-target="tab-intro">📄 소개</button>
-    <button class="tab-btn" data-target="tab-code">🔢 코드</button>
+    <button class="tab-btn active" data-target="tab-simulator">시뮬레이터</button>
+    <button class="tab-btn" data-target="tab-overview">한눈에 보기</button>
+    <button class="tab-btn" data-target="tab-intro">소개</button>
+    <button class="tab-btn" data-target="tab-code">코드</button>
   </div>
 
   <!-- 1. 시뮬레이터 탭 콘텐츠 -->
@@ -969,23 +969,27 @@ document.addEventListener('DOMContentLoaded', () => {
 
     <div style="padding:30px 0; font-family:'Pretendard',sans-serif;">
 
-      <!-- PPT 발표 슬라이드 세로 나열 -->
-      <div class="slides-vertical-list" style="display:flex; flex-direction:column; gap:24px; margin-bottom:40px;">
-        <img src="/assets/img/projects/safety_slides/slide_1.png" alt="Slide 1" style="width:100%; border-radius:8px; border:1px solid #334155; box-shadow: 0 4px 20px rgba(0,0,0,0.3);">
-        <img src="/assets/img/projects/safety_slides/slide_2.png" alt="Slide 2" style="width:100%; border-radius:8px; border:1px solid #334155; box-shadow: 0 4px 20px rgba(0,0,0,0.3);">
-        <img src="/assets/img/projects/safety_slides/slide_3.png" alt="Slide 3" style="width:100%; border-radius:8px; border:1px solid #334155; box-shadow: 0 4px 20px rgba(0,0,0,0.3);">
-        <img src="/assets/img/projects/safety_slides/slide_4.png" alt="Slide 4" style="width:100%; border-radius:8px; border:1px solid #334155; box-shadow: 0 4px 20px rgba(0,0,0,0.3);">
-        <img src="/assets/img/projects/safety_slides/slide_5.png" alt="Slide 5" style="width:100%; border-radius:8px; border:1px solid #334155; box-shadow: 0 4px 20px rgba(0,0,0,0.3);">
-        <img src="/assets/img/projects/safety_slides/slide_6.png" alt="Slide 6" style="width:100%; border-radius:8px; border:1px solid #334155; box-shadow: 0 4px 20px rgba(0,0,0,0.3);">
+      <!-- PDF 슬라이더 (타이틀 제거, 캐러셀 방식) -->
+      <div class="pdf-slider-wrap" style="background:#0f172a; border:2px solid #334155; border-radius:12px; padding:24px; margin-bottom:20px;">
+        <div class="pdf-slider-container" id="pdf-slider-safety" style="position:relative; width:100%; aspect-ratio:16/9; background:#1e293b; border-radius:8px; overflow:hidden;">
+          <div class="pdf-slide active" style="position:absolute; top:0; left:0; width:100%; height:100%; opacity:0; transition:opacity 0.4s ease; display:flex; align-items:center; justify-content:center; color:#475569; font-size:0.9rem; text-align:center; padding:20px; font-family:'Pretendard',sans-serif;">
+            <div><div style="font-size:2.5rem;margin-bottom:10px;">📂</div><div style="color:#64748b;">로딩 중...</div></div>
+          </div>
+        </div>
+        <div class="pdf-nav" style="display:flex; align-items:center; justify-content:center; gap:16px; margin-top:14px;">
+          <button class="pdf-btn" id="pdf-safety-prev" style="background:rgba(16,185,129,0.15); border:1px solid rgba(16,185,129,0.4); color:#10b981; border-radius:8px; padding:8px 18px; cursor:pointer; font-weight:bold; font-size:1rem; transition:all 0.2s; font-family:'Pretendard',sans-serif;">◀</button>
+          <span class="pdf-counter" id="pdf-safety-counter" style="color:#94a3b8; font-size:0.9rem; font-family:'Pretendard',sans-serif; min-width:60px; text-align:center;">- / -</span>
+          <button class="pdf-btn" id="pdf-safety-next" style="background:rgba(16,185,129,0.15); border:1px solid rgba(16,185,129,0.4); color:#10b981; border-radius:8px; padding:8px 18px; cursor:pointer; font-weight:bold; font-size:1rem; transition:all 0.2s; font-family:'Pretendard',sans-serif;">▶</button>
+        </div>
       </div>
 
-      <!-- 프로젝트 최종 결과물 사진 -->
+      <!-- 프로젝트 최종 결과물 사진 (슬라이드 바로 아래) -->
       <div class="result-section" style="margin-top: 30px; margin-bottom: 40px; background:#0f172a; border:2px solid #334155; border-radius:12px; padding:24px;">
         <div class="result-section-title" style="color:#cbd5e1; font-weight:bold; font-size:1rem; margin-bottom:16px; font-family:'Pretendard',sans-serif;">🏁 프로젝트 최종 결과물</div>
         <img src="/assets/img/projects/safety_result.png" alt="safety 최종 결과물" class="result-img" style="width:100%; border-radius:8px; border:1px solid #334155; box-shadow: 0 4px 20px rgba(0,0,0,0.3);">
       </div>
 
-      <!-- 영상/사진 좌우 배치 (슬라이드 및 결과물 밑으로 이동) -->
+      <!-- 영상/사진 좌우 배치 (슬라이드 밑으로 이동) -->
       <div class="ov-media-row">
         <div>
           <div class="ov-media-box">
@@ -1753,3 +1757,38 @@ void loop() {
 </div>
 </div>
 
+<script>
+(function() {
+  var slides = [
+    '/assets/img/projects/safety_slides/slide_1.png',
+    '/assets/img/projects/safety_slides/slide_2.png',
+    '/assets/img/projects/safety_slides/slide_3.png',
+    '/assets/img/projects/safety_slides/slide_4.png',
+    '/assets/img/projects/safety_slides/slide_5.png',
+    '/assets/img/projects/safety_slides/slide_6.png'
+  ];
+  var container = document.getElementById('pdf-slider-safety');
+  var counter   = document.getElementById('pdf-safety-counter');
+  var btnPrev   = document.getElementById('pdf-safety-prev');
+  var btnNext   = document.getElementById('pdf-safety-next');
+  if (!container || !slides.length) { if(counter) { counter.textContent='슬라이드 준비 중'; } return; }
+  var idx = 0;
+  container.innerHTML = '';
+  slides.forEach(function(src,i) {
+    var slide = document.createElement('div');
+    slide.className = 'pdf-slide' + (i===0?' active':'');
+    var img = document.createElement('img');
+    img.src=src; img.alt='Slide '+(i+1);
+    slide.appendChild(img); container.appendChild(slide);
+  });
+  function showSlide(n) {
+    var els = container.querySelectorAll('.pdf-slide');
+    idx = (n+slides.length)%slides.length;
+    els.forEach(function(el,i){ el.classList.toggle('active',i===idx); });
+    counter.textContent=(idx+1)+' / '+slides.length;
+  }
+  if(btnPrev) { btnPrev.addEventListener('click',function(){ showSlide(idx-1); }); }
+  if(btnNext) { btnNext.addEventListener('click',function(){ showSlide(idx+1); }); }
+  showSlide(0);
+})();
+</script>
