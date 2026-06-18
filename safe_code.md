@@ -203,7 +203,9 @@ void loop() {
 ###  5. 실시간 안전 장비 착용 여부 시스템 전체적인 코드
 * **작업자 MAC 주소:**  esp32 마다 고유의 'MAC' 주소가 있어 'MAC' 주소만 바꿔서 사용함.
 
-#### 5-1 MAC 주소 찾는 코드
+<details class="code-accordion">
+  <summary>5-1 MAC 주소 찾는 코드</summary>
+  <div class="accordion-content" markdown="1">
 
 ```cpp
 #include <BLEDevice.h>
@@ -220,8 +222,15 @@ void setup() {
 void loop() {
   // do nothing
 }
+```
 
-#### 5-2 수신용 코드
+  </div>
+</details>
+
+<details class="code-accordion">
+  <summary>5-2 수신용 코드</summary>
+  <div class="accordion-content" markdown="1">
+
 ```cpp
 #include <Wire.h>
 #include <MPU6050.h>
@@ -465,8 +474,14 @@ void loop() {
 
   delay(100); // 조금 쉬기
 }
+```
 
-#### 5-3 송신용 코드
+  </div>
+</details>
+
+<details class="code-accordion">
+  <summary>5-3 송신용 코드</summary>
+  <div class="accordion-content" markdown="1">
 
 ```cpp
 #include <BLEDevice.h>
@@ -497,8 +512,15 @@ void setup() {
 void loop() {
   delay(1000);
 }
+```
 
-#### 5-4 중계기 코드
+  </div>
+</details>
+
+<details class="code-accordion">
+  <summary>5-4 중계기 코드</summary>
+  <div class="accordion-content" markdown="1">
+
 ```cpp
 #include <BLEDevice.h>
 #include <BLEUtils.h>
@@ -609,4 +631,8 @@ void loop() {
   }
   delay(100);
 }
+```
+
+  </div>
+</details>
 
