@@ -290,7 +290,6 @@ short-description: "딥러닝 기반 객체 인식 모델을 모바일 장치에
     <button class="tab-btn active" data-target="tab-simulator">시뮬레이터</button>
     <button class="tab-btn" data-target="tab-overview">한눈에 보기</button>
     <button class="tab-btn" data-target="tab-intro">역할</button>
-    <button class="tab-btn" data-target="tab-code">코드</button>
   </div>
 
   <!-- 체험 시뮬레이터 탭 -->
@@ -515,21 +514,4 @@ document.addEventListener('DOMContentLoaded', () => {
 
   </div>
 
-  <!-- 3. 코드 탭 콘텐츠 -->
-  <div id="tab-code" class="tab-content" markdown="1">
-
-## 핵심 소스코드
-
-<details class="code-accordion">
-  <summary>코드 섹션 1</summary>
-  <div class="accordion-content" markdown="1">
-
-{% highlight cpp %}
-// 코드를 이곳에 붙여넣으세요.
-{% endhighlight %}
-
-  </div>
-</details>
-
-  </div>
 </div>
