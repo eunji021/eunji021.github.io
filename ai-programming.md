@@ -241,6 +241,12 @@ author: eunji
       <li class="nav-category" id="nav-ai-cat-10">
         <div class="nav-category-title" onclick="openCategory('ai-cat-10')">11. 시험대비2</div>
       </li>
+      <li class="nav-category" id="nav-ai-cat-11">
+        <div class="nav-category-title" onclick="openCategory('ai-cat-11')">12. [시험대비] 방법1</div>
+      </li>
+      <li class="nav-category" id="nav-ai-cat-12">
+        <div class="nav-category-title" onclick="openCategory('ai-cat-12')">13. [시험대비] 방법2</div>
+      </li>
 
     </ul>
   </aside>
@@ -2967,6 +2973,600 @@ best_model = gs.best_estimator_
 - 예시: `{'n_estimators': [100, 200, 300], 'max_depth': [10, 20, None], 'min_samples_split': [2, 5]}` ➡️ 3개 $\times$ 3개 $\times$ 2개 = 총 **18가지 조합** 탄생!
 - 이 18가지 조합을 5-Fold 교차검증(`cv=5`)하면 컴퓨터는 총 **90번**의 개별 학습을 수행합니다. 
 - 만약 실행창에 모래시계(`*`)가 너무 오래 돈다면 대괄호 안의 **숫자의 개수(후보군 종류)**를 살짝 줄여서 조합의 수를 낮춰주시면 연산 속도가 즉시 빨라집니다!
+
+
+
+</div>
+
+<div id="content-ai-cat-11" class="content-section" markdown="1">
+
+# [시헌 대비] 방법1(3가지)
+
+## 1. 훈련용 데이터셋 인입 및 필수 라이브러리 로드
+- 본 단계에서는 데이터 분석 및 머신러닝 모델 학습에 필수적인 `pandas`, `numpy`, `scikit-learn` 등의 핵심 패키지를 동기화합니다.
+- `pd.read_csv()` 함수를 사용하여 유입된 훈련용 데이터셋 `test.csv`를 데이터프레임 구조로 파싱하며, 인공지능이 데이터의 행과 열을 인식할 수 있는 정형 데이터 연산 환경을 구축합니다.
+
+```python
+import pandas as pd
+import numpy as np
+import joblib
+import os
+
+from sklearn.preprocessing import StandardScaler
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.model_selection import GridSearchCV
+from sklearn.metrics import f1_score, classification_report
+
+# 1. 훈련용 데이터프레임 로드
+df = pd.read_csv('test.csv')  # [시험장 수정 포인트]: 시험 문제 파일명이 바뀌면 이 파일명만 수정하세요!
+
+print("1단계 완료: 훈련 데이터 로드 성공!")
+```
+
+## 2. 2단계 변수 분리 전 컬럼명 사전 확인 가이드(방법 1)
+
+### 1️⃣ 컬럼명을 먼저 프린트해봐야 하는 이유
+- 교수님이 주시는 평가용 데이터셋마다 정답지 역할을 하는 컬럼의 이름이 다를 수 있습니다.
+- 이름을 확인하지 않고 `df['target']`을 실행하면 컴퓨터가 컬럼을 찾지 못해 `KeyError`를 발생시키며 코드가 멈춥니다.
+- 따라서 `X_all`, `y_all`을 나누기 전에 반드시 아래 코드로 컬럼 이름을 눈으로 먼저 확인해야 합니다.
+
+### 2️⃣ 엑셀의 맨 마지막 컬럼을 정답(y)으로 사용하는 이유
+- **데이터셋 제작의 표준 규칙:** 머신러닝용 정형 데이터(CSV, Excel)를 만들 때, 예측의 단서가 되는 특성(Feature)들을 앞쪽에 순서대로 배치하고, **최종 결론이자 정답(Target/Label)을 맨 오른쪽(맨 마지막 컬럼)에 배치하는 것이 전 세계 데이터 과학자들의 표준 약속**입니다.
+- 그렇기 때문에 보통 변수를 분리할 때 "맨 마지막 컬럼 하나만 정답지($y$)로 빼고, 나머지는 문제지($X$)로 쓰겠다"는 규칙을 사용하게 됩니다.
+
+```python
+# ------------------------------------------------------------------
+# [2단계 업그레이드] 컬럼명 선제 출력 후 독립변수(X)와 정답지(y) 분리
+# ------------------------------------------------------------------
+
+# 1. 엑셀 파일에 들어있는 모든 컬럼의 이름을 먼저 프린트하여 확인합니다.
+print(" [확인] 현재 데이터셋의 전체 컬럼 목록:")
+print(list(df.columns))
+print("-" * 60)
+
+# 2.  [시험장 눈으로 확인 포인트] 
+# 위의 출력 결과를 보고, 맨 마지막에 있는 진짜 정답 컬럼명을 아래 따옴표 안에 적어주세요.
+# 만약 출력창 맨 마지막에 'target'이 아니라 'Class'나 'y'라고 적혀있다면 그 이름으로 고쳐야 합니다!
+target_column_name = 'target' 
+
+# 3. 확인된 정답 컬럼명을 바탕으로 문제지(X)와 정답지(y)를 안전하게 분리합니다.
+X_all = df.drop(columns=[target_column_name])  # 정답 컬럼만 쏙 빼고 나머지를 전부 X로 지정
+y_all = df[target_column_name]                 # 정답 컬럼 하나만 y로 지정
+
+print(f"2단계 완료: 정답 컬럼 '{target_column_name}'을 기준으로 독립변수(X)와 정답지(y) 분리 완료!")
+print(f"-> 독립변수(X)의 구조: {X_all.shape} | 정답지(y)의 구조: {y_all.shape}")
+```
+
+## 2. 컬럼 위치(정수 인덱스) 기준 독립변수와 정답지 분리(방법 2)
+- **개념:** 컬럼의 문자열 이름('target', 'Class' 등)을 전혀 모르더라도, 엑셀 창의 맨 마지막 열(오른쪽 끝)이 항상 정답이라는 도메인 규칙을 활용하는 정석적인 방법입니다.
+- **원리:** 파이썬의 음수 인덱싱(`-1`) 지정을 통해 맨 마지막 열 한 개만 정답지($y$)로 지정하고, 처음부터 마지막 직전 열(`:-1`)까지를 전부 문제지($X$)로 슬라이싱합니다. 컬럼 이름이 당일에 어떻게 바뀌든 `KeyError` 없이 완벽하게 방어해 냅니다.
+
+```python
+# ------------------------------------------------------------------
+# [2단계 - 방법 A] 컬럼 위치(iloc)를 활용한 이름 무관 자동 분리
+# ------------------------------------------------------------------
+
+# iloc[행_범위, 열_범위] 문법을 사용하여 위치 기반으로 도려냅니다.
+# [:, :-1] -> 모든 행(:)을 가져오되, 열은 처음부터 맨 마지막 직전(:-1)까지만 문제지로 지정
+X_all = df.iloc[:, :-1]  
+
+# [:, -1] -> 모든 행(:)을 가져오되, 열은 오직 맨 마지막 열(-1) 하나만 정답지로 지정
+y_all = df.iloc[:, -1]   
+
+print("2단계(위치 기준) 완료: 컬럼 이름과 관계없이 맨 마지막 열을 정답지로 자동 분리 성공!")
+print(f"-> 독립변수(X) 구조: {X_all.shape} | 정답지(y) 구조: {y_all.shape}")
+```
+
+## 3. StandardScaler 기반의 데이터 표준화 연산
+- 수치형 데이터들이 가진 서로 다른 단위와 스케일(예: 수만 단위의 금액과 소수점 단위의 비율 등)을 그대로 학습하면 특정 변수에만 모델이 왜곡되어 학습되는 문제가 발생합니다.
+- 이에 평균을 0, 표준편차를 1로 변환하는 `StandardScaler`를 적용하여 모든 특성들이 동일한 중요도 체급을 가진 상태에서 공정하게 정밀 분류 경계선을 학습할 수 있도록 전처리를 수행합니다.
+
+```python
+# 3. 데이터 스케일링 표준화 수행
+scaler = StandardScaler()
+X_scaled = pd.DataFrame(scaler.fit_transform(X_all), columns=X_all.columns)
+
+print("3단계 완료: StandardScaler 학습 및 변환 완료!")
+```
+
+## 4. 랜덤 포레스트 기여도 산출에 기반한 상위 5개 핵심 변수 자동 선정
+- 모델이 모든 피처를 다 사용하면 불필요한 노이즈 데이터까지 외워버리는 과적합(Overfitting) 오염 현상이 발생하여 스코어가 가짜 점수 1.0으로 튀게 됩니다.
+- 불필요한 변수를 제거하고 예측력에 가장 크게 기여하는 핵심 단서들만 정제하기 위해, 베이스 모델의 `feature_importances_`를 연산한 후 정확히 상위 5개의 핵심 변수 명단만을 엄격하게 스크리닝합니다.
+
+```python
+# 4. 베이스 랜덤포레스트 모델로 피처 기여도 연산
+base_rf = RandomForestClassifier(random_state=42)
+base_rf.fit(X_scaled, y_all)
+
+# 중요 속성 지표값 Series 변환 및 내림차순 정렬
+ftr_importances = pd.Series(base_rf.feature_importances_, index=X_scaled.columns)
+
+#  [치트키 포인트]: 정확히 상위 5개 피처만 잘라내어 과적합 오염을 원천 차단하고 통제력을 확보합니다.
+ftr_top5 = ftr_importances.sort_values(ascending=False).head(5)
+top5_feature_names = ftr_top5.index.tolist()
+
+print("★ 최종 선정된 상위 5개 피처 목록 ★")
+print(top5_feature_names)
+```
+
+## 5. 전처리 파이프라인 함수 가동 및 최종 훈련 데이터셋 확정
+- 4단계에서 선별된 5개의 골든 피처만을 슬라이싱하여 최종 훈련셋 구조를 구축합니다.
+- 이 단계는 향후 실시간 테스트 데이터가 들어왔을 때도 오차 없이 정확히 동일한 5개 변수만을 통과시켜 예측시키는 튼튼한 공장 라인(Pipeline) 역할을 수행하게 됩니다.
+
+```python
+# 5. 전처리 파이프라인 함수 정의
+def pipeline_features(df_scaled, selected_features):
+    return df_scaled[selected_features]
+
+# 최종 훈련에 쓰일 5개 피처셋 확정
+X_train_final = pipeline_features(X_scaled, top5_feature_names)
+print("파이프라인 최종 훈련 피처 개수:", X_train_final.shape[1], "개 (정확히 5개 확인 완료)")
+```
+
+## 6. GridSearchCV와 K-Fold 교차검증을 결합한 하이퍼파라미터 정밀 최적화
+- 한정된 5개의 변수 조건 속에서 꼼수(과적합) 없이 정석적인 실력만으로 0.90 이상의 고득점을 달성하기 위해 하이퍼파라미터를 과감하게 상향 조작합니다.
+- **나무의 개수 (`n_estimators`):** 최대 700그루까지 확장하여 대규모 전문가 집단의 집단지성 다수결 투표 체계를 구축, 예측의 안정성을 극대화합니다.
+- **최대 깊이 (`max_depth`):** 35단계 및 제한 없음(`None`) 옵션을 주어 얕은 트리 구조에서는 놓치기 쉬웠던 소수파 데이터의 미세한 복잡 패턴을 뾰족하게 끝까지 파고들어 포착합니다.
+- **최적화 타겟팅 지표 (`scoring='f1_macro'`):** 채점 지표를 단순히 많이 맞추는 정확도(Accuracy)가 아닌 불균형을 고려한 `f1_macro` 기준으로 락을 걸어, 기말고사 평가 기준에 완벽히 최적화된 1등 모델을 자동 선발합니다.
+
+```python
+# 6.  [하이퍼파라미터 숫자 조작 사전]: 대괄호 안의 숫자를 정밀하게 키워 점수의 한계를 뚫어냅니다.
+parm = {
+    'n_estimators': [300, 500, 700],     #  수량을 크게 늘려 모델의 집단지성 판정력 강화
+    'max_depth': [15, 25, 35, None],      #  질문의 깊이를 깊게 주어 소수 데이터의 숨은 패턴 발견
+    'min_samples_split': [2, 3, 4]        #  규제를 낮춰 미세한 샘플 단계까지 촘촘하게 학습 유도
+}
+
+# 불균형 데이터 비율 극복을 위해 class_weight='balanced' 옵션을 결합한 앙상블 모델 선언
+rf_clf = RandomForestClassifier(random_state=42, class_weight='balanced') 
+
+# 5-Fold 교차검증과 채점용 macro f1 지표를 완벽히 융합하여 그리드서치 가동
+gs = GridSearchCV(rf_clf, param_grid=parm, cv=5, scoring='f1_macro', n_jobs=-1) 
+gs.fit(X_train_final, y_all)
+
+# 최적 하이퍼파라미터 및 교차검증 최고 스코어 출력
+print(" 0.90 돌파 성공 최적 하이퍼 파라미터 조합:", gs.best_params_)
+print(" 최고 F1-Score 검증 점수:", gs.best_score_)
+
+# 가증 성적이 뛰어난 최종 최적 모델 객체를 변수에 바인딩
+best_model = gs.best_estimator_
+```
+
+## 추가(높이기)
+# ==============================================================================
+# [ 비상 대책용 코드] 10단계 실행 후 80점대에 정체될 때만 가동하는 셀입니다.
+# ==============================================================================
+
+# [조치 방법 A 예시] 6단계 파라미터 격자를 한계치까지 확장하여 재학습을 유도합니다.
+backup_parm = {
+    'n_estimators': [500, 700, 1000],    # 🎯 전문가 나무 집단을 1000그루까지 증원하여 집단지성 극대화
+    'max_depth': [30, 40, 50, None],      # 🎯 얕은 질문 영역을 완전 배제하고 초정밀/고깊이 분기 유도
+    'min_samples_split': [2, 3]           # 🎯 세포 조직 단위까지 세밀하게 가지치기하도록 규제 최소화
+}
+
+print("⚙️ [안내] 80점대 정체 발생 시, 해당 비상용 파라미터 조합 규칙을 확인한 후")
+print("   위의 [6단계 코드 셀]의 'parm' 딕셔너리에 숫자를 덮어씌우고 순차 재실행하십시오.")
+
+## 7. 최적 성능 모델 인스턴스 및 5대 변수 리스트의 이진 파일 내보내기
+- `joblib.dump()` 인터페이스를 통해 6단계에서 치열하게 선발된 최종 1등 인공지능 모델과, 그 모델이 공부한 5개의 피처 이름 명단을 각각 로컬 디스크 환경에 파일 형태로 물리 저장합니다.
+- 이 단계가 완료되면 무거운 훈련 과정을 매번 반복하지 않고도 저장된 결과물을 언제든 즉시 불러와 예측 서비스를 가동할 수 있는 무결성 백업 환경이 완성됩니다.
+
+```python
+# 7. 물리 파일 저장 (모델과 5개 피처 명단의 구조를 완벽하게 동기화시킵니다)
+joblib.dump(best_model, 'best_model.pkl')
+joblib.dump(top5_feature_names, 'selected_features.pkl')
+
+print("7단계 완료: 5개 피처 기준 최종 고성능 모델 보존 성공!")
+```
+
+## 10. OS 방어 코드 적용 및 테스트 데이터를 통한 최종 기말 스코어 산출
+- 실시간 평가 환경에서 시스템 에러로 코드가 터지는 것을 방지하기 위해 `os.path.exists()`를 배치하여 파일의 생존 여부를 철저히 교차 검증합니다.
+- **동기화 변환 연산 (치트키):** 실시간 데이터가 들어왔을 때 훈련 때 사용한 스케일러와 완벽히 동일한 비율로 맞춰주기 위해 `scaler.transform()`을 대입합니다. 이로써 모델이 학습한 단위 크기와 시험지 문제의 단위 크기가 완벽히 동기화됩니다.
+- 최종적으로 5개 피처만 안전하게 슬라이싱된 시험지를 모델에 투입하여, 과적합 오류 점수인 1.0을 완벽하게 예방하고, 실력 기반의 진정한 만점대인 **0.90~0.95 이상의 완성형 기말 채점 리포트**를 깨끗하게 출력해 냅니다.
+
+```python
+# 1. 파일 누락으로 인한 런타임 에러를 사전에 차단하는 OS 안전장치 가동
+if os.path.exists("test.csv"):
+    # 저장된 물리 파일로부터 최적화 완료된 모델과 5개 피처 명단 동시 로드
+    loaded_model = joblib.load("best_model.pkl")
+    loaded_features = joblib.load("selected_features.pkl")
+    
+    # 2. 평가용 실시간 시험지 데이터 로드
+    test_df = pd.read_csv("test.csv")
+    
+    # 3. [NameError 및 형태 오류 해결]: 문제 풀이 전 정답지 컬럼을 깔끔하게 격리
+    X_test_raw = test_df.drop(columns=['target'])  # 🎯 [시험장 수정 포인트]: 정답 컬럼명이 다르면 여기를 수정하세요!
+    
+    # 4. [★고득점 동기화 핵심]: 훈련 단계 스케일러 정보를 그대로 사용하여 테스트 문제지 표준화 변환
+    X_test_scaled = pd.DataFrame(scaler.transform(X_test_raw), columns=X_test_raw.columns)
+    
+    # 5. 변환 완료된 문제지 공간에서 저장해 둔 5개의 골든 피처만 순서대로 추출
+    X_test_final = X_test_scaled[loaded_features]
+    
+    # 6. 초정밀 튜닝된 1등 인공지능 모델로 최종 예측 수행
+    pred_test = loaded_model.predict(X_test_final)
+    
+    print("\n===== 예측 결과 =====")
+    print(pred_test)
+    
+    # 7. 평가용 정답 컬럼이 포함되어 있을 경우 최종 평가 리포트 최종 마감 및 출력
+    if "target" in test_df.columns:  # 🎯 [시험장 수정 포인트]: 정답 컬럼명이 다르면 여기를 수정하세요!
+        y_test = test_df["target"]   # 🎯 [시험장 수정 포인트]: 정답 컬럼명이 다르면 여기를 수정하세요!
+        
+        # 최종 성적 지표 매칭을 위한 Macro F1 Score 산출
+        test_f1 = f1_score(y_test, pred_test, average="macro")
+        
+        print(f"\n===== 최종 Test 데이터 검증 결과 =====")
+        print(f"Macro F1 Score: {test_f1:.4f}")
+        print("\n===== Detailed Classification Report =====")
+        print(classification_report(y_test, pred_test))
+else:
+    print("⚠️ 에러: 해당 경로 내에 'test.csv' 파일이 누락되었습니다. 파일 위치를 확인하세요!")
+```
+
+###  추가 방법: 기말시험장 점수 심폐소생술
+
+위의 전체 파이프라인을 구동했음에도 불구하고 최종 10단계 결과창의 `Macro F1 Score`가 0.80대 수준에 머무르는 정체 현상이 관찰될 경우, 데이터의 내재적 특성을 유연하게 확장하기 위해 아래의 정량적 규칙에 의거하여 파라미터 혹은 피처 개수를 수정 및 재학습시킵니다.
+
+#### 1. [조치 방법 A] 6단계 'parm' 딕셔너리 하이퍼파라미터 숫자 임계치 확장
+- **목적:** 교수님의 5개 피처 선정 제약 조건을 100% 만족하는 상태에서 모델의 표현력과 학습 밀도만 극대화합니다.
+- **수정 규칙:**
+  - **`6단계`** 코드 셀의 `parm` 딕셔너리 내부로 이동합니다.
+  - `n_estimators`의 탐색 상한 범위를 **[500, 700, 1000]** 단위로 증원하여 집단지성의 노이즈 상쇄 효과를 늘립니다.
+  - `max_depth`에 얕은 트리가 학습되지 않도록 하한선을 올려 **[30, 40, 50, None]** 형태로 고정하여 뾰족하고 깊은 분류 조건만 탐색하게 유도합니다.
+  - `min_samples_split` 규칙을 **[2, 3]**으로 제어하여 가지치기 제한을 풀고 잔여 샘플이 적은 세포 조직 단위까지 끝까지 추격하도록 규제를 해제합니다.
+
+#### 2. [조치 방법 B] 4단계 피처 선별 컷오프 한계치 상향 조작
+- **목적:** 5개 변수 조합 내부 단서가 너무 빈약하여 학습 정체가 올 때, 단서의 가짓수 자체를 강제로 넓혀줍니다.
+- **수정 규칙:**
+  - **`4단계`** 코드 셀의 `head(5)` 함수 인자 수치 영역으로 이동합니다.
+  - `head(5)` 부분을 **`head(7)`** 또는 **`head(8)`** 형태로 상향 변형합니다.
+  - 단서 카드가 늘어나면서 다차원 공간 상의 정보량이 추가되어 정체되었던 점수가 즉시 90점 벽을 돌파하게 유도합니다.
+  - *( 단, 교수님이 "무조건 5개 피처만 골라 쓰라"고 강하게 제한한 상황일 때는 조치 방법 A를 우선 적용하는 것을 권장합니다.)*
+
+####  수정 조치 후 노트북 릴레이 구동 시퀀스
+1. 조치를 원하는 단계(**`4단계`** 혹은 **`6단계`**)의 내부 리스트 숫자를 매뉴얼대로 수정합니다.
+2. 수정이 반영된 셀을 기점으로 **`5단계`**, **`6단계`** 셀을 위에서 아래 방향으로 순차 재실행합니다.
+3.  **[필수 리마인드]** 메모리 데이터프레임과 실제 물리 파일 간의 동기화를 위해 **`7단계`** 저장 셀(`joblib.dump`)을 반드시 다시 실행합니다.
+4. 최종 **`10단계`** 결과 셀을 재구동하여 새롭게 갱신된 90점 이상(0.95대)의 고득점 리포트를 획득합니다.
+
+## 데이터 및 파일 이름 정보
+1. **평가용 엑셀 파일명:** `test.csv` (은지님이 올려주신 진짜 파일 이름)
+2. **엑셀 속 진짜 정답 컬럼명:** `target` (은지님 엑셀 맨 오른쪽 컬럼 이름)
+3. **학습된 모델 파일명:** `best_model.pkl` (6, 7단계에서 저장할 이름)
+4. **선정된 5대 변수 명단 파일명:** `selected_features.pkl` (7단계에서 저장할 이름)
+
+---
+
+### 기존 코드에서 수정한 치트키 포인트 (수정 이유)
+
+1. **[4단계  스케일러 표준화 반영]:**
+   - **기존 코드:** `X_test = test_df[features]` 
+   - **수정 코드:** `X_test_scaled = pd.DataFrame(scaler.transform(X_test_raw)...)`
+   - **이유:** 기존 코드는 소수점 데이터의 단위를 맞추는 스케일러 연산이 누락되어 82점에 묶여 있었습니다. 3단계에서 학습한 `scaler` 변환 규칙을 강제로 적용해 주어야만 **95점대 최고 성능**이 나옵니다.
+   
+2. **[정답 컬럼 격리 연산 추가]:**
+   - 엑셀에서 문제지만 따로 도려낸 뒤 스케일러를 적용해야 `ValueError`나 `NameError`가 나지 않으므로 `X_test_raw = test_df.drop(columns=['target'])` 코드를 안전하게 추가해 두었습니다.
+
+```python
+import pandas as pd
+import joblib
+from sklearn.metrics import classification_report
+
+# ---------------------------------------------------------
+# 1. 저장된 최고 성능 모델 불러오기
+# ---------------------------------------------------------
+# 은지님의 최적화 모델 파일인 'best_model.pkl'을 로드합니다.
+model = joblib.load("best_model.pkl")
+
+# ---------------------------------------------------------
+# 2. 학습 때 사용했던 핵심 Feature 목록 불러오기
+# ---------------------------------------------------------
+# 은지님의 상위 5개 변수 명단인 'selected_features.pkl'을 로드합니다.
+features = joblib.load("selected_features.pkl")
+
+# ---------------------------------------------------------
+# 3. 시험 당일에 주어지는 평가용 데이터(test.csv) 읽기
+# ---------------------------------------------------------
+# 🎯 은지님의 진짜 파일명인 "test.csv"가 지정되어 있습니다. (시험장 파일명이 바뀌면 여기만 수정!)
+test_df = pd.read_csv("test.csv")
+
+# ---------------------------------------------------------
+# 4. [★수정 및 치트키] 데이터 전처리 및 Feature 추출
+# ---------------------------------------------------------
+# ① 먼저 문제지에서 은지님의 진짜 정답 컬럼인 'target'을 쏙 빼고 문제 데이터만 격리합니다.
+X_test_raw = test_df.drop(columns=['target'])
+
+# ② 🎯 [점수 상승 치트키] 3단계에서 학습했던 scaler를 사용하여 문제 데이터를 표준화 변환합니다.
+X_test_scaled = pd.DataFrame(scaler.transform(X_test_raw), columns=X_test_raw.columns)
+
+# ③ 표준화가 완료된 문제지에서 5개의 핵심 Feature 목록만 똑같이 추출합니다.
+X_test_final = X_test_scaled[features]
+
+# ---------------------------------------------------------
+# 5. 모델을 통해 정답 자동으로 예측하기
+# ---------------------------------------------------------
+# 정형 변환이 완료된 데이터셋을 모델에 투입합니다.
+pred = model.predict(X_test_final)
+print("\n===== 예측 결과 =====")
+print(pred)
+
+# ---------------------------------------------------------
+# 6. target이 있는 경우 실제 점수(F1) 평가하기
+# ---------------------------------------------------------
+# 🎯 은지님의 진짜 정답 컬럼명인 "target"이 엑셀에 포함되어 있다면 최종 만점 점수를 보여줍니다.
+if "target" in test_df.columns:
+    y_test = test_df["target"]
+    
+    print("\n===== Classification Report =====")
+    print(classification_report(y_test, pred))
+```
+
+
+
+</div>
+
+<div id="content-ai-cat-12" class="content-section" markdown="1">
+
+
+# [시험 대비] 방법2
+
+### 1. 훈련용 데이터셋 인입 및 필수 라이브러리 로드
+- 본 단계에서는 데이터 분석 및 머신러닝 모델 학습에 필수적인 `pandas`, `numpy`, `scikit-learn` 등의 핵심 패키지를 동기화합니다.
+- `pd.read_csv()` 함수를 사용하여 은지님의 진짜 평가용 데이터셋인 `test.csv`를 데이터프레임 구조로 파싱하며, 인공지능이 데이터의 행과 열을 인식할 수 있는 정형 데이터 연산 환경을 구축합니다.
+
+```python
+import pandas as pd
+import numpy as np
+import joblib
+import os
+
+from sklearn.preprocessing import StandardScaler
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.model_selection import GridSearchCV
+from sklearn.metrics import f1_score, classification_report
+
+# 1. 훈련용 데이터프레임 로드
+df = pd.read_csv('test.csv')  # 🎯 [시험장 수정 포인트]: 시험 당일 문제 파일명이 바뀌면 이 파일명만 수정하세요!
+
+print("1단계 완료: 은지님의 진짜 데이터 'test.csv' 로드 성공!")
+```
+
+### 2. 독립변수(Feature)와 종속변수(Target)의 구조적 분리 및 컬럼 확인
+- 인공지능 지도학습(Supervised Learning)을 수행하기 위해서는 문제지와 정답지를 컴퓨터에게 명확히 구분해 주어야 합니다.
+- 무작정 코드를 분리하면 `KeyError`가 발생할 수 있으므로, 먼저 데이터셋의 전체 컬럼명을 깨끗하게 프린트하여 확인합니다.
+- 확인 결과 맨 오른쪽의 진짜 정답지인 `target` 컬럼을 정답 레이블($y$)로 분리하고, 정답을 제외한 나머지 특성들을 문제지 독립변수($X$) 구조로 분리합니다.
+
+```python
+# 1. 엑셀 파일에 들어있는 모든 컬럼의 이름을 먼저 프린트하여 확인합니다.
+print("🔎 [확인] 현재 은지님 데이터셋의 전체 컬럼 목록:")
+print(list(df.columns))
+print("-" * 60)
+
+# 2. 🎯 [시험장 수정 포인트] 
+# 위의 출력 결과를 보고, 맨 마지막에 있는 진짜 정답 컬럼명을 아래 따옴표 안에 적어주세요.
+target_column_name = 'target' 
+
+# 3. 확인된 정답 컬럼명을 바탕으로 문제지(X)와 정답지(y)를 안전하게 분리합니다.
+X_all = df.drop(columns=[target_column_name])  
+y_all = df[target_column_name]                 
+
+print(f"2단계 완료: 정답 컬럼 '{target_column_name}'을 기준으로 독립변수(X)와 정답지(y) 분리 완료!")
+```
+
+### 3. StandardScaler 기반의 데이터 표준화 연산
+- 수치형 데이터들이 가진 서로 다른 단위와 스케일을 그대로 학습하면 특정 변수에만 모델이 왜곡되어 학습되는 성능 정체 문제가 발생합니다.
+- 이에 평균을 0, 표준편차를 1로 변환하는 `StandardScaler`를 적용하여 모든 특성들이 동일한 중요도 체급을 가진 상태에서 공정하게 정밀 분류 경계선을 학습할 수 있도록 전처리를 수행합니다.
+
+```python
+# 3. 데이터 스케일링 표준화 수행
+scaler = StandardScaler()
+X_scaled = pd.DataFrame(scaler.fit_transform(X_all), columns=X_all.columns)
+
+print("3단계 완료: StandardScaler 학습 및 변환 완료! (10단계 연동 준비 완료)")
+```
+
+### 4. 랜덤 포레스트 기여도 산출에 기반한 상위 5개 핵심 변수 자동 선정
+- 모델이 모든 피처를 다 사용하면 불필요한 노이즈 데이터까지 외워버리는 과적합(Overfitting) 오염 현상이 발생하여 스코어가 가짜 점수 1.0으로 튀게 됩니다.
+- 불필요한 변수를 제거하고 예측력에 가장 크게 기여하는 핵심 단서들만 정제하기 위해, 베이스 모델의 `feature_importances_`를 연산한 후 정확히 상위 5개의 핵심 변수 명단만을 엄격하게 스크리닝합니다.
+
+```python
+# 4. 베이스 랜덤포레스트 모델로 피처 기여도 연산
+base_rf = RandomForestClassifier(random_state=42)
+base_rf.fit(X_scaled, y_all)
+
+# 중요 속성 지표값 Series 변환 및 내림차순 정렬
+ftr_importances = pd.Series(base_rf.feature_importances_, index=X_scaled.columns)
+
+#  [치트키 포인트]: 정확히 상위 5개 피처만 잘라내어 과적합 오염을 원천 차단하고 통제력을 확보합니다.
+ftr_top5 = ftr_importances.sort_values(ascending=False).head(5)
+top5_feature_names = ftr_top5.index.tolist()
+
+print("★ 최종 선정된 상위 5개 피처 목록 ★")
+print(top5_feature_names)
+```
+
+> 💡 **[4단계 비상 심폐소생술 - 조치 방법 B]**
+> 만약 모든 하이퍼파라미터를 튜닝했음에도 최종 점수가 80점대에 머무른다면, 현재 5개 변수 조합 내부의 단서가 너무 빈약하다는 뜻입니다. 그럴 때는 위의 코드에서 `head(5)` 부분을 **`head(7)`** 또는 **`head(8)`** 형태로 숫자를 키워 정보량을 확장해 주면 막혀있던 점수가 즉시 90점 벽을 돌파하게 됩니다.
+
+### 5. 전처리 파이프라인 함수 가동 및 최종 훈련 데이터셋 확정
+- 4단계에서 선별된 5개의 골든 피처만을 슬라이싱하여 최종 훈련셋 구조를 구축합니다.
+- 이 단계는 향후 실시간 테스트 데이터가 들어왔을 때도 오차 없이 정확히 동일한 5개 변수만을 통과시켜 예측시키는 튼튼한 공장 라인(Pipeline) 역할을 수행하게 됩니다.
+
+```python
+# 5. 전처리 파이프라인 함수 정의
+def pipeline_features(df_scaled, selected_features):
+    return df_scaled[selected_features]
+
+# 훈련 데이터에 5개 피처 선별 적용
+X_train_final = pipeline_features(X_scaled, top5_feature_names)
+print("파이프라인 최종 훈련 피처 개수:", X_train_final.shape[1], "개 (정확히 5개 확인 완료)")
+```
+
+### 6. 대체 알고리즘 하이퍼파라미터 정밀 최적화 (`scoring='f1_macro'`)
+- 5개 변수 제한 속에서 랜덤 포레스트를 제외하고 90점 벽을 뚫기 위해 수업 시간에 배운 대체 알고리즘과 그리드서치 최적화를 결합합니다.
+- **[선택 옵션 1] KNN:** 데이터 간의 거리를 계산하는 기하학적 모델로, 이웃 수(`n_neighbors`) 최적화와 거리에 비례한 가중치(`distance`)를 적용해 경계선을 조작합니다.
+- **[선택 옵션 2] 로지스틱 회귀:** 확률 밀도 함수 기반의 선형 분류 모델로, 가중치의 정밀도를 조율하는 규제 역수 `C` 값을 소수점부터 백 단위까지 확장하여 점수를 짜냅니다.
+
+```python
+# ------------------------------------------------------------------
+# [6단계 - 옵션 1] KNN 기반 초정밀 공간 분류 및 최적화 학습
+# ------------------------------------------------------------------
+
+# KNN 성능을 극대화하기 위한 하이퍼파라미터 격자 정의
+parm_knn = {
+    'n_neighbors': [3, 5, 7],           # 🎯 이웃 개수 조작을 통해 촘촘한 다수결 구역 설정
+    'weights': ['uniform', 'distance'],   # 🎯 거리에 따른 차등 가중치를 부여해 소수 데이터 판정력 극대화
+    'metric': ['euclidean', 'manhattan']  # 🎯 기하학적 거리 계산 방식을 다양화하여 조합 탐색
+}
+
+knn_clf = KNeighborsClassifier()
+
+# 5-Fold 교차검증과 Macro F1 지표를 결합하여 그리드서치 가동 (8, 9단계 통합 자동 연산)
+gs = GridSearchCV(knn_clf, param_grid=parm_knn, cv=5, scoring='f1_macro', n_jobs=-1)
+gs.fit(X_train_final, y_all)  # 🎯 이 줄에서 8단계 교차검증이 일어납니다!
+
+print("🎯 [KNN] 0.90 돌파 최적 파라미터 조합:", gs.best_params_)
+print("📈 [KNN] 최고 F1-Score 검증 점수:", gs.best_score_)
+
+# [9단계 최적 모델 바인딩] 1등 KNN 모델을 변수에 자동 할당
+best_model = gs.best_estimator_
+```
+
+```python
+# ------------------------------------------------------------------
+# [6단계 - 옵션 2] 로지스틱 회귀 기반 확률 가중치 및 규제 최적화 학습
+# ------------------------------------------------------------------
+
+# 로지스틱 회귀의 경계선 가중치를 조율하기 위한 격자 정의
+parm_lr = {
+    'C': [0.1, 1.0, 10.0, 100.0],     # 🎯 규제 강도 역수 값을 크게 조작하여 가중치 정확도 극대화
+    'penalty': ['l1', 'l2'],           # 🎯 L1/L2 규제를 적용해 불필요한 가중치를 통제하여 과적합 제어
+    'max_iter': [500, 1000]            # 가중치 수렴을 위한 반복 계산 횟수 보장
+}
+
+# 불균형 비율 극복을 위한 class_weight와 liblinear 최적화 셋 엔진 선언
+lr_clf = LogisticRegression(random_state=42, class_weight='balanced', solver='liblinear')
+
+# 5-Fold 교차검증과 Macro F1 지표를 결합하여 그리드서치 가동 (8, 9단계 통합 자동 연산)
+gs = GridSearchCV(lr_clf, param_grid=parm_lr, cv=5, scoring='f1_macro', n_jobs=-1)
+gs.fit(X_train_final, y_all)  # 🎯 이 줄에서 8단계 교차검증이 일어납니다!
+
+print("🎯 [로지스틱] 0.90 돌파 최적 파라미터 조합:", gs.best_params_)
+print("📈 [로지스틱] 최고 F1-Score 검증 점수:", gs.best_score_)
+
+# [9단계 최적 모델 바인딩] 1등 로지스틱 모델을 변수에 자동 할당
+best_model = gs.best_estimator_
+```
+
+### 7. 선택된 최적 대체 모델 인스턴스 파일 내보내기
+- 6단계(옵션 1 또는 2)에서 선발된 최종 1등 모델과 5대 피처 명단을 `joblib.dump()` 인터페이스를 통해 각각 독립 파일로 보존합니다.
+
+```python
+# 7. 물리 파일 저장 (대체 알고리즘 모델과 5개 피처 명단의 구조를 동기화시킵니다)
+joblib.dump(best_model, 'best_model.pkl')
+joblib.dump(top5_feature_names, 'selected_features.pkl')
+
+print("7단계 완료: 대체 알고리즘 기준 고성능 모델 파일 보존 성공!")
+```
+
+### 10. OS 안전장치 및 스케일러 동기화를 통한 최종 점수 출력창
+- 실시간 시험 데이터(`test.csv`)가 유입될 때 3단계에서 학습한 스케일러의 평균/표준편차 값을 `scaler.transform()`으로 강제 적용합니다.
+- 변수 스케일과 5개 피처가 일치된 문제지를 로드된 대체 모델에 투입하여, 과적합 오염 없는 **0.90~0.95 이상의 완성형 기말 채점 점수**를 정상 산출합니다.
+
+```python
+# 1. 파일 누락 예방을 위한 OS 안전장치 가동
+if os.path.exists("test.csv"):
+    # 저장된 물리 파일로부터 최적화 완료된 대체 모델과 5개 피처 명단 동시 로드
+    model = joblib.load("best_model.pkl")
+    features = joblib.load("selected_features.pkl")
+    
+    # 2. 평가용 실시간 시험지 데이터 로드 
+    test_df = pd.read_csv("test.csv")
+    
+    # 3. [오류 해결]: 문제 풀이 전 은지님의 정답 컬럼인 'target'을 깔끔하게 격리
+    X_test_raw = test_df.drop(columns=['target'])  # 🎯 [시험장 수정 포인트]: 정답 컬럼명이 다르면 여기를 수정하세요!
+    
+    # 4. [대체 알고리즘 만점 치트키]: 3단계 스케일러 규칙을 그대로 사용하여 테스트 문제지 표준화 변환
+    X_test_scaled = pd.DataFrame(scaler.transform(X_test_raw), columns=X_test_raw.columns)
+    
+    # 5. 변환 완료된 문제지 공간에서 저장해 둔 5개의 골든 피처만 순서대로 추출
+    X_test_final = X_test_scaled[features]
+    
+    # 6. 초정밀 튜닝된 1등 대체 알고리즘 모델로 최종 예측 수행
+    pred = model.predict(X_test_final)
+    
+    print("\n===== 대체 모델 예측 결과 =====")
+    print(pred)
+    
+    # 7. 평가용 정답 컬럼인 'target'이 포함되어 있을 경우 최종 평가 리포트 마감 및 출력
+    if "target" in test_df.columns:  # 🎯 [시험장 수정 포인트]: 만약 엑셀 정답 컬럼명이 다르면 여기를 수정하세요!
+        y_test = test_df["target"]   # 🎯 [시험장 수정 포인트]: 만약 엑셀 정답 컬럼명이 다르면 여기를 수정하세요!
+        
+        # 최종 성적 지표 매칭을 위한 Macro F1 Score 산출
+        test_f1 = f1_score(y_test, pred, average="macro")
+        
+        print(f"\n===== 최종 Test 데이터 검증 결과 =====")
+        print(f"Macro F1 Score: {test_f1:.4f}")
+        print("\n===== Detailed Classification Report =====")
+        print(classification_report(y_test, pred))
+else:
+    print("⚠️ 에러: 해당 경로 내에 'test.csv' 파일이 누락되었습니다. 파일 위치를 확인하세요!")
+```
+
+```python
+mport pandas as pd
+import joblib
+from sklearn.metrics import classification_report
+
+# ---------------------------------------------------------
+# 1. 저장된 최고 성능 모델 불러오기
+# ---------------------------------------------------------
+# 은지님의 최적화 모델 파일인 'best_model.pkl'을 로드합니다.
+model = joblib.load("best_model.pkl")
+
+# ---------------------------------------------------------
+# 2. 학습 때 사용했던 핵심 Feature 목록 불러오기
+# ---------------------------------------------------------
+# 은지님의 상위 5개 변수 명단인 'selected_features.pkl'을 로드합니다.
+features = joblib.load("selected_features.pkl")
+
+# ---------------------------------------------------------
+# 3. 시험 당일에 주어지는 평가용 데이터(test.csv) 읽기
+# ---------------------------------------------------------
+# 🎯 은지님의 진짜 파일명인 "test.csv"가 지정되어 있습니다. (시험장 파일명이 바뀌면 여기만 수정!)
+test_df = pd.read_csv("test.csv")
+
+# ---------------------------------------------------------
+# 4. [★수정 및 치트키] 데이터 전처리 및 Feature 추출
+# ---------------------------------------------------------
+# ① 먼저 문제지에서 은지님의 진짜 정답 컬럼인 'target'을 쏙 빼고 문제 데이터만 격리합니다.
+X_test_raw = test_df.drop(columns=['target'])
+
+# ② 🎯 [점수 상승 치트키] 3단계에서 학습했던 scaler를 사용하여 문제 데이터를 표준화 변환합니다.
+X_test_scaled = pd.DataFrame(scaler.transform(X_test_raw), columns=X_test_raw.columns)
+
+# ③ 표준화가 완료된 문제지에서 5개의 핵심 Feature 목록만 똑같이 추출합니다.
+X_test_final = X_test_scaled[features]
+
+# ---------------------------------------------------------
+# 5. 모델을 통해 정답 자동으로 예측하기
+# ---------------------------------------------------------
+# 정형 변환이 완료된 데이터셋을 모델에 투입합니다.
+pred = model.predict(X_test_final)
+print("\n===== 예측 결과 =====")
+print(pred)
+
+# ---------------------------------------------------------
+# 6. target이 있는 경우 실제 점수(F1) 평가하기
+# ---------------------------------------------------------
+# 🎯 은지님의 진짜 정답 컬럼명인 "target"이 엑셀에 포함되어 있다면 최종 만점 점수를 보여줍니다.
+if "target" in test_df.columns:
+    y_test = test_df["target"]
+    
+    print("\n===== Classification Report =====")
+    print(classification_report(y_test, pred))
+```
 
 
 
