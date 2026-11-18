@@ -886,25 +886,6 @@ resetAll();
         </div>
       </div>
 
-
-      <!-- 영상/사진 좌우 배치 (슬라이드 밑으로 이동) -->
-      <div class="ov-media-row">
-        <div>
-          <div class="ov-media-box">
-            <!-- 영상: <video src="/assets/videos/fire_demo.mp4" controls></video> -->
-            <div><div style="font-size:2.5rem;margin-bottom:10px;">🎬</div><div><strong style="color:#94a3b8;">시연 영상</strong><br><span style="color:#64748b;">video 태그로 교체해 주세요</span></div></div>
-          </div>
-          <p class="ov-media-label">📽️ 시스템 시연 영상</p>
-        </div>
-        <div>
-          <div class="ov-media-box">
-            <!-- 사진: <img src="/assets/images/fire_hw.jpg" alt="하드웨어"> -->
-            <div><div style="font-size:2.5rem;margin-bottom:10px;">📸</div><div><strong style="color:#94a3b8;">하드웨어 사진</strong><br><span style="color:#64748b;">img 태그로 교체해 주세요</span></div></div>
-          </div>
-          <p class="ov-media-label">🔧 실제 하드웨어 구성</p>
-        </div>
-      </div>
-
     </div>
     </div>
 

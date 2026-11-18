@@ -132,6 +132,7 @@ void loop() {
   }
   delay(100);
 }
+```
 
 ### 3. BLE 거리 판정 및 이탈 감지 로직 코드 (BLE_Distance_Scanner.ino)
 * **핵심 로직 설명:** * 기준이 되는 비콘(targetMac)의 RSSI 무선 강도를 체크하여 -50dBm 이하로 떨어지면    작업자가 구역을 이탈한 것으로 보고 부저 경고 신호를 발생시킴.
@@ -197,8 +198,171 @@ void loop() {
     delay(2000); 
   }
 }
+```
 
 ### 4. MIT APP Inventor(앱 인벤터)
+
+---
+
+### 1. 중계기 핵심 코드 [전담 파트]
+
+**1. 작업자별 BLE 데이터 구분**
+
+- 작업자별 MAC 주소를 기준으로 BLE 데이터를 구분하고, 수신된 상태 정보를 각각 저장
+
+```cpp
+const String WORKER1_MAC = "ec:e3:34:bf:80:9e";
+const String WORKER2_MAC = "ec:e3:34:bf:e6:aa";
+
+WorkerData worker1, worker2;
+```
+
+**2. BLE 데이터 수신 및 작업자 구분**
+
+BLE 광고 데이터를 수신하고 MAC 주소를 확인하여 작업자별 부저 상태(B/N)를 저장
+
+```cpp
+void onResult(BLEAdvertisedDevice advertisedDevice) override {
+    String mac = advertisedDevice.getAddress().toString();
+    mac.toLowerCase();
+
+    if (mac == WORKER1_MAC || mac == WORKER2_MAC) {
+        String adv = advertisedDevice.getManufacturerData().c_str();
+
+        int rssi = advertisedDevice.getRSSI();
+        char buzzerChar = 'N';
+
+        if (adv.length() > 0) {
+            char lastChar = adv.charAt(adv.length() - 1);
+            if (lastChar == 'B' || lastChar == 'N') {
+                buzzerChar = lastChar;
+            }
+        }
+
+        if (mac == WORKER1_MAC) {
+            worker1.dataReceived = true;
+            worker1.rssi = rssi;
+            worker1.advData = adv;
+            worker1.buzzerState = buzzerChar;
+        } else {
+            worker2.dataReceived = true;
+            worker2.rssi = rssi;
+            worker2.advData = adv;
+            worker2.buzzerState = buzzerChar;
+        }
+    }
+}
+```
+
+**3. BLE 및 Bluetooth Serial 초기화**
+
+중계기가 작업자 디바이스의 BLE 데이터를 수신하고, 스마트폰 앱과 Bluetooth Serial로 연결되도록 초기화
+
+```cpp
+SerialBT.begin("RelayDeviceBT");
+
+BLEDevice::init("Relay-Device");
+pBLEScan = BLEDevice::getScan();
+pBLEScan->setAdvertisedDeviceCallbacks(
+    new MyAdvertisedDeviceCallbacks()
+);
+pBLEScan->setActiveScan(true);
+```
+
+**4. 작업자별 상태 정보 앱으로 전송**
+
+작업자 1과 작업자 2의 상태 정보를 번갈아 앱인벤터로 전송합니다. 부저 상태에 따라 정상착용 또는 착용불량으로 구분
+
+```cpp
+if (millis() - lastSendTime >= SEND_INTERVAL) {
+    lastSendTime = millis();
+
+    if (sendWorker1Next) {
+        if (worker1.dataReceived) {
+            String message = "작업자1: ";
+            message += (worker1.buzzerState == 'B')
+                ? "착용불량" : "정상착용";
+            SerialBT.println(message);
+        } else {
+            SerialBT.println("작업자1: 데이터 없음");
+        }
+    } else {
+        if (worker2.dataReceived) {
+            String message = "작업자2: ";
+            message += (worker2.buzzerState == 'B')
+                ? "착용불량" : "정상착용";
+            SerialBT.println(message);
+        } else {
+            SerialBT.println("작업자2: 데이터 없음");
+        }
+    }
+
+    sendWorker1Next = !sendWorker1Next;
+}
+```
+
+### 2. 수신용, 송신용 핵심 코드
+
+**1. 착용불량 상태 판단(수신용)**
+
+감압센서, 움직임 감지, BLE 신호 세기를 종합하여 안전장비 착용 상태를 판단
+
+```cpp
+bool pressureAlarm = (pressureValue < pressureThreshold);
+bool movementAlarm = noMovement;
+bool distanceAlarm = weakSignalDetected;
+
+bool shouldBuzz = pressureAlarm || movementAlarm || distanceAlarm;
+```
+
+**2. 착용 상태를 BLE 광고 데이터로 송신(수신용)**
+
+판단한 착용 상태를 `B` 또는 `N`으로 구분하여 BLE 광고 데이터에 담아 중계기로 전달
+
+```cpp
+String advStr = String("B:") + (shouldBuzz ? "B" : "N");
+
+BLEAdvertisementData advData;
+advData.setName("Helmet-Receiver");
+advData.setManufacturerData(advStr);
+
+pAdvertising->setAdvertisementData(advData);
+pAdvertising->start();
+```
+
+**3. BLE 송신 장치 초기화(송신용)**
+
+ESP32를 BLE 장치로 초기화하고 송신 출력을 최대 세기로 설정
+
+```cpp
+BLEDevice::init("ESP32_Advertiser");
+BLEDevice::setPower(ESP_PWR_LVL_P9);
+```
+
+**4. BLE 광고 데이터 설정 및 송신(송신용)**
+
+장치 이름과 식별 데이터를 광고 데이터에 담아 BLE 신호를 송신
+
+```cpp
+BLEAdvertisementData advertisementData;
+advertisementData.setName("ESP32_BEACON");
+advertisementData.setManufacturerData("123456");
+
+pAdvertising->setAdvertisementData(advertisementData);
+pAdvertising->setScanResponse(false);
+pAdvertising->start();
+```
+
+### 3. esp32의 각 맥 주소  찾는 코드
+
+```cpp
+BLEDevice::init("");
+
+String bleMac = BLEDevice::getAddress().toString().c_str();
+
+Serial.print("BLE MAC Address: ");
+Serial.println(bleMac);
+```
 
 <details class="code-accordion">
   <summary>5. 실시간 안전 장비 착용 여부 시스템 전체적인 코드</summary>
@@ -229,6 +393,7 @@ void setup() {
 void loop() {
   // do nothing
 }
+```
 
 
 
@@ -484,6 +649,7 @@ void loop() {
 
   delay(100); // 조금 쉬기
 }
+```
 
 
 
@@ -526,6 +692,7 @@ void setup() {
 void loop() {
   delay(1000);
 }
+```
 
 
 
@@ -648,6 +815,7 @@ void loop() {
   }
   delay(100);
 }
+```
 
 
 

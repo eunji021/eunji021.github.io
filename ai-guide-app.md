@@ -454,24 +454,6 @@ document.addEventListener('DOMContentLoaded', () => {
         </div>
       </div>
 
-      <!-- 영상/사진 좌우 배치 (슬라이드 밑으로 이동) -->
-      <div class="ov-media-row">
-        <div>
-          <div class="ov-media-box">
-            <!-- 영상: <video src="/assets/videos/ai_demo.mp4" controls></video> -->
-            <div><div style="font-size:2.5rem;margin-bottom:10px;">🎬</div><div><strong style="color:#94a3b8;">시연 영상</strong><br><span style="color:#64748b;">video 태그로 교체해 주세요</span></div></div>
-          </div>
-          <p class="ov-media-label">📽️ 앱 작동 시연 영상</p>
-        </div>
-        <div>
-          <div class="ov-media-box">
-            <!-- 사진: <img src="/open.png" alt="앱 인터페이스"> -->
-            <div><div style="font-size:2.5rem;margin-bottom:10px;">📱</div><div><strong style="color:#94a3b8;">모바일 앱 인터페이스</strong><br><span style="color:#64748b;">img 태그로 교체해 주세요</span></div></div>
-          </div>
-          <p class="ov-media-label">📱 실제 앱 구동 화면</p>
-        </div>
-      </div>
-
     </div>
   </div>
 
