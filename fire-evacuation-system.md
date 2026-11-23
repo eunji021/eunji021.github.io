@@ -892,51 +892,260 @@ resetAll();
   <!-- ===================== 소개 탭 ===================== -->
   <div id="tab-intro" class="tab-content">
     <style>
-      .intro-section { margin-bottom:32px; }
-      .intro-section-title { display:flex; align-items:center; gap:10px; color:#10b981; font-size:1.2rem; font-weight:700; border-bottom:2px solid rgba(16,185,129,0.2); padding-bottom:10px; margin-bottom:16px; font-family:'Pretendard',sans-serif; }
-      .intro-row { display:flex; gap:12px; margin-bottom:10px; font-family:'Pretendard',sans-serif; }
-      .intro-label { color:#94a3b8; font-size:0.9rem; min-width:110px; font-weight:600; padding-top:2px; }
-      .intro-value { color:#e2e8f0; font-size:0.95rem; line-height:1.7; flex:1; }
-      .intro-chip { display:inline-block; background:rgba(16,185,129,0.12); border:1px solid rgba(16,185,129,0.3); color:#10b981; border-radius:20px; padding:3px 12px; font-size:0.8rem; margin:3px 3px 3px 0; font-family:'Pretendard',sans-serif; }
-      .intro-chip.blue { background:rgba(56,189,248,0.12); border-color:rgba(56,189,248,0.3); color:#38bdf8; }
-      .intro-chip.purple { background:rgba(167,139,250,0.12); border-color:rgba(167,139,250,0.3); color:#a78bfa; }
-      .intro-issue-box { background:rgba(15,23,42,0.6); border-left:3px solid #f59e0b; border-radius:0 8px 8px 0; padding:14px 18px; margin-bottom:14px; font-family:'Pretendard',sans-serif; }
-      .intro-issue-box .issue-title { color:#f59e0b; font-weight:700; font-size:0.95rem; margin-bottom:8px; }
-      .intro-issue-box .issue-row { color:#94a3b8; font-size:0.88rem; margin-bottom:4px; line-height:1.6; }
-      .intro-issue-box .issue-row strong { color:#cbd5e1; }
+      .intro-section { margin-bottom: 36px; }
+      .intro-section-title {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        color: #10b981;
+        font-size: 1.25rem;
+        font-weight: 700;
+        border-bottom: 2px solid rgba(16, 185, 129, 0.25);
+        padding-bottom: 12px;
+        margin-bottom: 20px;
+        font-family: 'Pretendard', sans-serif;
+      }
+      
+      /* Main Role Badge */
+      .role-main-badge {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        background: rgba(16, 185, 129, 0.08);
+        border: 1px solid rgba(16, 185, 129, 0.25);
+        border-radius: 10px;
+        padding: 14px 18px;
+        margin-bottom: 20px;
+      }
+      .role-main-tag {
+        background: #10b981;
+        color: #0f172a;
+        font-size: 0.8rem;
+        font-weight: 700;
+        padding: 4px 10px;
+        border-radius: 6px;
+        white-space: nowrap;
+      }
+      .role-main-text {
+        color: #f1f5f9;
+        font-size: 1.05rem;
+        font-weight: 600;
+      }
+
+      /* Role Cards */
+      .role-cards-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+        gap: 16px;
+        margin-bottom: 10px;
+      }
+      .role-card {
+        background: #1e293b;
+        border: 1px solid #334155;
+        border-radius: 10px;
+        padding: 20px 22px;
+        transition: border-color 0.2s, transform 0.2s;
+      }
+      .role-card:hover {
+        border-color: rgba(16, 185, 129, 0.5);
+        transform: translateY(-2px);
+      }
+      .role-card-header {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 14px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      }
+      .role-card-num {
+        color: #10b981;
+        font-family: 'Consolas', monospace;
+        font-weight: 800;
+        font-size: 1.1rem;
+        background: rgba(16, 185, 129, 0.12);
+        padding: 2px 8px;
+        border-radius: 6px;
+      }
+      .role-card-title {
+        color: #e2e8f0;
+        font-weight: 700;
+        font-size: 1.0rem;
+      }
+      .role-list {
+        margin: 0;
+        padding-left: 20px;
+        color: #94a3b8;
+        font-size: 0.92rem;
+        line-height: 1.75;
+      }
+      .role-list li {
+        margin-bottom: 8px;
+      }
+      .role-list li:last-child {
+        margin-bottom: 0;
+      }
+      .role-list code {
+        background: #0f172a;
+        color: #38bdf8;
+        border: 1px solid #334155;
+        padding: 2px 6px;
+        border-radius: 4px;
+        font-size: 0.85em;
+        font-family: 'Consolas', monospace;
+      }
+
+      /* Trouble Shooting (Issue Boxes) */
+      .intro-issue-box {
+        background: #1e293b;
+        border: 1px solid #334155;
+        border-left: 4px solid #f59e0b;
+        border-radius: 0 10px 10px 0;
+        padding: 18px 22px;
+        margin-bottom: 16px;
+        font-family: 'Pretendard', sans-serif;
+        transition: border-color 0.2s;
+      }
+      .intro-issue-box:hover {
+        border-color: #475569;
+        border-left-color: #f59e0b;
+      }
+      .issue-title {
+        color: #f1f5f9;
+        font-weight: 700;
+        font-size: 1.0rem;
+        margin-bottom: 14px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .issue-badge {
+        background: rgba(245, 158, 11, 0.15);
+        border: 1px solid rgba(245, 158, 11, 0.35);
+        color: #f59e0b;
+        font-size: 0.75rem;
+        font-weight: 700;
+        padding: 2px 8px;
+        border-radius: 4px;
+        font-family: 'Consolas', monospace;
+      }
+      .issue-row {
+        display: flex;
+        gap: 12px;
+        margin-bottom: 8px;
+        align-items: baseline;
+        font-size: 0.92rem;
+        line-height: 1.65;
+      }
+      .issue-row:last-child {
+        margin-bottom: 0;
+      }
+      .issue-label {
+        font-size: 0.78rem;
+        font-weight: 700;
+        padding: 2px 8px;
+        border-radius: 4px;
+        min-width: 68px;
+        text-align: center;
+        white-space: nowrap;
+      }
+      .issue-label.red {
+        background: rgba(239, 68, 68, 0.15);
+        color: #f87171;
+        border: 1px solid rgba(239, 68, 68, 0.3);
+      }
+      .issue-label.yellow {
+        background: rgba(245, 158, 11, 0.15);
+        color: #fbbf24;
+        border: 1px solid rgba(245, 158, 11, 0.3);
+      }
+      .issue-label.green {
+        background: rgba(16, 185, 129, 0.15);
+        color: #34d399;
+        border: 1px solid rgba(16, 185, 129, 0.3);
+      }
+      .issue-desc {
+        color: #cbd5e1;
+        flex: 1;
+      }
     </style>
-    <div style="padding:30px 0; font-family:'Pretendard',sans-serif;">
+
+    <div style="padding: 30px 0; font-family: 'Pretendard', sans-serif;">
+      <!-- 3. 나의 역할 -->
       <div class="intro-section">
-        <div class="intro-section-title">📌 프로젝트 개요</div>
-        <div class="intro-row"><span class="intro-label">진행 기간</span><span class="intro-value"><!-- 예: 2024.03 ~ 2024.06 (팀 N명) --></span></div>
-        <div class="intro-row"><span class="intro-label">기획 배경</span><span class="intro-value">화재 발생 시 고정형 비상구 안내 표시판으로 인해 작업자가 화재 방향으로 대피하는 오안내 문제를 해결하고자 기획되었습니다.</span></div>
-        <div class="intro-row"><span class="intro-label">프로젝트 목적</span><span class="intro-value">화재 센서 로그 데이터를 기반으로 동적 대피 유도 LED 패널을 제어해 안전 대피 경로를 가이드하는 시스템을 구축합니다.</span></div>
-      </div>
-      <div class="intro-section">
-        <div class="intro-section-title">🛠 사용 기술 및 개발 환경</div>
-        <div class="intro-row"><span class="intro-label">언어</span><span class="intro-value"><span class="intro-chip">C/C++</span><span class="intro-chip">Python</span></span></div>
-        <div class="intro-row"><span class="intro-label">하드웨어</span><span class="intro-value"><span class="intro-chip blue">ESP32</span><span class="intro-chip blue">Flame/Smoke Sensors</span><span class="intro-chip blue">LED Dot Matrix</span><span class="intro-chip blue">Buzzer</span></span></div>
-        <div class="intro-row"><span class="intro-label">소프트웨어</span><span class="intro-value"><span class="intro-chip purple">VS Code</span><span class="intro-chip purple">PlatformIO</span><span class="intro-chip purple">Arduino IDE</span></span></div>
-        <div class="intro-row"><span class="intro-label">통신 프로토콜</span><span class="intro-value">Wi-Fi / WebSockets, Serial, I2C</span></div>
-      </div>
-      <div class="intro-section">
-        <div class="intro-section-title">⚡ 핵심 기능</div>
-        <div class="intro-row"><span class="intro-label">기능 1</span><span class="intro-value">화재 감지 센서값에 가중치를 부여하여 실시간 위험 노드를 우회하는 최적 대피 경로 계산 알고리즘 (Dijkstra)</span></div>
-        <div class="intro-row"><span class="intro-label">기능 2</span><span class="intro-value">계산된 경로 방향에 맞춰 대피 비상구 LED matrix 화살표 방향을 동적으로 스위칭하는 제어 구조</span></div>
-      </div>
-      <div class="intro-section">
-        <div class="intro-section-title">🔧 개발 중 겪은 문제와 해결 과정</div>
-        <div class="intro-issue-box">
-          <div class="issue-title">⚠ Issue 1: 다중 노드 센서 데이터 수집 병목 및 레이턴시</div>
-          <div class="issue-row"><strong>현상:</strong> 센서 노드가 동시에 데이터를 게이트웨이로 전송할 때 패킷 유실 및 딜레이 발생</div>
-          <div class="issue-row"><strong>원인:</strong> 동기식 통신 대기로 인한 CPU 차단 현상 확인</div>
-          <div class="issue-row"><strong>해결:</strong> FreeRTOS 태스크 분리 및 비동기 웹소켓 통신 인터럽트 제어로 변환하여 대기 시간 단축</div>
+        <div class="intro-section-title">👤 3. 나의 역할</div>
+        
+        <div class="role-main-badge">
+          <span class="role-main-tag">핵심 담당</span>
+          <span class="role-main-text">I2C LCD 모듈 제어 및 화재 위치 디스플레이 구현</span>
+        </div>
+
+        <div class="role-cards-grid">
+          <div class="role-card">
+            <div class="role-card-header">
+              <span class="role-card-num">01</span>
+              <span class="role-card-title">1. I2C 통신 기반 LCD 인터페이스 구축</span>
+            </div>
+            <ul class="role-list">
+              <li>ESP32와 I2C LCD 모듈 간 통신 회로 설계</li>
+              <li>SDA, SCL 2개 핀을 활용한 LCD 제어로 MCU 핀 사용 효율 개선</li>
+              <li>LCD 초기 화면 및 시스템 정상 상태 표시 구현</li>
+            </ul>
+          </div>
+
+          <div class="role-card">
+            <div class="role-card-header">
+              <span class="role-card-num">02</span>
+              <span class="role-card-title">2. 구역별 불꽃 센서 실시간 매핑</span>
+            </div>
+            <ul class="role-list">
+              <li>각 방에 설치된 불꽃 센서의 입력 신호 실시간 수집</li>
+              <li>센서 입력값을 기반으로 화재 발생 구역 판별</li>
+              <li>화재가 감지된 방의 위치를 LCD에 즉시 표시하는 로직 개발</li>
+              <li><code>ROOM A FIRE!</code>와 같은 구역별 화재 안내 메시지 구현</li>
+            </ul>
+          </div>
         </div>
       </div>
+
+      <!-- 5. 개발 과정 중 기술적 과제 및 극복 -->
       <div class="intro-section">
-        <div class="intro-section-title">🏁 프로젝트 결과 및 느낀 점</div>
-        <div class="intro-row"><span class="intro-label">최종 성과</span><span class="intro-value"><!-- 성과 내용 --></span></div>
-        <div class="intro-row"><span class="intro-label">배운 점</span><span class="intro-value">그래프 탐색 알고리즘(Dijkstra)의 하드웨어 실시간 적용 및 임베디드 멀티태스킹 설계 능력을 습득했습니다.</span></div>
+        <div class="intro-section-title">🔧 5. 개발 과정 중 기술적 과제 및 극복</div>
+
+        <div class="intro-issue-box">
+          <div class="issue-title"><span class="issue-badge">Issue 01</span> 문제 1. LED 구동 중 전원 공급 문제</div>
+          <div class="issue-row"><span class="issue-label red">문제 상황</span><span class="issue-desc">LED 스트립 구동 과정에서 전원 공급 불안정으로 ESP32가 손상되는 문제가 발생함.</span></div>
+          <div class="issue-row"><span class="issue-label yellow">원인</span><span class="issue-desc">LED 스트립의 전력 소비량과 전원 공급 구조를 충분히 고려하지 못함.</span></div>
+          <div class="issue-row"><span class="issue-label green">해결 방법</span><span class="issue-desc">LED 구동용 보조 전원을 추가하고 ESP32와 외부 전원의 공통 접지를 재설정함.</span></div>
+        </div>
+
+        <div class="intro-issue-box">
+          <div class="issue-title"><span class="issue-badge">Issue 02</span> 문제 2. 장거리 LED 데이터 신호 감쇠</div>
+          <div class="issue-row"><span class="issue-label red">문제 상황</span><span class="issue-desc">LED 스트립의 길이가 길어질수록 일부 LED에서 점등이 불안정하게 나타남.</span></div>
+          <div class="issue-row"><span class="issue-label yellow">원인</span><span class="issue-desc">긴 배선으로 인한 데이터 신호 품질 저하.</span></div>
+          <div class="issue-row"><span class="issue-label green">해결 방법</span><span class="issue-desc">데이터 배선 길이를 최소화하여 신호 전달 안정성을 개선함.</span></div>
+        </div>
+
+        <div class="intro-issue-box">
+          <div class="issue-title"><span class="issue-badge">Issue 03</span> 문제 3. 센서 감지 오작동</div>
+          <div class="issue-row"><span class="issue-label red">문제 상황</span><span class="issue-desc">실제 화재가 발생하지 않은 상황에서도 센서가 반응하는 오검출 발생.</span></div>
+          <div class="issue-row"><span class="issue-label yellow">원인</span><span class="issue-desc">주변 환경광 등의 외부 요인으로 불꽃 센서 감지값이 불안정해짐.</span></div>
+          <div class="issue-row"><span class="issue-label green">해결 방법</span><span class="issue-desc">센서 모듈의 감도를 조절하여 외부 환경에 의한 오검출을 줄임.</span></div>
+        </div>
+
+        <div class="intro-issue-box">
+          <div class="issue-title"><span class="issue-badge">Issue 04</span> 문제 4. LED 전원 공급 불안정으로 인한 ESP32 동작 오류</div>
+          <div class="issue-row"><span class="issue-label red">문제 상황</span><span class="issue-desc">WS2812B LED 스트립 구동 중 전원 공급이 불안정해지면서 ESP32가 손상되는 문제가 발생함.</span></div>
+          <div class="issue-row"><span class="issue-label yellow">원인</span><span class="issue-desc">LED 스트립의 전력 소비량에 비해 전원 공급이 충분하지 않거나 전원 분배 및 접지 구성이 적절하지 않았음.</span></div>
+          <div class="issue-row"><span class="issue-label green">해결 방법</span><span class="issue-desc">LED 구동을 위한 별도 보조 전원을 추가하고 ESP32와 외부 전원 간 공통 GND를 구성하여 전원 공급 안정성을 개선함.</span></div>
+        </div>
+
+        <div class="intro-issue-box">
+          <div class="issue-title"><span class="issue-badge">Issue 05</span> 문제 5. LED 데이터 신호 감쇠로 인한 점등 오류</div>
+          <div class="issue-row"><span class="issue-label red">문제 상황</span><span class="issue-desc">긴 LED 스트립을 연결했을 때 일부 LED에서 점등이 불안정하거나 정상적으로 동작하지 않는 문제가 발생함.</span></div>
+          <div class="issue-row"><span class="issue-label yellow">원인</span><span class="issue-desc">긴 배선으로 인해 LED 데이터 신호의 품질이 저하됨.</span></div>
+          <div class="issue-row"><span class="issue-label green">해결 방법</span><span class="issue-desc">데이터 신호 전달 경로를 단축하도록 배선 길이를 최소화하여 신호 전달 안정성을 개선함.</span></div>
+        </div>
       </div>
     </div>
   </div>
