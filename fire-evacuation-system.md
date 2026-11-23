@@ -1153,31 +1153,289 @@ resetAll();
   <!-- ===================== 코드 탭 ===================== -->
   <div id="tab-code" class="tab-content">
     <style>
-      .code-tab-header { position:sticky; top:0; background:linear-gradient(180deg,#0f172a 80%,transparent); z-index:10; padding:20px 0 14px 0; margin-bottom:10px; font-family:'Pretendard',sans-serif; }
-      .code-tab-title { color:#10b981; font-size:1.4rem; font-weight:700; display:flex; align-items:center; gap:10px; }
-      .code-tab-desc { color:#64748b; font-size:0.85rem; margin-top:4px; }
-      .code-accordion-new { background:#1e293b; border:1px solid #334155; border-radius:10px; margin-bottom:12px; overflow:hidden; font-family:'Pretendard',sans-serif; }
-      .code-accordion-new summary { padding:16px 20px; background:#0f172a; color:#10b981; font-weight:600; cursor:pointer; list-style:none; display:flex; align-items:center; justify-content:space-between; font-size:1rem; outline:none; transition:background 0.2s; }
-      .code-accordion-new summary:hover { background:#1e293b; }
-      .code-accordion-new summary::-webkit-details-marker { display:none; }
-      .code-accordion-new summary::after { content:'▼'; font-size:0.8rem; color:#64748b; transition:transform 0.3s; }
-      .code-accordion-new[open] summary::after { transform:rotate(180deg); }
-      .code-accordion-new .accordion-body { padding:20px; border-top:1px solid #334155; }
-      .code-file-tag { display:inline-block; background:rgba(16,185,129,0.12); border:1px solid rgba(16,185,129,0.3); color:#10b981; border-radius:6px; padding:2px 10px; font-size:0.75rem; margin-bottom:10px; font-family:monospace; }
+      .code-tab-header {
+        position: sticky;
+        top: 0;
+        background: linear-gradient(180deg, #0f172a 80%, transparent);
+        z-index: 10;
+        padding: 20px 0 14px 0;
+        margin-bottom: 24px;
+        font-family: 'Pretendard', sans-serif;
+      }
+      .code-tab-title {
+        color: #10b981;
+        font-size: 1.4rem;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .code-tab-desc {
+        color: #64748b;
+        font-size: 0.88rem;
+        margin-top: 6px;
+      }
+
+      .code-item-block {
+        margin-bottom: 32px;
+      }
+      .code-item-title {
+        color: #38bdf8;
+        font-size: 1.15rem;
+        font-weight: 700;
+        margin: 0 0 6px 0;
+        font-family: 'Pretendard', sans-serif;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .code-item-desc {
+        color: #94a3b8;
+        font-size: 0.92rem;
+        line-height: 1.6;
+        margin: 0 0 12px 0;
+        font-family: 'Pretendard', sans-serif;
+      }
+
+      .code-editor-box {
+        background: #0f172a;
+        border: 1px solid #334155;
+        border-radius: 8px;
+        margin: 10px 0 0 0;
+        overflow: hidden;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.35);
+        font-family: 'Consolas', 'Fira Code', 'Courier New', monospace;
+      }
+      .code-editor-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: #1e293b;
+        border-bottom: 1px solid #334155;
+        padding: 8px 14px;
+      }
+      .code-editor-dots {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+      .mac-dot {
+        width: 11px;
+        height: 11px;
+        border-radius: 50%;
+        display: inline-block;
+      }
+      .mac-dot.red { background: #ef4444; }
+      .mac-dot.yellow { background: #f59e0b; }
+      .mac-dot.green { background: #10b981; }
+
+      .code-lang-label {
+        color: #94a3b8;
+        font-size: 0.75rem;
+        font-weight: 700;
+        font-family: 'Consolas', monospace;
+        margin-left: 8px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+      .code-copy-btn {
+        background: rgba(16, 185, 129, 0.12);
+        border: 1px solid rgba(16, 185, 129, 0.35);
+        color: #10b981;
+        padding: 4px 10px;
+        border-radius: 5px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        font-family: 'Pretendard', sans-serif;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+      }
+      .code-copy-btn:hover {
+        background: #10b981;
+        color: #0f172a;
+        box-shadow: 0 0 10px rgba(16, 185, 129, 0.4);
+      }
+      .code-copy-btn.copied {
+        background: #10b981 !important;
+        color: #0f172a !important;
+      }
+
+      .code-editor-box pre {
+        background: #0f172a !important;
+        margin: 0 !important;
+        padding: 16px 18px !important;
+        border: none !important;
+        border-radius: 0 !important;
+        overflow-x: auto !important;
+      }
+      .code-editor-box pre code {
+        background: transparent !important;
+        border: none !important;
+        padding: 0 !important;
+        color: #e2e8f0 !important;
+        font-family: 'Consolas', 'Courier New', monospace !important;
+        font-size: 0.88rem !important;
+        line-height: 1.65 !important;
+        display: block;
+        white-space: pre;
+      }
+
+      /* Syntax Highlighting Tokens */
+      .hl-keyword { color: #569cd6 !important; font-weight: bold; }
+      .hl-type { color: #4ec9b0 !important; font-weight: bold; }
+      .hl-string { color: #ce9178 !important; }
+      .hl-comment { color: #6a9955 !important; font-style: italic; }
+      .hl-number { color: #b5cea8 !important; }
+      .hl-func { color: #dcdcaa !important; }
+      .hl-var { color: #9cdcfe !important; }
+      .hl-const { color: #4fc1ff !important; font-weight: bold; }
+      .hl-op { color: #d4d4d4 !important; }
     </style>
-    <div style="padding:30px 0;">
+
+    <div style="padding: 30px 0;">
       <div class="code-tab-header">
         <div class="code-tab-title">🔢 핵심 소스코드</div>
-        <div class="code-tab-desc">각 섹션을 클릭하면 코드를 펼쳐볼 수 있습니다.</div>
+        <div class="code-tab-desc">실시간 화재 대피 유도 시스템의 주요 기능별 C++ 핵심 소스코드입니다.</div>
       </div>
-      <details class="code-accordion-new">
-        <summary>📄 코드 섹션 1</summary>
-        <div class="accordion-body">
-          <div class="code-file-tag">파일명.cpp</div>
-          <pre style="background:#0f172a;color:#e2e8f0;padding:20px;border-radius:8px;overflow-x:auto;font-size:0.82rem;line-height:1.6;font-family:'Consolas',monospace;border:1px solid #334155;"><code>// 코드를 이곳에 붙여넣어 주세요</code></pre>
+
+      <!-- 1. LCD 초기화 및 화면 출력 -->
+      <div class="code-item-block">
+        <h3 class="code-item-title">1. LCD 초기화 및 화면 출력</h3>
+        <p class="code-item-desc">ESP32와 LCD를 초기화하고 시스템의 초기 상태를 화면에 출력하도록 구현.</p>
+        <div class="code-editor-box">
+          <div class="code-editor-header">
+            <div class="code-editor-dots">
+              <span class="mac-dot red"></span>
+              <span class="mac-dot yellow"></span>
+              <span class="mac-dot green"></span>
+              <span class="code-lang-label">C++</span>
+            </div>
+            <button class="code-copy-btn" type="button" onclick="copyCode(this)">📋 복사</button>
+          </div>
+          <pre><code><span class="hl-var">lcd</span>.<span class="hl-func">begin</span>(<span class="hl-number">16</span>, <span class="hl-number">2</span>);
+<span class="hl-var">lcd</span>.<span class="hl-func">clear</span>();
+
+<span class="hl-var">lcd</span>.<span class="hl-func">setCursor</span>(<span class="hl-number">0</span>, <span class="hl-number">0</span>);
+<span class="hl-var">lcd</span>.<span class="hl-func">print</span>(<span class="hl-string">"화재 감지 시스템"</span>);
+
+<span class="hl-var">lcd</span>.<span class="hl-func">setCursor</span>(<span class="hl-number">0</span>, <span class="hl-number">1</span>);
+<span class="hl-var">lcd</span>.<span class="hl-func">print</span>(<span class="hl-string">"상태: 정상"</span>);</code></pre>
         </div>
-      </details>
+      </div>
+
+      <!-- 2. 불꽃 센서 입력 및 화재 발생 구역 판별 -->
+      <div class="code-item-block">
+        <h3 class="code-item-title">2. 불꽃 센서 입력 및 화재 발생 구역 판별</h3>
+        <p class="code-item-desc">3개 방에 설치된 불꽃 센서의 입력값을 수집하여 각 구역의 화재 발생 여부를 판별.</p>
+        <div class="code-editor-box">
+          <div class="code-editor-header">
+            <div class="code-editor-dots">
+              <span class="mac-dot red"></span>
+              <span class="mac-dot yellow"></span>
+              <span class="mac-dot green"></span>
+              <span class="code-lang-label">C++</span>
+            </div>
+            <button class="code-copy-btn" type="button" onclick="copyCode(this)">📋 복사</button>
+          </div>
+          <pre><code><span class="hl-keyword">const</span> <span class="hl-type">int</span> <span class="hl-var">flamePins</span>[] = {<span class="hl-number">14</span>, <span class="hl-number">27</span>, <span class="hl-number">26</span>};
+<span class="hl-keyword">const</span> <span class="hl-type">int</span> <span class="hl-var">roomCount</span> = <span class="hl-number">3</span>;
+
+<span class="hl-type">bool</span> <span class="hl-var">roomFire</span>[<span class="hl-var">roomCount</span>];
+
+<span class="hl-keyword">for</span> (<span class="hl-type">int</span> <span class="hl-var">i</span> = <span class="hl-number">0</span>; <span class="hl-var">i</span> &lt; <span class="hl-var">roomCount</span>; <span class="hl-var">i</span>++) {
+    <span class="hl-type">int</span> <span class="hl-var">val</span> = <span class="hl-func">digitalRead</span>(<span class="hl-var">flamePins</span>[<span class="hl-var">i</span>]);
+    <span class="hl-var">roomFire</span>[<span class="hl-var">i</span>] = (<span class="hl-var">val</span> == <span class="hl-const">LOW</span>);
+}</code></pre>
+        </div>
+      </div>
+
+      <!-- 3. 화재 발생 구역에 따른 LCD 출력 -->
+      <div class="code-item-block">
+        <h3 class="code-item-title">3. 화재 발생 구역에 따른 LCD 출력</h3>
+        <p class="code-item-desc">화재가 감지된 방의 정보를 문자열로 구성하여 LCD에 실시간으로 표시.</p>
+        <div class="code-editor-box">
+          <div class="code-editor-header">
+            <div class="code-editor-dots">
+              <span class="mac-dot red"></span>
+              <span class="mac-dot yellow"></span>
+              <span class="mac-dot green"></span>
+              <span class="code-lang-label">C++</span>
+            </div>
+            <button class="code-copy-btn" type="button" onclick="copyCode(this)">📋 복사</button>
+          </div>
+          <pre><code><span class="hl-var">lcd</span>.<span class="hl-func">setCursor</span>(<span class="hl-number">0</span>, <span class="hl-number">0</span>);
+<span class="hl-var">lcd</span>.<span class="hl-func">print</span>(<span class="hl-string">"화재 감지:"</span>);
+
+<span class="hl-var">lcd</span>.<span class="hl-func">setCursor</span>(<span class="hl-number">0</span>, <span class="hl-number">1</span>);
+
+<span class="hl-type">String</span> <span class="hl-var">status</span> = <span class="hl-string">""</span>;
+
+<span class="hl-keyword">for</span> (<span class="hl-type">int</span> <span class="hl-var">i</span> = <span class="hl-number">0</span>; <span class="hl-var">i</span> &lt; <span class="hl-var">roomCount</span>; <span class="hl-var">i</span>++) {
+    <span class="hl-keyword">if</span> (<span class="hl-var">roomFire</span>[<span class="hl-var">i</span>]) {
+        <span class="hl-keyword">if</span> (<span class="hl-var">status</span> != <span class="hl-string">""</span>) <span class="hl-var">status</span> += <span class="hl-string">", "</span>;
+        <span class="hl-var">status</span> += <span class="hl-type">String</span>(<span class="hl-var">i</span> + <span class="hl-number">1</span>) + <span class="hl-string">"번 방"</span>;
+    }
+}
+
+<span class="hl-keyword">if</span> (<span class="hl-var">status</span> == <span class="hl-string">""</span>) {
+    <span class="hl-var">lcd</span>.<span class="hl-func">print</span>(<span class="hl-string">"정상"</span>);
+} <span class="hl-keyword">else</span> {
+    <span class="hl-var">lcd</span>.<span class="hl-func">print</span>(<span class="hl-var">status</span> + <span class="hl-string">" 화재 발생"</span>);
+}</code></pre>
+        </div>
+      </div>
+
+      <!-- 4. 화재 감지에 따른 부저 경고 제어 -->
+      <div class="code-item-block">
+        <h3 class="code-item-title">4. 화재 감지에 따른 부저 경고 제어</h3>
+        <p class="code-item-desc">화재 감지 여부에 따라 서로 다른 주파수의 경고음을 출력하도록 구현.</p>
+        <div class="code-editor-box">
+          <div class="code-editor-header">
+            <div class="code-editor-dots">
+              <span class="mac-dot red"></span>
+              <span class="mac-dot yellow"></span>
+              <span class="mac-dot green"></span>
+              <span class="code-lang-label">C++</span>
+            </div>
+            <button class="code-copy-btn" type="button" onclick="copyCode(this)">📋 복사</button>
+          </div>
+          <pre><code><span class="hl-keyword">if</span> (<span class="hl-var">anyFire</span>) {
+    <span class="hl-func">tone</span>(<span class="hl-var">buzzerPin</span>, <span class="hl-number">1200</span>, <span class="hl-number">150</span>);
+    <span class="hl-func">delay</span>(<span class="hl-number">170</span>);
+
+    <span class="hl-func">tone</span>(<span class="hl-var">buzzerPin</span>, <span class="hl-number">1500</span>, <span class="hl-number">150</span>);
+    <span class="hl-func">delay</span>(<span class="hl-number">170</span>);
+} <span class="hl-keyword">else</span> {
+    <span class="hl-func">noTone</span>(<span class="hl-var">buzzerPin</span>);
+}</code></pre>
+        </div>
+      </div>
+
     </div>
+
+    <script>
+      function copyCode(btn) {
+        var box = btn.closest('.code-editor-box');
+        if (!box) return;
+        var codeEl = box.querySelector('code');
+        if (!codeEl) return;
+        var text = codeEl.innerText || codeEl.textContent;
+        navigator.clipboard.writeText(text).then(function() {
+          var orig = btn.innerHTML;
+          btn.innerHTML = '✓ 복사됨';
+          btn.classList.add('copied');
+          setTimeout(function() {
+            btn.innerHTML = orig;
+            btn.classList.remove('copied');
+          }, 2000);
+        }).catch(function(err) {
+          console.error('복사 실패:', err);
+        });
+      }
+    </script>
   </div>
 
 </div>
