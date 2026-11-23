@@ -15,124 +15,344 @@
 
 ---
 
-### 2. 내가 전담한 핵심 코드 및 상세 설명 
+### 2. 내가 전담한 핵심 코드 및 상세 설명
 
-####  중계기 제어 및 앱 송신 메인 코드 (`Relay_Master_Code.ino`)
-* **핵심 로직 설명:** * 고유 MAC 주소 매칭과 `toLowerCase()` 함수를 통해 현장 노이즈 신호를 원천 차단함.
-  * 앱인벤터의 다중 연결 한계를 깨기 위해, `millis()` 함수 기반의 타임 스케줄러로 **`1초(1000ms)`**마다 `sendWorker1Next` 플래그를 토글시켜 작업자 1과 2의 데이터를 교차 전송함.
+<style>
+/* Code Editor Box & Syntax Highlighting Styles */
+#tab-code .highlighter-rouge,
+#tab-code .code-editor-box {
+  background: #0f172a;
+  border: 1px solid #334155;
+  border-radius: 8px;
+  margin: 14px 0 24px 0;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.35);
+  font-family: 'Consolas', 'Fira Code', 'Courier New', monospace;
+}
 
+#tab-code .code-editor-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #1e293b;
+  border-bottom: 1px solid #334155;
+  padding: 8px 14px;
+}
+
+#tab-code .code-editor-dots {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+#tab-code .mac-dot {
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  display: inline-block;
+}
+#tab-code .mac-dot.red { background: #ef4444; }
+#tab-code .mac-dot.yellow { background: #f59e0b; }
+#tab-code .mac-dot.green { background: #10b981; }
+
+#tab-code .code-lang-label {
+  color: #94a3b8;
+  font-size: 0.75rem;
+  font-weight: 700;
+  font-family: 'Consolas', monospace;
+  margin-left: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+#tab-code .code-copy-btn {
+  background: rgba(16, 185, 129, 0.12);
+  border: 1px solid rgba(16, 185, 129, 0.35);
+  color: #10b981;
+  padding: 4px 10px;
+  border-radius: 5px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  font-family: 'Pretendard', sans-serif;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+#tab-code .code-copy-btn:hover {
+  background: #10b981;
+  color: #0b1412;
+  box-shadow: 0 0 10px rgba(16, 185, 129, 0.4);
+}
+#tab-code .code-copy-btn.copied {
+  background: #10b981 !important;
+  color: #0b1412 !important;
+}
+
+#tab-code .highlight,
+#tab-code pre {
+  background: #0f172a !important;
+  margin: 0 !important;
+  padding: 16px 18px !important;
+  border: none !important;
+  border-radius: 0 !important;
+  overflow-x: auto !important;
+}
+
+#tab-code .highlight code,
+#tab-code pre code {
+  background: transparent !important;
+  border: none !important;
+  padding: 0 !important;
+  color: #e2e8f0 !important;
+  font-family: 'Consolas', 'Courier New', monospace !important;
+  font-size: 0.88rem !important;
+  line-height: 1.65 !important;
+  display: block;
+}
+
+/* Syntax Highlighting Tokens */
+#tab-code .highlight .k, #tab-code .highlight .kd, #tab-code .highlight .kn,
+#tab-code .highlight .kp, #tab-code .highlight .kr, #tab-code .hl-keyword {
+  color: #569cd6 !important; font-weight: bold;
+}
+#tab-code .highlight .kt, #tab-code .hl-type {
+  color: #4ec9b0 !important; font-weight: bold;
+}
+#tab-code .highlight .s, #tab-code .highlight .s1, #tab-code .highlight .s2,
+#tab-code .highlight .sb, #tab-code .highlight .sc, #tab-code .hl-string {
+  color: #ce9178 !important;
+}
+#tab-code .highlight .c, #tab-code .highlight .c1, #tab-code .highlight .cm, #tab-code .hl-comment {
+  color: #6a9955 !important; font-style: italic;
+}
+#tab-code .highlight .m, #tab-code .highlight .mi, #tab-code .highlight .mf,
+#tab-code .highlight .mo, #tab-code .hl-number {
+  color: #b5cea8 !important;
+}
+#tab-code .highlight .nf, #tab-code .highlight .nc, #tab-code .hl-func {
+  color: #dcdcaa !important;
+}
+#tab-code .highlight .n, #tab-code .highlight .nv, #tab-code .highlight .vi,
+#tab-code .highlight .na, #tab-code .hl-ident {
+  color: #9cdcfe !important;
+}
+#tab-code .highlight .o, #tab-code .highlight .ow, #tab-code .highlight .p, #tab-code .hl-op {
+  color: #d4d4d4 !important;
+}
+#tab-code .highlight .nb, #tab-code .highlight .bp, #tab-code .hl-builtin {
+  color: #4ec9b0 !important;
+}
+</style>
+
+### 2-1. 중계기 핵심 코드 (전담 파트)
+
+**1. 작업자별 BLE 데이터 구분**
 
 ```cpp
-#include <BLEDevice.h>
-#include <BLEUtils.h>
-#include <BLEScan.h>
-#include <BLEAdvertisedDevice.h>
-#include <BluetoothSerial.h>
-
-BluetoothSerial SerialBT;
-
-// 실물 보드의 고유 MAC 주소 고정 (필터링 설계)
 const String WORKER1_MAC = "ec:e3:34:bf:80:9e";
 const String WORKER2_MAC = "ec:e3:34:bf:e6:aa";
 
-BLEScan* pBLEScan;
-const int SCAN_TIME = 2;
-
-struct WorkerData {
-  bool dataReceived = false;
-  int rssi = 0;
-  String advData = "";
-  char buzzerState = 'N'; 
-};
-
 WorkerData worker1, worker2;
+```
 
-unsigned long lastSendTime = 0;
-const unsigned long SEND_INTERVAL = 1000; // 1초 전송 주기
-bool sendWorker1Next = true;
+**2. BLE 데이터 수신 및 작업자 구분**
 
-class MyAdvertisedDeviceCallbacks : public BLEAdvertisedDeviceCallbacks {
-  void onResult(BLEAdvertisedDevice advertisedDevice) override {
+```cpp
+void onResult(BLEAdvertisedDevice advertisedDevice) override {
     String mac = advertisedDevice.getAddress().toString();
-    mac.toLowerCase(); // 대소문자 무선 데이터 예외 처리
+    mac.toLowerCase();
 
     if (mac == WORKER1_MAC || mac == WORKER2_MAC) {
-      String adv = advertisedDevice.getManufacturerData().c_str();
-      if (adv.length() == 0) {
-        adv = advertisedDevice.toString().c_str();
-      }
+        String adv = advertisedDevice.getManufacturerData().c_str();
 
-      int rssi = advertisedDevice.getRSSI();
-      char buzzerChar = 'N';
+        int rssi = advertisedDevice.getRSSI();
+        char buzzerChar = 'N';
 
-      if (adv.length() > 0) {
-        char lastChar = adv.charAt(adv.length() - 1);
-        if (lastChar == 'B' || lastChar == 'N') {
-          buzzerChar = lastChar;
+        if (adv.length() > 0) {
+            char lastChar = adv.charAt(adv.length() - 1);
+            if (lastChar == 'B' || lastChar == 'N') {
+                buzzerChar = lastChar;
+            }
         }
-      }
 
-      if (mac == WORKER1_MAC) {
-        worker1.dataReceived = true;
-        worker1.rssi = rssi;
-        worker1.advData = adv;
-        worker1.buzzerState = buzzerChar;
-      } else {
-        worker2.dataReceived = true;
-        worker2.rssi = rssi;
-        worker2.advData = adv;
-        worker2.buzzerState = buzzerChar;
-      }
+        if (mac == WORKER1_MAC) {
+            worker1.dataReceived = true;
+            worker1.rssi = rssi;
+            worker1.advData = adv;
+            worker1.buzzerState = buzzerChar;
+        } else {
+            worker2.dataReceived = true;
+            worker2.rssi = rssi;
+            worker2.advData = adv;
+            worker2.buzzerState = buzzerChar;
+        }
     }
-  }
-};
-
-void setup() {
-  Serial.begin(115200);
-  SerialBT.begin("RelayDeviceBT"); // 앱인벤터와 연동될 블루투스 이름
-  
-  BLEDevice::init("Relay-Device");
-  pBLEScan = BLEDevice::getScan();
-  pBLEScan->setAdvertisedDeviceCallbacks(new MyAdvertisedDeviceCallbacks());
-  pBLEScan->setActiveScan(true);
-  pBLEScan->setInterval(100);
-  pBLEScan->setWindow(99);
 }
+```
 
-void loop() {
-  BLEScanResults* results = pBLEScan->start(SCAN_TIME, false);
-  if (results->getCount() == 0) {
-    worker1.dataReceived = false;
-    worker2.dataReceived = false;
-  }
-  pBLEScan->clearResults();
+**3. BLE 및 Bluetooth Serial 초기화**
 
-  // 1초마다 작업자 데이터를 교차 전송하여 데이터 과부하 및 튕김 방지
-  if (millis() - lastSendTime >= SEND_INTERVAL) {
+```cpp
+SerialBT.begin("RelayDeviceBT");
+
+BLEDevice::init("Relay-Device");
+pBLEScan = BLEDevice::getScan();
+pBLEScan->setAdvertisedDeviceCallbacks(
+    new MyAdvertisedDeviceCallbacks()
+);
+pBLEScan->setActiveScan(true);
+```
+
+**4. 작업자별 상태 정보 앱으로 전송**
+
+```cpp
+if (millis() - lastSendTime >= SEND_INTERVAL) {
     lastSendTime = millis();
 
     if (sendWorker1Next) {
-      if (worker1.dataReceived) {
-        String message = "작업자1: ";
-        message += (worker1.buzzerState == 'B') ? "착용불량" : "정상착용";
-        SerialBT.println(message);
-      } else {
-        SerialBT.println("작업자1: 데이터 없음");
-      }
+        if (worker1.dataReceived) {
+            String message = "작업자1: ";
+            message += (worker1.buzzerState == 'B')
+                ? "착용불량" : "정상착용";
+            SerialBT.println(message);
+        } else {
+            SerialBT.println("작업자1: 데이터 없음");
+        }
     } else {
-      if (worker2.dataReceived) {
-        String message = "작업자2: ";
-        message += (worker2.buzzerState == 'B') ? "착용불량" : "정상착용";
-        SerialBT.println(message);
-      } else {
-        SerialBT.println("작업자2: 데이터 없음");
-      }
+        if (worker2.dataReceived) {
+            String message = "작업자2: ";
+            message += (worker2.buzzerState == 'B')
+                ? "착용불량" : "정상착용";
+            SerialBT.println(message);
+        } else {
+            SerialBT.println("작업자2: 데이터 없음");
+        }
     }
-    sendWorker1Next = !sendWorker1Next; // 플래그 토글
-  }
-  delay(100);
+
+    sendWorker1Next = !sendWorker1Next;
 }
 ```
+
+### 2-2. 수신용, 송신용 핵심 코드
+
+**1. 착용불량 상태 판단 (수신용)**
+
+```cpp
+bool pressureAlarm = (pressureValue < pressureThreshold);
+bool movementAlarm = noMovement;
+bool distanceAlarm = weakSignalDetected;
+
+bool shouldBuzz = pressureAlarm || movementAlarm || distanceAlarm;
+```
+
+**2. 착용 상태를 BLE 광고 데이터로 송신 (수신용)**
+
+```cpp
+String advStr = String("B:") + (shouldBuzz ? "B" : "N");
+
+BLEAdvertisementData advData;
+advData.setName("Helmet-Receiver");
+advData.setManufacturerData(advStr);
+
+pAdvertising->setAdvertisementData(advData);
+pAdvertising->start();
+```
+
+**3. BLE 송신 장치 초기화 (송신용)**
+
+```cpp
+BLEDevice::init("ESP32_Advertiser");
+BLEDevice::setPower(ESP_PWR_LVL_P9);
+```
+
+**4. BLE 광고 데이터 설정 및 송신 (송신용)**
+
+```cpp
+BLEAdvertisementData advertisementData;
+advertisementData.setName("ESP32_BEACON");
+advertisementData.setManufacturerData("123456");
+
+pAdvertising->setAdvertisementData(advertisementData);
+pAdvertising->setScanResponse(false);
+pAdvertising->start();
+```
+
+### 2-3. ESP32의 각 MAC 주소 찾는 코드
+
+**1. ESP32 BLE MAC 주소 확인**
+
+```cpp
+BLEDevice::init("");
+
+String bleMac = BLEDevice::getAddress().toString().c_str();
+
+Serial.print("BLE MAC Address: ");
+Serial.println(bleMac);
+```
+
+<script>
+(function() {
+  function attachCodeHeaders() {
+    var codeBlocks = document.querySelectorAll('#tab-code div.highlighter-rouge, #tab-code .code-editor-box');
+    codeBlocks.forEach(function(block) {
+      if (block.querySelector('.code-editor-header')) return;
+      var header = document.createElement('div');
+      header.className = 'code-editor-header';
+      header.innerHTML = '<div class="code-editor-dots"><span class="mac-dot red"></span><span class="mac-dot yellow"></span><span class="mac-dot green"></span><span class="code-lang-label">C++</span></div><button class="code-copy-btn" type="button">📋 복사</button>';
+      var btn = header.querySelector('.code-copy-btn');
+      btn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        var codeEl = block.querySelector('code');
+        if (!codeEl) return;
+        var text = codeEl.innerText || codeEl.textContent;
+        navigator.clipboard.writeText(text).then(function() {
+          btn.innerHTML = '✓ 복사됨';
+          btn.classList.add('copied');
+          setTimeout(function() {
+            btn.innerHTML = '📋 복사';
+            btn.classList.remove('copied');
+          }, 2000);
+        }).catch(function(err) {
+          console.error('복사 실패:', err);
+        });
+      });
+      block.insertBefore(header, block.firstChild);
+
+      // Client syntax highlight fallback if not highlighted by Rouge
+      var codeEl = block.querySelector('code');
+      if (codeEl && !codeEl.querySelector('span')) {
+        var raw = codeEl.textContent;
+        var escaped = raw
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;');
+        escaped = escaped.replace(/(\/\/[^\n]*)/g, '<span class="hl-comment">$1</span>');
+        escaped = escaped.replace(/(".*?")/g, '<span class="hl-string">$1</span>');
+        escaped = escaped.replace(/\b(const|void|bool|char|int|override|if|else|true|false|new|return)\b/g, '<span class="hl-keyword">$1</span>');
+        escaped = escaped.replace(/\b(String|WorkerData|BLEAdvertisedDevice|BLEDevice|BLEScan|BLEAdvertisementData|BluetoothSerial)\b/g, '<span class="hl-type">$1</span>');
+        escaped = escaped.replace(/\b(onResult|getAddress|toString|toLowerCase|getManufacturerData|c_str|length|charAt|getRSSI|begin|init|getScan|setAdvertisedDeviceCallbacks|setActiveScan|millis|println|setAdvertisementData|setName|setPower|setScanResponse|start|print)\b/g, '<span class="hl-func">$1</span>');
+        escaped = escaped.replace(/\b(\d+)\b/g, '<span class="hl-number">$1</span>');
+        codeEl.innerHTML = escaped;
+      }
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', attachCodeHeaders);
+  } else {
+    attachCodeHeaders();
+  }
+  document.querySelectorAll('.tab-btn').forEach(function(b) {
+    b.addEventListener('click', function() {
+      setTimeout(attachCodeHeaders, 50);
+    });
+  });
+})();
+</script>
+
+---
 
 ### 3. BLE 거리 판정 및 이탈 감지 로직 코드 (BLE_Distance_Scanner.ino)
 * **핵심 로직 설명:** * 기준이 되는 비콘(targetMac)의 RSSI 무선 강도를 체크하여 -50dBm 이하로 떨어지면    작업자가 구역을 이탈한 것으로 보고 부저 경고 신호를 발생시킴.
@@ -201,168 +421,6 @@ void loop() {
 ```
 
 ### 4. MIT APP Inventor(앱 인벤터)
-
----
-
-### 1. 중계기 핵심 코드 [전담 파트]
-
-**1. 작업자별 BLE 데이터 구분**
-
-- 작업자별 MAC 주소를 기준으로 BLE 데이터를 구분하고, 수신된 상태 정보를 각각 저장
-
-```cpp
-const String WORKER1_MAC = "ec:e3:34:bf:80:9e";
-const String WORKER2_MAC = "ec:e3:34:bf:e6:aa";
-
-WorkerData worker1, worker2;
-```
-
-**2. BLE 데이터 수신 및 작업자 구분**
-
-BLE 광고 데이터를 수신하고 MAC 주소를 확인하여 작업자별 부저 상태(B/N)를 저장
-
-```cpp
-void onResult(BLEAdvertisedDevice advertisedDevice) override {
-    String mac = advertisedDevice.getAddress().toString();
-    mac.toLowerCase();
-
-    if (mac == WORKER1_MAC || mac == WORKER2_MAC) {
-        String adv = advertisedDevice.getManufacturerData().c_str();
-
-        int rssi = advertisedDevice.getRSSI();
-        char buzzerChar = 'N';
-
-        if (adv.length() > 0) {
-            char lastChar = adv.charAt(adv.length() - 1);
-            if (lastChar == 'B' || lastChar == 'N') {
-                buzzerChar = lastChar;
-            }
-        }
-
-        if (mac == WORKER1_MAC) {
-            worker1.dataReceived = true;
-            worker1.rssi = rssi;
-            worker1.advData = adv;
-            worker1.buzzerState = buzzerChar;
-        } else {
-            worker2.dataReceived = true;
-            worker2.rssi = rssi;
-            worker2.advData = adv;
-            worker2.buzzerState = buzzerChar;
-        }
-    }
-}
-```
-
-**3. BLE 및 Bluetooth Serial 초기화**
-
-중계기가 작업자 디바이스의 BLE 데이터를 수신하고, 스마트폰 앱과 Bluetooth Serial로 연결되도록 초기화
-
-```cpp
-SerialBT.begin("RelayDeviceBT");
-
-BLEDevice::init("Relay-Device");
-pBLEScan = BLEDevice::getScan();
-pBLEScan->setAdvertisedDeviceCallbacks(
-    new MyAdvertisedDeviceCallbacks()
-);
-pBLEScan->setActiveScan(true);
-```
-
-**4. 작업자별 상태 정보 앱으로 전송**
-
-작업자 1과 작업자 2의 상태 정보를 번갈아 앱인벤터로 전송합니다. 부저 상태에 따라 정상착용 또는 착용불량으로 구분
-
-```cpp
-if (millis() - lastSendTime >= SEND_INTERVAL) {
-    lastSendTime = millis();
-
-    if (sendWorker1Next) {
-        if (worker1.dataReceived) {
-            String message = "작업자1: ";
-            message += (worker1.buzzerState == 'B')
-                ? "착용불량" : "정상착용";
-            SerialBT.println(message);
-        } else {
-            SerialBT.println("작업자1: 데이터 없음");
-        }
-    } else {
-        if (worker2.dataReceived) {
-            String message = "작업자2: ";
-            message += (worker2.buzzerState == 'B')
-                ? "착용불량" : "정상착용";
-            SerialBT.println(message);
-        } else {
-            SerialBT.println("작업자2: 데이터 없음");
-        }
-    }
-
-    sendWorker1Next = !sendWorker1Next;
-}
-```
-
-### 2. 수신용, 송신용 핵심 코드
-
-**1. 착용불량 상태 판단(수신용)**
-
-감압센서, 움직임 감지, BLE 신호 세기를 종합하여 안전장비 착용 상태를 판단
-
-```cpp
-bool pressureAlarm = (pressureValue < pressureThreshold);
-bool movementAlarm = noMovement;
-bool distanceAlarm = weakSignalDetected;
-
-bool shouldBuzz = pressureAlarm || movementAlarm || distanceAlarm;
-```
-
-**2. 착용 상태를 BLE 광고 데이터로 송신(수신용)**
-
-판단한 착용 상태를 `B` 또는 `N`으로 구분하여 BLE 광고 데이터에 담아 중계기로 전달
-
-```cpp
-String advStr = String("B:") + (shouldBuzz ? "B" : "N");
-
-BLEAdvertisementData advData;
-advData.setName("Helmet-Receiver");
-advData.setManufacturerData(advStr);
-
-pAdvertising->setAdvertisementData(advData);
-pAdvertising->start();
-```
-
-**3. BLE 송신 장치 초기화(송신용)**
-
-ESP32를 BLE 장치로 초기화하고 송신 출력을 최대 세기로 설정
-
-```cpp
-BLEDevice::init("ESP32_Advertiser");
-BLEDevice::setPower(ESP_PWR_LVL_P9);
-```
-
-**4. BLE 광고 데이터 설정 및 송신(송신용)**
-
-장치 이름과 식별 데이터를 광고 데이터에 담아 BLE 신호를 송신
-
-```cpp
-BLEAdvertisementData advertisementData;
-advertisementData.setName("ESP32_BEACON");
-advertisementData.setManufacturerData("123456");
-
-pAdvertising->setAdvertisementData(advertisementData);
-pAdvertising->setScanResponse(false);
-pAdvertising->start();
-```
-
-### 3. esp32의 각 맥 주소  찾는 코드
-
-```cpp
-BLEDevice::init("");
-
-String bleMac = BLEDevice::getAddress().toString().c_str();
-
-Serial.print("BLE MAC Address: ");
-Serial.println(bleMac);
-```
 
 <details class="code-accordion">
   <summary>5. 실시간 안전 장비 착용 여부 시스템 전체적인 코드</summary>
